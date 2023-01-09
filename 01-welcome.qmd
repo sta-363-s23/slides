@@ -28,9 +28,8 @@ library(tidyverse)
 <i class="fa fa-calendar"></i> &nbsp; Thurs 10a-11a
 
 
-Everything you will need will be posted at:
 
-### [bit.ly/sta-363-s23](http://bit.ly/sta-363-s23)
+# [bit.ly/sta-363-s23](http://bit.ly/sta-363-s23)
 
 ## Intros
 
@@ -106,6 +105,7 @@ Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
 Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
 :::
 
+# DEMO
 
 ## Statistical Learning Problems {.small}
 
