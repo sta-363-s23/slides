@@ -1,0 +1,241 @@
+---
+title: "Welcome to Statistical Learning"
+author: "Dr. D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/icon.png"
+editor: source
+format: 
+  revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+## `r emo::ji("wave")`
+
+###  Lucy D'Agostino McGowan
+
+<i class="fa fa-envelope"></i> &nbsp; [mcgowald@wfu.edu](mailto:mcgowald@wfu.edu) <br>
+<i class="fa fa-calendar"></i> &nbsp; Thurs 10a-11a
+
+
+Everything you will need will be posted at:
+
+### [bit.ly/sta-363-s23](http://bit.ly/sta-363-s23)
+
+## Intros
+
+* Name
+* Major
+* Fun OR boring fact 
+
+
+## Statistical Learning Problems {.small}
+
+:::: {.columns}
+::: {.column}
+
+* Identify risk factors for breast cancer
+:::
+
+::: {.column}
+
+![](img/01/breast-cancer.jpg)
+:::
+::::
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+:::
+
+
+## Statistical Learning Problems {.small}
+
+:::: {.columns}
+
+::: {.column}
+
+* Identify risk factors for breast cancer
+* Customize an email spam detection system
+
+:::
+::: {.column}
+
+* **Data**: 4601 labeled emails sent to _George_ who works at _HP Labs_ 
+* **Input features**: frequencies of words and punctuation
+
+:::
+::::
+
+| george | you | hp | free | ! | edu | remove
+--|-----|-----|----|-----|-----|----|------
+**spam** | 0.00 | 2.26 | 0.02 | 0.52 | 0.51 | 0.01 | 0.28
+**email** | 2.27 | 1.27 | 0.90 | 0.07 | 0.11 | 0.29 | 0.01
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+:::
+
+
+
+## Statistical Learning Problems {.small}
+
+:::: {.columns}
+::: {.column}
+* Identify risk factors for breast cancer  
+* Customize an email spam detection system  
+* Identify numbers in handwritten zip code  
+:::
+
+::: {.column}
+![](img/01/zipcode.png)
+:::
+
+::::
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+:::
+
+
+## Statistical Learning Problems {.small}
+
+:::: {.columns}
+
+::: {.column}
+* Identify risk factors for breast cancer  
+* Customize an email spam detection system  
+* Identify numbers in handwritten zip code  
+* Establish the relationship between variables in population survey data  
+:::
+
+::: {.column}
+Income survey data for males from the central Atlantic region of US, 2009
+
+
+<img src = "img/01/wage1.png" height = 350></img>
+
+:::
+
+::::
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+:::
+
+---
+
+# Statistical Learning Problems {.small}
+
+:::: {.columns}
+
+::: {.column}
+* Identify risk factors for breast cancer  
+* Customize an email spam detection system  
+* Identify numbers in handwritten zip code  
+* Establish the relationship between variables in population survey data  
+* Classify pixels of an image
+:::
+
+
+::: {.column}
+<img src = "img/01/land-use.png" height = 300></img>
+
+Usage $\in$ {red soil, cotton, vegetation stubble, mixture, gray soil, damp
+gray soil}
+:::
+
+::::
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+::: 
+
+
+
+## `r emo::ji("v")` types of statistical learning
+
+
+* Supervised Learning
+* Unsupervised Learning
+
+
+## Supervised Learning {.small}
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+:::
+
+> * **outcome variable**: $Y$, (dependent variable,
+response, target)
+> * **predictors**: vector of $p$ predictors, $X$, (inputs,
+regressors, covariates, features, independent variables)
+> * In the **regression problem**, $Y$ is quantitative (e.g price,
+blood pressure)
+> * In the **classification** problem, $Y$ takes values in a finite,
+unordered set (survived/died, digit 0-9, cancer class of
+tissue sample)
+> * We have **training data** $(x_1, y_1), \dots, (x_N, y_N)$. These are
+observations (examples, instances) of these measurements
+
+
+## Supervised Learning
+
+::: .question
+What do you think are some objectives here?
+:::
+
+. . .
+
+### Objectives
+
+* Accurately predict unseen test cases
+* Understand which inputs affect the outcome, and how
+* Assess the quality of our predictions and inferences
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+:::
+
+
+## Unsupervised Learning
+
+::: footer
+Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+:::
+
+> * No outcome variable, just a set of predictors (features)
+measured on a set of samples
+> * objective is more fuzzy -- find groups of samples that
+behave similarly, find features that behave similarly, find
+linear combinations of features with the most variation
+> * difficult to know how well your are doing
+> * different from supervised learning, but can be useful as a
+pre-processing step for supervised learning
+
+
+## Let's take a tour - class website {.small}
+
+::: .center
+![](img/demo.png)
+:::
+
+
+- Concepts introduced:
+  - How to find slides
+  - How to find assignments
+  - How to find RStudio Cloud
+  - How to get help
+  - How to find policies
+
+
+
