@@ -3,8 +3,9 @@
 @import 'https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap';
 
 $font-family-sans-serif: "Noto Sans", sans-serif;
-$presentation-heading-color: #86a293;
+$presentation-heading-color: #BB2649;
 $body-color: #404040;
+$link-color: #70001A;
 
 
 /*-- scss:rules --*/
@@ -14,7 +15,7 @@ tbody tr:nth-child(odd) {
 }
 
 strong {
-  color: #44745A;
+  color: #70001A;
   font-weight: 900;
 }
 
@@ -39,7 +40,7 @@ strong {
 }
 
 .inverse {
-  background-color: #6CA0DC;
+  background-color: #369475;
   color: #ffffff;
 }
 .inverse h1, .inverse h2, .inverse h3 {
