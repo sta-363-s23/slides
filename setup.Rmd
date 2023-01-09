@@ -1,0 +1,11 @@
+```{r}
+#| label: setup
+#| include: false
+# magick
+dev.off <- function(){
+  invisible(grDevices::dev.off())
+}
+library(tidyverse)
+old <- theme_set(theme_minimal())
+#source("iterative_latex.R")
+```

@@ -1,0 +1,78 @@
+/*-- scss:defaults --*/
+
+@import 'https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap';
+
+$font-family-sans-serif: "Noto Sans", sans-serif;
+$presentation-heading-color: #86a293;
+$body-color: #404040;
+
+
+/*-- scss:rules --*/
+
+tbody tr:nth-child(odd) {
+  background-color: #DCDCDC;
+}
+
+strong {
+  color: #44745A;
+  font-weight: 900;
+}
+
+.small {
+  font-size: 0.75em;
+}
+
+.smaller {
+  font-size: 0.5em;
+}
+
+.large {
+  font-size: 1.25em;
+}
+
+.larger {
+  font-size: 1.5em;
+}
+
+.largest {
+  font-size: 3em;
+}
+
+.inverse {
+  background-color: #6CA0DC;
+  color: #ffffff;
+}
+.inverse h1, .inverse h2, .inverse h3 {
+  color: #f3f3f3;
+}
+
+.reveal pre code {
+  word-wrap: normal;
+}
+
+.reveal .slide .question {
+  border: 5px solid #404040;
+  border-left: 50px solid #404040;
+  padding: 0.5em;
+  background: #C2F9BB;
+  border-radius: 25px;
+  margin-top: 10px;
+}
+
+.question::after {
+    content: '';
+    position: absolute;
+    bottom: 100px;
+}
+
+details>summary {
+  font-size: 0.5em;
+}
+
+.v-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
