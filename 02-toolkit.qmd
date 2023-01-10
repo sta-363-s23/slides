@@ -1,0 +1,333 @@
+---
+title: "Meet the toolkit"
+author: "Dr. D'Agostino McGowan"
+footer:  "Slides adapted from <a href='https://datasciencebox.org' target='_blank'>datasciencebox.org</a> by Dr. Lucy D'Agostino McGowan"
+logo: "img/icon.png"
+editor: source
+format: 
+  revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+---
+
+```{r child = "setup.Rmd"}
+```
+
+
+## Agenda
+
+- Demo: Penguin Study
+- R and RStudio
+- Quarto
+
+
+# A Penguin Study {.center}
+
+
+## Recap: What did we just do?
+
+- Create a project in **RStudio**
+- Upload a .qmd file in **RStudio**
+- Render the analysis 
+- Edit the analysis 
+- Re-render the analysis
+
+## Login to RStudio Pro {.smaller}
+
+- **Note:** if you are off campus, you will need to use a [VPN to connect](https://is.wfu.edu/services/vpn/)
+- Go to [rstudio.deac.wfu.edu](rstudio.deac.wfu.edu)
+
+
+![](img/01/rstudio-pro.png){width="1000" height="350"}
+
+## RStudio Pro Setup
+
+**Step 1: Create a New Project**
+
+Click File > New Project
+
+![](img/01/new-project.png)
+
+## RStudio Pro Setup
+
+**Step 2: Click "Version Control"**
+
+Click the third option.
+
+![](img/01/version-control.png)
+
+## RStudio Pro Setup
+
+**Step 3: Click Git**
+
+Click the first option
+
+![](img/01/git.png)
+
+## RStudio Pro Setup
+
+**Step 4: Copy my starter files**
+
+Paste this link in the top box (`Repository url`):
+
+`https://github.com/sta-112-f22/appex-01-welcome-penguins.git`
+
+![](img/01/paste-link.png)
+
+## {{< fa laptop >}} `Penguin fun!` {.smaller}
+
+- Once you log on to RStudio Pro, create a new project from version control (Git)
+- Paste `https://github.com/sta-363-s23/appex-01-welcome-penguins.git` in the Repository url box
+- Find the file pane (on the bottom right). Click the `welcome-penguins.qmd` file
+- Click the "Render" button
+- Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and render again.
+- Then, scroll to the `plot` chunk, below **Palmer Penguins**. Instead of looking at the relationship between flipper length and bill length, plot the relationship between flipper length and bill **depth**. _Hint, look at the full dataset at the bottom of the document for variable names, update the captions to match your new plot_. 
+- Render again & voila!
+
+```{r}
+#| echo: false
+#| cache: false
+countdown(minutes = 8, font_size = "1.5em")
+```
+
+## What is R?
+
+::: {.incremental}
+
+- scripting language
+- statistical software
+- like a car's "engine"
+
+:::
+
+## What is RStudio?
+
+::: {.incremental}
+
+- IDE (integrated development environment)
+- like a car's "dashboard"
+:::
+
+# Let's take a tour -- R / RStudio
+
+## What did we learn?
+
+- Using the console
+- Using R as a calculator
+- Environment
+- Loading and viewing a data frame
+- Creating a Project
+
+
+
+## R essentials {.smaller}
+
+A short list (for now):
+
+- Functions are (most often) verbs, followed by what they will be applied to in parentheses:
+
+```{r}
+#| eval: false
+#| echo: true
+do_this(to_this)
+do_that(to_this, to_that, with_those)
+```
+
+. . .
+
+- Columns (variables) in data frames are accessed with `$`:
+
+```{r}
+#| eval: false
+#| echo: true
+dataframe$var_name
+```
+
+. . .
+
+- Packages are installed with the `install.packages` function and loaded with the `library` function, once per session:
+
+```{r}
+#| eval: false
+#| echo: true
+install.packages("package_name")
+library(package_name)
+```
+
+
+
+## tidyverse
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](img/02/tidyverse.png)
+
+:::
+
+::: {.column width="50%"}
+
+**R packages for data science**
+
+::: {.small}
+The [tidyverse](https://www.tidyverse.org/) is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures.
+:::
+
+:::
+
+::::
+
+# Quarto
+
+## Quarto
+
+::: {.incremental}
+- Fully reproducible reports -- each time you render the document the analysis is run from the beginning
+- Simple markdown syntax for text
+- Code goes in chunks, defined by three backticks, narrative goes outside of chunks
+:::
+
+# Let's take a tour - Quarto
+
+## What did we learn?
+
+- Creating a project
+- Creating a `.qmd` file
+- Rendering documents
+- Visual Editor
+- The YAML
+- Markdown and (some) R syntax
+
+## Rendering {.smaller}
+
+Use the <kbd>![](img/02/rstudio-render-button.png){width="25" height="20"}</kbd> **Render** button in the RStudio IDE to render the file and preview the output with a single click or keyboard shortcut (⇧⌘K). 
+
+![](img/02/rstudio-render.png){.border fig-align="center"}
+
+. . .
+
+If you prefer to automatically render whenever you save, you can check the Render on Save option on the editor toolbar.
+
+![](img/02/rstudio-render-on-save.png){.border fig-align="center"}
+
+::: {.footer}
+[Getting Started with Quarto](https://quarto.org/docs/get-started/hello/rstudio.html)
+:::
+
+## YAML header
+
+The YAML header starts and ends with three dashes
+
+``` yaml
+---
+title: "This is a title"
+format: html
+editor: visual
+---
+```
+::: {.footer}
+[Getting Started with Quarto](https://quarto.org/docs/get-started/hello/rstudio.html)
+:::
+
+## Code chunks
+
+R code chunks identified with `{r}` with (optional) chunk options, in YAML style, identified by `#|` at the beginning of the line.
+
+```` markdown
+```{{r}}
+#| label: load-packages
+#| include: false
+library(tidyverse)
+library(palmerpenguins)
+```
+````
+
+. . . 
+
+::: {.question}
+Would this code chunk be "included" in the final report?
+:::
+
+::: {.footer}
+[Getting Started with Quarto](https://quarto.org/docs/get-started/hello/rstudio.html)
+:::
+
+## Markdown text
+
+::: {.incremental}
+* Quarto uses markdown for formatting text, including section headers, hyperlinks, an embedded image, and an inline code chunk.
+* If you use the "visual" editor, you don't need to learn much of this
+:::
+
+::: {.footer}
+[Getting Started with Quarto](https://quarto.org/docs/get-started/hello/rstudio.html)
+:::
+
+## {{< fa laptop >}} `Your turn`
+
+- Log into RStudio Pro 
+- Open the project you created in the last class
+- Explore the visual editor -- try adding some **bold** text to the document
+
+```{r}
+#| echo: false
+#| cache: false
+countdown::countdown(minutes = 4, font_size = "3em")
+```
+
+
+## Workspaces {.smaller}
+
+Remember this, and expect it to bite you a few times as you're learning to work 
+with Quarto: The workspace of your Quarto document is separate from the Console!
+
+- Run the following in the console
+```{r}
+#| eval: false
+#| echo: true
+x <- 2
+x * 3
+```
+
+. . .
+
+::: {.question}
+All looks good, eh?
+:::
+
+. . .
+
+- Then, add the following chunk in your Quarto document
+```{r}
+#| echo: true
+#| eval: false
+x * 3
+```
+
+. . .
+
+::: {.question}
+What happens? Why the error?
+:::
+
+
+
+
+## How will we use Quarto?
+
+- Every assignment / report / project / etc. is a Quarto document
+- You'll often have a template Quarto document to start with
+- The amount of scaffolding in the template will decrease over the semester
+- You will turn in the .html file on Canvas
+
+
+## Lab 01
+
+- Lab instructions are posted on the course website under `assignment`
+  + Let's go find today's!
+
+::: {.center .larger}
+[bit.ly/sta-363-s23](https://bit.ly/sta-363-s23)
+:::

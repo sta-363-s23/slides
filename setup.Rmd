@@ -6,6 +6,7 @@ dev.off <- function(){
   invisible(grDevices::dev.off())
 }
 library(tidyverse)
+library(countdown)
 old <- theme_set(theme_minimal())
 #source("iterative_latex.R")
 ```
