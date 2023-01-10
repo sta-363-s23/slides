@@ -28,7 +28,7 @@ format:
 ## Recap: What did we just do?
 
 - Create a project in **RStudio**
-- Upload a .qmd file in **RStudio**
+- Open a .qmd file in **RStudio**
 - Render the analysis 
 - Edit the analysis 
 - Re-render the analysis
