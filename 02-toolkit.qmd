@@ -36,7 +36,7 @@ format:
 ## Login to RStudio Pro {.smaller}
 
 - **Note:** if you are off campus, you will need to use a [VPN to connect](https://is.wfu.edu/services/vpn/)
-- Go to [rstudio.deac.wfu.edu](rstudio.deac.wfu.edu)
+- Go to [https://rstudio.deac.wfu.edu/](https://rstudio.deac.wfu.edu/)
 
 
 ![](img/01/rstudio-pro.png){width="1000" height="350"}
@@ -71,7 +71,7 @@ Click the first option
 
 Paste this link in the top box (`Repository url`):
 
-`https://github.com/sta-112-f22/appex-01-welcome-penguins.git`
+`https://github.com/sta-363-s23/appex-01-welcome-penguins.git`
 
 ![](img/01/paste-link.png)
 
