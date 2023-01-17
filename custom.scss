@@ -55,12 +55,43 @@ strong {
   border: 5px solid #404040;
   border-left: 50px solid #404040;
   padding: 0.5em;
-  background: #C2F9BB;
+  background: #BB2649;
   border-radius: 25px;
   margin-top: 10px;
+  color: #fff;
+}
+
+.reveal .slide .question strong {
+  color: #fff;
+  font-weight: 1200px;
+}
+
+.reveal .slide .question code {
+  color: #fff;
+}
+
+.reveal .slide .definition {
+  border: 5px solid #404040;
+  border-left: 50px solid #404040;
+  padding: 0.5em;
+  background: #404040;
+  border-radius: 25px;
+  margin-top: 10px;
+  color: #fff;
+}
+
+.reveal .slide .definition strong {
+  color: #fff;
+  font-weight: 1200;
 }
 
 .question::after {
+    content: '';
+    position: absolute;
+    bottom: 100px;
+}
+
+.definition::after {
     content: '';
     position: absolute;
     bottom: 100px;
