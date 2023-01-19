@@ -244,11 +244,11 @@ ggplot(Auto, aes(horsepower, mpg)) +
 ```
 
 ::: question
-This point has a $Y$ value of 32.9. What is $\varepsilon$?
+This point has a $Y$ value of 32.9. What is $\hat\varepsilon$?
 :::
 
 
-> * $\varepsilon = Y - f(X) = 32.9 - 19.6 = \color{red}{13.3}$
+> * $\hat\varepsilon = Y - \hat{f}(X) = 32.9 - 19.6 = \color{red}{13.3}$
 
 
 
