@@ -191,8 +191,9 @@ ggplot(x_data, aes(x = x)) +
 
 
 ```{r}
-#| ref-label: "histogram"
 #| warning: true
+ggplot(x_data, aes(x = x)) +
+  geom_histogram()
 ```
 
 :::
@@ -273,7 +274,8 @@ ggplot(x_data, aes(x = x)) +
 ```
 
 ```{r}
-#| ref-label: density
+ggplot(x_data, aes(x = x)) + 
+  geom_density()
 ```
 
 :::
@@ -327,13 +329,13 @@ countdown::countdown(.5)
 #| label: boxplot
 #| echo: true
 #| eval: false
-ggplot(x_data, aes(x = x)) +
-  geom_boxplot()
+
 ```
 
 
 ```{r}
-#| ref-label: "boxplot"
+ggplot(x_data, aes(x = x)) +
+  geom_boxplot()
 ```
 
 :::
@@ -364,7 +366,9 @@ ggplot(x_data, aes(x = x, y = 1)) +
 
 
 ```{r}
-#| ref-label: "boxplot-2"
+ggplot(x_data, aes(x = x, y = 1)) +
+  geom_boxplot() + 
+  geom_jitter()
 ```
 
 :::
@@ -388,8 +392,11 @@ ggplot(x_data, aes(x = x, y = 1)) +
 
 
 ```{r}
-#| ref-label: "boxplot-2"
 #| warning: true
+
+ggplot(x_data, aes(x = x, y = 1)) +
+  geom_boxplot() + 
+  geom_jitter()
 ```
 
 :::
