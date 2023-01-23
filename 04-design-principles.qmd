@@ -1,0 +1,308 @@
+---
+title: "Design Principles for Data Analysis"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/icon.png"
+editor: source
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+     data-background-color: "#fff" 
+     data-color: "#70001A"
+---
+
+## Learning Objectives
+
+- Compare convergent and divergent thinking
+- Describe 6 design principles for data analysis
+- Identify which principles were likely prioritized for given analyses 
+
+## Statistical thinking
+
+![](img/03/stat-thinking.png){fig-align="center"}
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## Statistical thinking
+
+![](img/03/flowchart.png)
+
+::: {.footer}
+https://onishlab.colostate.edu/summer-statistics-workshop-2019/which_test_flowchart/
+:::
+
+## Design Thinking
+
+![](img/03/principles-01.jpg)
+
+::: {.footer}
+Model proposed by the Hasso-Plattner Institute of Design at Stanford
+:::
+
+## Design Thinking
+
+![](img/03/principles-02.jpg)
+
+::: {.footer}
+Model proposed by the Hasso-Plattner Institute of Design at Stanford
+:::
+
+## Design Thinking
+
+![](img/03/principles-03.jpg)
+
+::: {.footer}
+Model proposed by the Hasso-Plattner Institute of Design at Stanford
+:::
+
+## Design Thinking
+
+![](img/03/principles-04.jpg)
+
+::: {.footer}
+Model proposed by the Hasso-Plattner Institute of Design at Stanford
+:::
+
+## Design Thinking
+
+![](img/03/principles-05.jpg)
+
+::: {.footer}
+Model proposed by the Hasso-Plattner Institute of Design at Stanford
+:::
+
+## Design Thinking
+
+![](img/03/principles-06.jpg)
+
+::: {.footer}
+Model proposed by the Hasso-Plattner Institute of Design at Stanford
+:::
+
+## Design Thinking
+
+![](img/03/principles-07.jpg)
+
+::: {.footer}
+Model proposed by the Hasso-Plattner Institute of Design at Stanford
+:::
+
+# Design Principles
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-01.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-02.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+##
+
+![](img/03/data-matching.jpeg){fig-align="center"}
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-03.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+
+##
+
+![](img/03/principles-ex-exh.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/exhaustive.jpeg){fig-align="center"}
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-04.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/skeptical.jpeg){fig-align="center"}
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+##
+
+![](img/03/principles-ex-01.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+##
+
+![](img/03/principles-ex-02.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-05.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+##
+
+![](img/03/second-order.jpeg){fig-align="center"}
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-06.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/clarity.jpeg){fig-align="center"}
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+##
+
+![](img/03/principles-ex-clarity.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-07.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+##
+
+![](img/03/reproducible.jpeg){fig-align="center" height="700"}
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-07.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/producer-consumer-01.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/producer-consumer-02.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/producer-consumer-03.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/producer-consumer-04.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/producer-consumer-05.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/producer-consumer-06.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/producer-consumer-07.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::
+
+## 
+
+![](img/03/principles-list-07.jpg)
+
+::: {.footer}
+D'Agostino McGowan, Peng, and Hicks (2022) [doi.org/10.1080/10618600.2022.2104290](https://doi.org/10.1080/10618600.2022.2104290)
+:::

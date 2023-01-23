@@ -10,6 +10,32 @@ $link-color: #70001A;
 
 /*-- scss:rules --*/
 
+#title-slide {
+  background-size: cover;
+  background-color: #fff;
+  color: #70001A;
+}
+
+.quarto-title-authors {
+  color:  #404040;
+  font-size: 72px;
+  font-family: $presentation-heading-font;
+}
+
+
+
+section.has-dark-background h1  {
+  color: #BB2649;
+  font-weight: 500;
+}
+
+.title h1 {
+  color: #BB2649;
+  font-size: 72px;
+  text-shadow: none;
+  vertical-align: bottom;
+}
+
 tbody tr:nth-child(odd) {
   background-color: #DCDCDC;
 }
@@ -19,12 +45,21 @@ strong {
   font-weight: 900;
 }
 
+em {
+  color: #70001A;  
+  font-style: normal;
+}
+
 .small {
   font-size: 0.75em;
 }
 
 .smaller {
   font-size: 0.5em;
+}
+
+.smallest {
+  font-size: 0.25em;
 }
 
 .large {
@@ -46,6 +81,11 @@ strong {
 .inverse h1, .inverse h2, .inverse h3 {
   color: #f3f3f3;
 }
+
+ul li {
+  padding-bottom: 10px;
+}
+
 
 .reveal pre code {
   word-wrap: normal;

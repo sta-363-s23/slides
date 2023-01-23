@@ -5,10 +5,13 @@ footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
 logo: "img/icon.png"
 editor: source
 format: 
-  revealjs: 
+  kakashi-revealjs: 
     theme: [custom.scss]
     slide-number: true
     chalkboard: true
+    title-slide-attributes: 
+     data-background-color: "#fff" 
+     data-color: "#70001A"
 ---
 
 
@@ -75,7 +78,7 @@ Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
 :::
 ::::
 
-| george | you | hp | free | ! | edu | remove
+---| george | you | hp | free | ! | edu | remove
 --|-----|-----|----|-----|-----|----|------
 **spam** | 0.00 | 2.26 | 0.02 | 0.52 | 0.51 | 0.01 | 0.28
 **email** | 2.27 | 1.27 | 0.90 | 0.07 | 0.11 | 0.29 | 0.01
@@ -207,7 +210,7 @@ Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
 :::
 
 
-## Unsupervised Learning
+## Unsupervised Learning {.small}
 
 ::: footer
 Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
@@ -230,12 +233,14 @@ pre-processing step for supervised learning
 :::
 
 
+::: smaller
+
 - Concepts introduced:
   - How to find slides
   - How to find assignments
   - How to find RStudio Cloud
   - How to get help
   - How to find policies
-
+:::
 
 

@@ -1,0 +1,578 @@
+---
+title: "Exploratory Data Analysis"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/icon.png"
+editor: source
+format: 
+  revealjs: 
+    theme: [custom.scss]
+    transition: fade
+    slide-number: true
+    chalkboard: true
+---
+
+## Learning objectives
+
+* Identify data types and matching appropriate visualization techniques
+* Explain the utility of exploratory data analysis
+* Conduct exploratory data analysis on a new dataset 
+
+# Why explore your data?
+
+## Why EDA? {.small}
+
+> * Check whether everything is **as expected** in your data
+>     + Are there as many rows as you expected in the data set?
+>     + Is any data missing?
+>     + Are there data entry errors?
+>     + Are there outliers?
+
+## Why EDA? {.small}
+
+  * Check whether everything is **as expected** in your data
+  
+> * Check whether the **assumptions of your modeling choice** are met
+>     + Do the data types match the analysis method?
+>     + If doing simple linear regression is the relationship linear?
+>     + If doing multiple linear regression, is the functional form modeled correctly?
+>     + Are any points having a strong influence on the model results?
+
+# Reading in Data
+
+## Reading in data
+
+Some data is already loaded when you load certain packages in `R`, to access these, you just need to use the `data()` function like this:
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: true
+library(datasauRus)
+data(datasaurus_dozen)
+```
+
+. . .
+
+![](img/03/data.png)
+
+## Reading in data
+
+Other times you'll have data in a file, like a `.csv` or Excel file. You can use `read_*` functions that load when you load the **tidyverse** package to read these in. For example, to read a `.csv` file in, you could run:
+
+```{r}
+#| eval: false
+#| echo: true
+movie_data <- read_csv("movie_data.csv")
+```
+
+<br>
+
+:::{.smaller}
+*Note, `movie_data.csv` would need to be saved in your RStudio project folder for this code to run. We will practice this in a few weeks.*
+:::
+
+# Checking your data
+
+## `glimpse` at your data
+
+
+<br>
+
+```{r}
+#| eval: false
+#| echo: true
+glimpse(datasaurus_dozen)
+```
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+glimpse(datasaurus_dozen, width = 60)
+```
+
+. . .
+
+::: {.question}
+How many rows are in this dataset? How many columns?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+
+## `glimpse` at your data
+
+
+<br>
+
+```{r}
+#| eval: false
+#| echo: true
+library(palmerpenguins)
+glimpse(penguins)
+```
+
+```{r}
+#| message: false
+#| warning: false
+library(palmerpenguins)
+glimpse(penguins, width = 60)
+```
+
+. . .
+
+::: {.question}
+What type of variable is `species`? How many numeric variables are there?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+
+# Visualizing data
+
+## What are we looking for?
+
+* The "shape" of the data
+* Patterns
+* Outliers (strange points / data errors)
+
+## Data
+
+Let's grab one of the `datasaurus_dozen` datasets.
+
+```{r}
+#| echo: true
+x_data <- datasaurus_dozen %>%
+  filter(dataset == "x_shape")
+```
+
+<br>
+
+::: {.question}
+What does `filter` do? Why `==`?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+# One continuous variable
+
+## Histogram
+
+::: {.question}
+The `geom_*` in **ggplot2** describe the type of plot you want to create. What do you think would create a histogram?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+. . .
+
+### `geom_histogram`
+
+## Histogram
+
+::: {layout-ncol=2}
+
+
+```{r}
+#| label: histogram
+#| echo: true
+#| eval: false
+ggplot(x_data, aes(x = x)) +
+  geom_histogram()
+```
+
+
+```{r}
+#| ref-label: "histogram"
+#| warning: true
+```
+
+:::
+
+. . .
+
+::: {.question}
+What does this warning mean? How do you think we can get rid of it?
+:::
+
+## Histogram
+
+::: panel-tabset
+
+### `bins = 30`
+
+```{r}
+ggplot(x_data, aes(x = x)) +
+  geom_histogram(bins = 30)
+```
+
+### `bins = 50`
+
+```{r}
+ggplot(x_data, aes(x = x)) +
+  geom_histogram(bins = 100)
+```
+
+### `bins = 10`
+
+```{r}
+ggplot(x_data, aes(x = x)) +
+  geom_histogram(bins = 5)
+```
+
+:::
+
+## Histogram 
+
+```{r}
+#| fig-height: 4
+ggplot(x_data, aes(x = x)) +
+  geom_histogram(bins = 30)
+```
+
+::: {.question .small}
+What does this plot tell us about the **shape** of this data?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+## Density plot
+
+:::{.question}
+What `geom_` do you think would create a density plot?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+. . .
+
+`geom_density`
+
+## Density plots
+
+::: {layout-ncol=2}
+
+```{r}
+#| label: density
+#| echo: true
+#| eval: false
+ggplot(x_data, aes(x = x)) + 
+  geom_density()
+```
+
+```{r}
+#| ref-label: density
+```
+
+:::
+
+## Density plots
+
+::: panel-tabset
+
+### `adjust = 0.1`
+
+```{r}
+ggplot(x_data, aes(x = x)) + 
+  geom_density(adjust = 0.1)
+```
+
+### `adjust = 1`
+
+```{r}
+ggplot(x_data, aes(x = x)) + 
+  geom_density(adjust = 1)
+```
+
+### `adjust = 2`
+
+```{r}
+ggplot(x_data, aes(x = x)) + 
+  geom_density(adjust = 2)
+```
+:::
+
+## Boxplot
+
+::: {.question}
+What `geom_` do you think would create a boxplot?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+. . .
+
+### `geom_boxplot`
+
+## Boxplot
+
+::: {layout-ncol=2}
+
+
+```{r}
+#| label: boxplot
+#| echo: true
+#| eval: false
+ggplot(x_data, aes(x = x)) +
+  geom_boxplot()
+```
+
+
+```{r}
+#| ref-label: "boxplot"
+```
+
+:::
+
+. . .
+
+::: {.question}
+Does this give us as much information as the histogram?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+## Boxplot
+
+::: {layout-ncol=2}
+
+
+```{r}
+#| label: boxplot-2
+#| echo: true
+#| eval: false
+ggplot(x_data, aes(x = x, y = 1)) +
+  geom_boxplot() + 
+  geom_jitter()
+```
+
+
+```{r}
+#| ref-label: "boxplot-2"
+```
+
+:::
+
+### Always show your data!
+
+## Boxplot
+
+::: {layout-ncol=2}
+
+
+```{r}
+#| label: boxplot-3
+#| echo: true
+#| eval: false
+#| code-line-numbers: "3"
+ggplot(x_data, aes(x = x, y = 1)) +
+  geom_boxplot() + 
+  geom_jitter()
+```
+
+
+```{r}
+#| ref-label: "boxplot-2"
+#| warning: true
+```
+
+:::
+
+### Always show your data!
+
+# Relationship between two continuous variables
+
+## Scatterplot
+
+
+```{r}
+#| echo: true
+ggplot(x_data, aes(x = x, y = y)) +
+  geom_point()
+```
+
+
+## Hex plot
+
+```{r}
+#| echo: true
+ggplot(x_data, aes(x = x, y = y)) +
+  geom_hex()
+```
+
+# One categorical variable
+
+## Barplot
+
+```{r}
+#| echo: true
+ggplot(datasaurus_dozen, aes(x = dataset)) + 
+  geom_bar()
+```
+
+
+
+. . .
+
+::: {.question .small}
+What does this plot tell us?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+## Barplot
+
+
+```{r}
+#| echo: true
+#| code-line-numbers: "3"
+#| fig-height: 3
+ggplot(datasaurus_dozen, aes(x = dataset)) + 
+  geom_bar() + 
+  coord_flip()
+```
+
+
+### Flip the coordinates to make it easier to read {.smaller}
+
+# Relationship between continuous and categorical variables
+
+## Histogram
+
+```{r}
+#| echo: true
+ggplot(datasaurus_dozen, aes(x = x, fill = dataset)) + 
+  geom_histogram(bins = 30, alpha = 0.5)
+```
+
+## Histogram
+
+```{r}
+#| echo: true
+ggplot(datasaurus_dozen, aes(x = x)) + 
+  geom_histogram(bins = 30) + 
+  facet_wrap(~dataset)
+```
+## Histogram
+
+```{r}
+#| echo: true
+smaller_data <- datasaurus_dozen %>%
+  filter(dataset %in% c("slant_down", "x_shape"))
+```
+
+. . .
+
+::: {.question}
+What does `%in%` do?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+## Histogram
+
+```{r}
+#| echo: true
+ggplot(smaller_data, aes(x = x, fill = dataset)) + 
+  geom_histogram(bins = 30, alpha = 0.5)
+```
+
+
+## Ridge plots
+
+```{r}
+#| echo: true
+library(ggridges)
+ggplot(datasaurus_dozen, aes(x = x, y = dataset, fill = dataset)) +
+  geom_density_ridges(alpha = 0.4, bandwidth = 2)
+```
+
+## Boxplot
+
+```{r}
+#| echo: true
+#| fig-height: 3
+ggplot(datasaurus_dozen, aes(x = x, y = dataset)) + 
+  geom_boxplot()
+```
+
+. . .
+
+:::{.question .small}
+What is missing?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+## Boxplot
+
+```{r}
+#| echo: true
+#| fig-height: 3
+ggplot(datasaurus_dozen, aes(x = x, y = dataset)) + 
+  geom_boxplot() + 
+  geom_jitter()
+```
+. . . 
+
+::: {.question .small}
+How can we make this more legible?
+:::
+
+```{r}
+countdown::countdown(.5)
+```
+
+## Boxplot
+
+```{r}
+#| echo: true
+ggplot(datasaurus_dozen, aes(x = x, y = dataset, color = dataset)) + 
+  geom_boxplot() + 
+  geom_jitter(alpha = 0.5)
+```
+
+## How will we use this?
+
+* Plot **every** outcome variable before performing an analysis
+  * Be sure to include labels and titles on all plots for full points
+* Plot important features 
+* Be sure to note any missing data patterns
+
+## {{< fa laptop >}} `Application Exercise` {.smaller}
+
+1.  Open the Welcome Penguins folder from the previous application exercise
+
+2. Create a boxplot examining the relationship between the body mass of a penguin and their species. 
+
+3. Add jittered points to this plot
+
+4. Add labels and a title to this plot
+
+```{r}
+countdown::countdown(8)
+```
+
+
