@@ -7,9 +7,11 @@ $presentation-heading-color: #BB2649;
 $body-color: #404040;
 $link-color: #70001A;
 
-
 /*-- scss:rules --*/
 
+a {
+  color: #70001A;
+}
 #title-slide {
   background-size: cover;
   background-color: #fff;

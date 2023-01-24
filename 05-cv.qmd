@@ -1,0 +1,500 @@
+---
+title: "Cross validation"
+author: "Dr. D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i>adapted from slides by Hastie & Tibshirani</i>"
+logo: "img/icon.png"
+editor: source
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+library(gridExtra)
+```
+
+
+
+## Cross validation
+
+### `r emo::ji("bulb")` Big idea
+
+::: nonincremental
+* We have determined that it is sensible to use a _test_ set to calculate metrics like prediction error
+:::
+
+## Cross validation
+
+### `r emo::ji("bulb")` Big idea
+
+::: nonincremental
+* We have determined that it is sensible to use a _test_ set to calculate metrics like prediction error
+:::
+
+::: question
+Why?
+:::
+
+
+## Cross validation 
+
+### `r emo::ji("bulb")` Big idea
+
+::: nonincremental
+* We have determined that it is sensible to use a _test_ set to calculate metrics like prediction error
+:::
+
+::: question
+How could we do this?
+:::
+
+
+
+## Cross validation
+
+### `r emo::ji("bulb")` Big idea
+
+::: nonincremental
+* We have determined that it is sensible to use a _test_ set to calculate metrics like prediction error
+* What if we don't have a separate data set to test our model on?
+* `r emo::ji("tada")` We can use **resampling** methods to **estimate** the test-set prediction error
+:::
+
+
+## Training error versus test error {.small}
+
+::: question
+What is the difference? Which is typically larger?
+:::
+
+ * The **training error** is calculated by using the same observations used to fit the statistical learning model
+ * The **test error** is calculated by using a statistical learning method to predict the response of **new** observations
+ * The **training error rate** typically _underestimates_ the true prediction error rate
+
+##
+
+![](img/05/model-complexity.png)
+
+## Estimating prediction error {.small}
+
+ * Best case scenario: We have a large data set to test our model on 
+ * This is not always the case!
+
+. . .
+
+ `r emo::ji("bulb")` Let's instead find a way to estimate the test error by holding out a subset of the training observations from the model fitting process, and then applying the statistical learning method to those held out observations
+
+
+
+## Approach #1: Validation set  {.small}
+
+ * Randomly divide the available set up samples into two parts: a **training set** and a **validation set**
+ * Fit the model on the **training set**, calculate the prediction error on the **validation set**
+
+. . .
+
+::: question
+If we have a **quantitative predictor** what metric would we use to calculate this test error?
+:::
+
+
+* Often we use Mean Squared Error (MSE)
+
+
+## Approach #1: Validation set {.small}
+
+::: nonincremental
+* Randomly divide the available set up samples into two parts: a **training set** and a **validation set**
+* Fit the model on the **training set**, calculate the prediction error on the **validation set**
+
+:::
+
+::: question
+If we have a **qualitative predictor** what metric would we use to calculate this test error?
+:::
+
+
+* Often we use misclassification rate
+
+
+
+## Approach #1: Validation set {.small}
+
+```{r, echo = FALSE}
+plot_split <- function(data = sample(c(rep("Training", 10), rep("Testing", 10)))) {
+    s_plot <-
+        tibble(
+          Row = 1:20,
+          Data = data
+        ) |> 
+        ggplot(aes(x = Row, y = 1, fill = Data)) + 
+        geom_tile(color = "white",
+                  size = 1) + 
+        scale_fill_manual(values = c("orange", "cornflower blue"),
+                          guide = FALSE) +
+        theme_void() +
+        coord_equal()
+    
+    s_plot
+}
+```
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.1}
+plot_split()
+```
+
+. . .
+
+$$\Large\color{orange}{MSE_{\texttt{test-split}} = \textrm{Ave}_{i\in\texttt{test-split}}[y_i-\hat{f}(x_i)]^2}$$
+
+. . .
+
+$$\Large\color{orange}{Err_{\texttt{test-split}} = \textrm{Ave}_{i\in\texttt{test-split}}I[y_i\neq \mathcal{\hat{C}}(x_i)]}$$
+
+
+
+## Approach #1: Validation set {.small}
+
+Auto example:  
+
+::: nonincremental
+* We have 392 observations. 
+* Trying to predict `mpg` from `horsepower`. 
+* We can split the data in half and use 196 to fit the model and 196 to test 
+:::
+
+```{r, fig.height = 2}
+data(Auto)
+set.seed(3)
+f <- function() {
+  samp <- sample(1:392, 196)
+  train <- Auto[samp, ]
+  test <- Auto[-samp, ]
+  tibble(x = 1:15,
+         y = map_dbl(1:15, mse, test = test, train = train)
+  )
+}
+mse <- function(p = 1, test = test, train = train) {
+  mean((test$mpg - predict(lm(mpg ~ poly(horsepower, degree = p), data = train), newdata = test))^2)
+}
+ggplot(f(), aes(x = x, y = y)) + 
+  geom_line() +
+  geom_point() + 
+  labs(x = "degree polynomial", y = "MSE") + 
+  theme_classic() + 
+  ylim(c(15, 30))
+```
+
+
+
+## Approach #1: Validation set {.small}
+
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.05}
+plot_split()
+```
+
+
+$\color{orange}{MSE_{\texttt{test-split}}}$
+
+. . .
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.05}
+plot_split()
+```
+
+
+
+$\color{orange}{MSE_{\texttt{test-split}}}$
+
+. . .
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.05}
+plot_split()
+```
+
+
+$\color{orange}{MSE_{\texttt{test-split}}}$
+
+
+. . .
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.05}
+plot_split()
+```
+
+
+$\color{orange}{MSE_{\texttt{test-split}}}$
+
+
+
+## Approach #1: Validation set {.small}
+
+Auto example: 
+
+::: nonincremental
+
+* We have 392 observations. 
+* Trying to predict `mpg` from `horsepower`. 
+* We can split the data in half and use 196 to fit the model and 196 to test - **what if we did this many times?**
+
+:::
+
+```{r, fig.height = 2}
+set.seed(1)
+d <- map_df(1:10, ~ f())
+d$z <- rep(LETTERS[1:10], each = 15)
+ggplot(d, aes(x = x, y = y, group = z, color = z)) + 
+  geom_line() +
+  labs(x = "degree polynomial", y = "MSE") + 
+  theme_classic() + 
+  theme(legend.position = "none") +
+  coord_cartesian(ylim = c(15, 30))
+```
+
+
+
+## Approach #1: Validation set (Drawbacks) {.small}
+
+* the validation estimate of the test error can be highly variable, depending on which observations are included in the training set and which observations are included in the validation set
+* In the validation approach, only a subset of the observations (those that are included in the training set rather than in the validation set) are used to fit the model
+* Therefore, the validation set error may tend to **overestimate** the test error for the model fit on the entire data set
+
+
+
+## Approach #2: K-fold cross validation {.small}
+
+`r emo::ji("bulb")` The idea is to do the following:
+
+*  Randomly divide the data into $K$ equal-sized parts
+*  Leave out part $k$, fit the model to the other $K - 1$ parts (combined)
+*  Obtain predictions for the left-out $k$th part
+*  Do this for each part $k = 1, 2,\dots K$, and then combine the result
+
+
+
+## K-fold cross validation {.smaller}
+
+```{r echo=FALSE, fig.width = 10, fig.height = .3, fig.asp = 0.05}
+plot_split(data = c(rep("Train", 15), rep("Test", 5)))
+```
+$\color{orange}{MSE_{\texttt{test-split-1}}}$
+
+
+. . .
+
+```{r echo=FALSE, fig.width = 10, fig.height = .3, fig.asp = 0.05}
+plot_split(data = c(rep("Train", 10), rep("Test", 5), rep("Train", 5)))
+```
+
+$\color{orange}{MSE_{\texttt{test-split-2}}}$
+
+. . .
+
+```{r echo=FALSE, fig.width = 10, fig.height = .3, fig.asp = 0.05}
+plot_split(data = c(rep("Train", 5), rep("Test", 5), rep("Train", 10)))
+```
+
+$\color{orange}{MSE_{\texttt{test-split-3}}}$
+
+
+. . .
+
+
+```{r echo=FALSE, fig.width = 10, fig.height = .3, fig.asp = 0.05}
+plot_split(data = c(rep("Test", 5), rep("Train", 15)))
+```
+
+$\color{orange}{MSE_{\texttt{test-split-4}}}$
+
+
+**Take the mean of the $k$ MSE values**
+
+## {{< fa laptop >}} `Application Exercise` 
+
+If we use 10 folds:
+
+::: nonincremental
+1. What percentage of the training data is used in each analysis for each fold?
+2. What percentage of the training data is used in the assessment for each fold?
+:::
+
+```{r}
+#| code-fold: false
+countdown::countdown(2)
+```
+
+
+## Estimating prediction error (quantitative outcome) {.small}
+
+* Split the data into K parts, where $C_1, C_2, \dots, C_k$ indicate the indices of observations in part $k$
+* $CV_{(K)} = \sum_{k=1}^K\frac{n_k}{n}MSE_k$
+* $MSE_k = \sum_{i \in C_k} (y_i - \hat{y}_i)^2/n_k$
+* $n_k$ is the number of observations in group $k$
+* $\hat{y}_i$ is the fit for observation $i$ obtained from the data with the part $k$ removed
+* If we set $K = n$, we'd have $n-fold$ cross validation which is the same as **leave-one-out cross validation** (LOOCV)
+
+## Estimating prediction error (quantitative outcome) {.small}
+
+::: nonincremental
+* Split the data into K parts, where $C_1, C_2, \dots, C_k$ indicate the indices of observations in part $k$
+* $$CV_{(K)} = \sum_{k=1}^K\frac{n_k}{n}MSE_k$$
+* $MSE_k = \sum_{i \in C_k} (y_i - \hat{y}_i)^2/n_k$
+* $n_k$ is the number of observations in group $k$
+* $\hat{y}_i$ is the fit for observation $i$ obtained from the data with the part $k$ removed
+* If we set $K = n$, we'd have $n-fold$ cross validation which is the same as **leave-one-out cross validation** (LOOCV)
+:::
+ 
+## Leave-one-out cross validation {.small}
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.1}
+plot_split(data = c(rep("Train", 19), rep("Test", 1)))
+```
+
+. . .
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.1}
+plot_split(data = c(rep("Train", 18), rep("Test", 1), "Train"))
+```
+
+. . .
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.1}
+plot_split(data = c(rep("Train", 17), rep("Test", 1), rep("Train", 2)))
+```
+
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.1}
+plot_split(data = c(rep("Train", 16), rep("Test", 1), rep("Train", 3)))
+```
+
+$$\dots$$
+
+
+```{r echo=FALSE, fig.width = 10, fig.height = .5, fig.asp = 0.1}
+plot_split(data = c(rep("Test", 1), rep("Train", 19)))
+```
+
+
+
+<!-- ## Special Case! -->
+
+<!-- * With _linear_ regression, you can actually calculate the LOOCV error without having to iterate! -->
+
+<!-- $$CV_{(n)} = \frac{1}{n}\sum_{i=1}^n\left(\frac{y_i-\hat{y}_i}{1-h_i}\right)^2$$ -->
+
+<!-- -- -->
+
+<!-- * $\hat{y}_i$ is the $i$th fitted value from the linear model  -->
+<!-- -- -->
+
+<!-- * $h_i$ is the diagonal of the "hat" matrix (remember that! `r emo::ji("hat")`) -->
+
+<!-- --- -->
+
+## Picking $K$ {.small}
+
+* $K$ can vary from 2 (splitting the data in half each time) to $n$ (LOOCV)
+* LOOCV is sometimes useful but usually the estimates from each fold are very correlated, so their average can have a **high variance**
+* A better choice tends to be $K=5$ or $K=10$
+
+
+
+## Bias variance trade-off
+
+* Since each training set is only $(K - 1)/K$ as big as the original training set, the estimates of prediction error will typically be **biased** upward
+* This bias is minimized when $K = n$ (LOOCV), but this estimate has a **high variance**
+* $K =5$ or $K=10$ provides a nice compromise for the bias-variance trade-off
+
+
+## Approach #2: K-fold Cross Validation {.small}
+
+Auto example: 
+
+::: nonincremental
+
+* We have 392 observations. 
+* Trying to predict `mpg` from `horsepower`
+:::
+
+```{r fig1, cache = TRUE, fig.height = 2}
+ggplot(d, aes(x = x, y = y, group = z, color = z)) + 
+  geom_line() +
+  labs(x = "degree polynomial", y = "MSE", title = "50-50 Validation set") + 
+  theme_classic() + 
+  theme(legend.position = "none") +
+  coord_cartesian(ylim = c(15, 30)) -> p1
+
+f2 <- function() {
+  Auto_ <- Auto |>
+    slice(sample(1:nrow(Auto))) |>
+    mutate(k = rep(1:10, length.out = nrow(Auto)))
+  
+  purrr::map2_df(rep(1:10, each = 15),
+                 rep(1:15, 10),
+                 ~ get_mse(.x, .y, data = Auto_)) |>
+    group_by(x) |>
+    summarise(cv_10 = sum(n / sum(n) * mse))
+}
+
+get_mse <- function(K, p, data = Auto_) {
+  Auto_k <- data |>
+    filter(k != K)
+  model_k <- lm(mpg ~ poly(horsepower, p), data = Auto_k)
+  data |>
+    filter(k == K) %>%
+    mutate(pred = predict(model_k, newdata = .)) |>
+    summarise(mse = mean((mpg - pred)^2),
+              n = n(),
+              x = p)
+}
+d2 <- map_df(1:10, ~f2())
+d2$group <- rep(LETTERS[1:10], each = 15)
+ggplot(d2, aes(x = x, y = cv_10, group = group, color = group)) +
+  geom_line() + 
+  coord_cartesian(ylim = c(15, 30)) + 
+  labs(y = "MSE", x = "degree polynomial", title = "10-fold CV") + 
+  theme_classic() + 
+  theme(legend.position = "none") -> p2
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+
+## Estimating prediction error (qualitative outcome) {.small}
+
+* The premise is the same as cross valiation for quantitative outcomes
+* Split the data into K parts, where $C_1, C_2, \dots, C_k$ indicate the indices of observations in part $k$
+* $CV_K = \sum_{k=1}^K\frac{n_k}{n}Err_k$
+* $Err_k = \sum_{i\in C_k}I(y_i\neq\hat{y}_i)/n_k$ (misclassification rate)
+* $n_k$ is the number of observations in group $k$
+* $\hat{y}_i$ is the fit for observation $i$ obtained from the data with the part $k$ removed
+
+
+## Estimating prediction error (qualitative outcome) {.small}
+
+::: nonincremental
+* The premise is the same as cross valiation for quantitative outcomes
+* Split the data into K parts, where $C_1, C_2, \dots, C_k$ indicate the indices of observations in part $k$
+* $CV_K = \sum_{k=1}^K\frac{n_k}{n}Err_k$
+* $Err_k = \sum_{i\in C_k}I(y_i\neq\hat{y}_i)/n_k$ (misclassification rate)
+* $n_k$ is the number of observations in group $k$
+* $\hat{y}_i$ is the fit for observation $i$ obtained from the data with the part $k$ removed
+:::
+

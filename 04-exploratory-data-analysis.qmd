@@ -5,11 +5,13 @@ footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
 logo: "img/icon.png"
 editor: source
 format: 
-  revealjs: 
+  kakashi-revealjs: 
     theme: [custom.scss]
-    transition: fade
     slide-number: true
     chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
 ---
 
 ## Learning objectives
@@ -147,7 +149,7 @@ Let's grab one of the `datasaurus_dozen` datasets.
 
 ```{r}
 #| echo: true
-x_data <- datasaurus_dozen %>%
+x_data <- datasaurus_dozen |>
   filter(dataset == "x_shape")
 ```
 
@@ -568,7 +570,9 @@ ggplot(datasaurus_dozen, aes(x = x, y = dataset, color = dataset)) +
 * Plot important features 
 * Be sure to note any missing data patterns
 
-## {{< fa laptop >}} `Application Exercise` {.smaller}
+## {{< fa laptop >}} `Application Exercise` {.small}
+
+::: {.nonincremental}
 
 1.  Open the Welcome Penguins folder from the previous application exercise
 
@@ -577,6 +581,8 @@ ggplot(datasaurus_dozen, aes(x = x, y = dataset, color = dataset)) +
 3. Add jittered points to this plot
 
 4. Add labels and a title to this plot
+
+:::
 
 ```{r}
 countdown::countdown(8)

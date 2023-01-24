@@ -10,8 +10,8 @@ format:
     slide-number: true
     chalkboard: true
     title-slide-attributes: 
-     data-background-color: "#fff" 
-     data-color: "#70001A"
+      data-background-color: "#fff" 
+      data-color: "#70001A"
 ---
 
 

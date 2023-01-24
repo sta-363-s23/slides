@@ -391,7 +391,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-color="#fff" data-color="#70001A" class="quarto-title-block center">
   <h1 class="title">Exploratory Data Analysis</h1>
 
 <div class="quarto-title-authors">
@@ -406,9 +406,9 @@ Lucy D’Agostino McGowan
 <section id="learning-objectives" class="slide level2">
 <h2>Learning objectives</h2>
 <ul>
-<li>Identify data types and matching appropriate visualization techniques</li>
-<li>Explain the utility of exploratory data analysis</li>
-<li>Conduct exploratory data analysis on a new dataset</li>
+<li class="fragment">Identify data types and matching appropriate visualization techniques</li>
+<li class="fragment">Explain the utility of exploratory data analysis</li>
+<li class="fragment">Conduct exploratory data analysis on a new dataset</li>
 </ul>
 </section>
 <section>
@@ -419,27 +419,27 @@ Lucy D’Agostino McGowan
 <section id="why-eda" class="slide level2 small">
 <h2>Why EDA?</h2>
 <ul>
-<li class="fragment">Check whether everything is <strong>as expected</strong> in your data
+<li>Check whether everything is <strong>as expected</strong> in your data
 <ul>
-<li class="fragment">Are there as many rows as you expected in the data set?</li>
-<li class="fragment">Is any data missing?</li>
-<li class="fragment">Are there data entry errors?</li>
-<li class="fragment">Are there outliers?</li>
+<li>Are there as many rows as you expected in the data set?</li>
+<li>Is any data missing?</li>
+<li>Are there data entry errors?</li>
+<li>Are there outliers?</li>
 </ul></li>
 </ul>
 </section>
 <section id="why-eda-1" class="slide level2 small">
 <h2>Why EDA?</h2>
 <ul>
-<li>Check whether everything is <strong>as expected</strong> in your data</li>
+<li class="fragment">Check whether everything is <strong>as expected</strong> in your data</li>
 </ul>
 <ul>
-<li class="fragment">Check whether the <strong>assumptions of your modeling choice</strong> are met
+<li>Check whether the <strong>assumptions of your modeling choice</strong> are met
 <ul>
-<li class="fragment">Do the data types match the analysis method?</li>
-<li class="fragment">If doing simple linear regression is the relationship linear?</li>
-<li class="fragment">If doing multiple linear regression, is the functional form modeled correctly?</li>
-<li class="fragment">Are any points having a strong influence on the model results?</li>
+<li>Do the data types match the analysis method?</li>
+<li>If doing simple linear regression is the relationship linear?</li>
+<li>If doing multiple linear regression, is the functional form modeled correctly?</li>
+<li>Are any points having a strong influence on the model results?</li>
 </ul></li>
 </ul>
 </section></section>
@@ -451,7 +451,7 @@ Lucy D’Agostino McGowan
 <section id="reading-in-data-1" class="slide level2">
 <h2>Reading in data</h2>
 <p>Some data is already loaded when you load certain packages in <code>R</code>, to access these, you just need to use the <code>data()</code> function like this:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(datasauRus)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">data</span>(datasaurus_dozen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -462,7 +462,7 @@ Lucy D’Agostino McGowan
 <section id="reading-in-data-2" class="slide level2">
 <h2>Reading in data</h2>
 <p>Other times you’ll have data in a file, like a <code>.csv</code> or Excel file. You can use <code>read_*</code> functions that load when you load the <strong>tidyverse</strong> package to read these in. For example, to read a <code>.csv</code> file in, you could run:</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>movie_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"movie_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -478,10 +478,10 @@ Lucy D’Agostino McGowan
 <section id="glimpse-at-your-data" class="slide level2">
 <h2><code>glimpse</code> at your data</h2>
 <p><br></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">glimpse</span>(datasaurus_dozen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 1,846
 Columns: 3
@@ -494,9 +494,9 @@ $ y       &lt;dbl&gt; 97.1795, 96.0256, 94.4872, 91.4103, 88.333…</code></pre>
 <div class="question">
 <p>How many rows are in this dataset? How many columns?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_cf34bdf8" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_8bd52602" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -507,11 +507,11 @@ $ y       &lt;dbl&gt; 97.1795, 96.0256, 94.4872, 91.4103, 88.333…</code></pre>
 <section id="glimpse-at-your-data-1" class="slide level2">
 <h2><code>glimpse</code> at your data</h2>
 <p><br></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(palmerpenguins)</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">glimpse</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 344
 Columns: 8
@@ -529,9 +529,9 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <div class="question">
 <p>What type of variable is <code>species</code>? How many numeric variables are there?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_c6233a12" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_009aaebe" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -547,25 +547,25 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <section id="what-are-we-looking-for" class="slide level2">
 <h2>What are we looking for?</h2>
 <ul>
-<li>The “shape” of the data</li>
-<li>Patterns</li>
-<li>Outliers (strange points / data errors)</li>
+<li class="fragment">The “shape” of the data</li>
+<li class="fragment">Patterns</li>
+<li class="fragment">Outliers (strange points / data errors)</li>
 </ul>
 </section>
 <section id="data" class="slide level2">
 <h2>Data</h2>
 <p>Let’s grab one of the <code>datasaurus_dozen</code> datasets.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>x_data <span class="ot">&lt;-</span> datasaurus_dozen <span class="sc">%&gt;%</span></span>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>x_data <span class="ot">&lt;-</span> datasaurus_dozen <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">==</span> <span class="st">"x_shape"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="question">
 <p>What does <code>filter</code> do? Why <code>==</code>?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_c8a10c78" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_402277ac" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -582,9 +582,9 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <div class="question">
 <p>The <code>geom_*</code> in <strong>ggplot2</strong> describe the type of plot you want to create. What do you think would create a histogram?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_a6e0529a" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_73e26106" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -607,7 +607,11 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 </div>
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-13-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-13-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -624,23 +628,35 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1"><code>bins = 30</code></a></li><li><a href="#tabset-1-2"><code>bins = 50</code></a></li><li><a href="#tabset-1-3"><code>bins = 10</code></a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-1-2">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-1-3">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -650,12 +666,12 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <section id="histogram-3" class="slide level2">
 <h2>Histogram</h2>
 
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"><div class="question small">
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-17-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="question small">
 <p>What does this plot tell us about the <strong>shape</strong> of this data?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_dcbdcd70" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_fbc64279" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -667,9 +683,9 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <div class="question">
 <p>What <code>geom_</code> do you think would create a density plot?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_489eeeeb" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_2383ce0c" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -689,7 +705,11 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </div>
 <div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-21-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-21-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -701,23 +721,35 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1"><code>adjust = 0.1</code></a></li><li><a href="#tabset-2-2"><code>adjust = 1</code></a></li><li><a href="#tabset-2-3"><code>adjust = 2</code></a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-22-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-22-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-2-2">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-23-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-23-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div id="tabset-2-3">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-24-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-24-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -729,9 +761,9 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <div class="question">
 <p>What <code>geom_</code> do you think would create a boxplot?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_ee226d83" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_837a8b9a" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -750,7 +782,11 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </div>
 <div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-27-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-27-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -759,9 +795,9 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <div class="question">
 <p>Does this give us as much information as the histogram?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_a55ca468" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_fe2e5f35" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -780,7 +816,11 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </div>
 <div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-30-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-30-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -798,7 +838,11 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </div>
 <div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="cell-output-display">
-<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-32-1.png" style="width:80.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -812,20 +856,20 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </section>
 <section id="scatterplot" class="slide level2">
 <h2>Scatterplot</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">ggplot</span>(x_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"></section>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-33-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="hex-plot" class="slide level2">
 <h2>Hex plot</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(x_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">geom_hex</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-34-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section></section>
 <section>
 <section id="one-categorical-variable" class="title-slide slide level1 center">
 <h1>One categorical variable</h1>
@@ -833,18 +877,18 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </section>
 <section id="barplot" class="slide level2">
 <h2>Barplot</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> dataset)) <span class="sc">+</span> </span>
 <span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"><div class="fragment">
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-35-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="fragment">
 <div class="question small">
 <p>What does this plot tell us?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_5ed96936" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_c7e49a07" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -854,13 +898,13 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </section>
 <section id="barplot-1" class="slide level2">
 <h2>Barplot</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb16" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> dataset)) <span class="sc">+</span> </span>
 <span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span> </span>
 <span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"><h3 class="smaller" id="flip-the-coordinates-to-make-it-easier-to-read">Flip the coordinates to make it easier to read</h3>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-37-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><h3 class="smaller" id="flip-the-coordinates-to-make-it-easier-to-read">Flip the coordinates to make it easier to read</h3>
 </section></section>
 <section>
 <section id="relationship-between-continuous-and-categorical-variables" class="title-slide slide level1 center">
@@ -869,24 +913,24 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </section>
 <section id="histogram-4" class="slide level2">
 <h2>Histogram</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">fill =</span> dataset)) <span class="sc">+</span> </span>
 <span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-38-1.png" width="960" class="r-stretch"></section>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-38-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="histogram-5" class="slide level2">
 <h2>Histogram</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span> </span>
 <span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span> </span>
 <span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-39-1.png" width="960" class="r-stretch"></section>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-39-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="histogram-6" class="slide level2">
 <h2>Histogram</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>smaller_data <span class="ot">&lt;-</span> datasaurus_dozen <span class="sc">%&gt;%</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">filter</span>(dataset <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"slant_down"</span>, <span class="st">"x_shape"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -894,9 +938,9 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 <div class="question">
 <p>What does <code>%in%</code> do?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_3af6ada7" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_2fc9dbd9" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -906,35 +950,35 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </section>
 <section id="histogram-7" class="slide level2">
 <h2>Histogram</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(smaller_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">fill =</span> dataset)) <span class="sc">+</span> </span>
 <span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-42-1.png" width="960" class="r-stretch"></section>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-42-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="ridge-plots" class="slide level2">
 <h2>Ridge plots</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">library</span>(ggridges)</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> dataset, <span class="at">fill =</span> dataset)) <span class="sc">+</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">geom_density_ridges</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">bandwidth =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-43-1.png" width="960" class="r-stretch"></section>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-43-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="boxplot-4" class="slide level2">
 <h2>Boxplot</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> dataset)) <span class="sc">+</span> </span>
 <span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-44-1.png" width="960" class="r-stretch"><div class="fragment">
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-44-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="fragment">
 <div class="question small">
 <p>What is missing?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_4f6cdfdc" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_1761fd6b" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -944,19 +988,19 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </section>
 <section id="boxplot-5" class="slide level2">
 <h2>Boxplot</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> dataset)) <span class="sc">+</span> </span>
 <span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
 <span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-46-1.png" width="960" class="r-stretch"><div class="fragment">
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-46-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="fragment">
 <div class="question small">
 <p>How can we make this more legible?</p>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_16560dba" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_eb417df2" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">00</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
@@ -966,35 +1010,37 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 </section>
 <section id="boxplot-6" class="slide level2">
 <h2>Boxplot</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(datasaurus_dozen, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> dataset, <span class="at">color =</span> dataset)) <span class="sc">+</span> </span>
 <span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
 <span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-48-1.png" width="960" class="r-stretch"></section>
+<img data-src="04-exploratory-data-analysis_files/figure-revealjs/unnamed-chunk-48-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="how-will-we-use-this" class="slide level2">
 <h2>How will we use this?</h2>
 <ul>
-<li>Plot <strong>every</strong> outcome variable before performing an analysis
+<li class="fragment">Plot <strong>every</strong> outcome variable before performing an analysis
 <ul>
-<li>Be sure to include labels and titles on all plots for full points</li>
+<li class="fragment">Be sure to include labels and titles on all plots for full points</li>
 </ul></li>
-<li>Plot important features</li>
-<li>Be sure to note any missing data patterns</li>
+<li class="fragment">Plot important features</li>
+<li class="fragment">Be sure to note any missing data patterns</li>
 </ul>
 </section>
-<section id="fa-laptop-application-exercise" class="slide level2 smaller">
+<section id="fa-laptop-application-exercise" class="slide level2 small">
 <h2> <code>Application Exercise</code></h2>
+<div>
 <ol type="1">
 <li><p>Open the Welcome Penguins folder from the previous application exercise</p></li>
 <li><p>Create a boxplot examining the relationship between the body mass of a penguin and their species.</p></li>
 <li><p>Add jittered points to this plot</p></li>
 <li><p>Add labels and a title to this plot</p></li>
 </ol>
-<div class="cell">
+</div>
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_3e32c098" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_e5e7c9d8" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">08</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -1037,7 +1083,7 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":false},
 'chalkboard': {"buttons":true},
 'smaller': false,
  
@@ -1161,10 +1207,10 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 20…</code></pre>
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'fade',
+        transition: 'none',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',
