@@ -238,10 +238,11 @@ ol li::before {
   text-align: center;
 }
 
-.slide-menu-wrapper {
-  display: none;
-  visibility: hidden;
-}
+//this breaks the menu
+//.slide-menu-wrapper {
+//  display: none;
+//  visibility: hidden;
+//}
 
 .huge { font-size: 200% }
 .large { font-size: 130% }

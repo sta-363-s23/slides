@@ -26,4 +26,5 @@ contributes:
         data-color: "#EDEEF"
       preview-links: true
       code-overflow: wrap
+      menu: false
       incremental: true

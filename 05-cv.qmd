@@ -13,7 +13,6 @@ format:
       data-background-color: "#fff" 
       data-color: "#70001A"
     menu: true
-    
 ---
 
 
