@@ -12,6 +12,7 @@ format:
     title-slide-attributes: 
       data-background-color: "#fff" 
       data-color: "#70001A"
+    menu: true
     
 ---
 
@@ -392,20 +393,13 @@ plot_split(data = c(rep("Test", 1), rep("Train", 19)))
 
 
 
-<!-- ## Special Case! -->
+## Special Case!
 
-<!-- * With _linear_ regression, you can actually calculate the LOOCV error without having to iterate! -->
+* With _linear_ regression, you can actually calculate the LOOCV error without having to iterate!
+* $CV_{(n)} = \frac{1}{n}\sum_{i=1}^n\left(\frac{y_i-\hat{y}_i}{1-h_i}\right)^2$
+* $\hat{y}_i$ is the $i$th fitted value from the linear model
+* $h_i$ is the diagonal of the "hat" matrix (remember that! `r emo::ji("hat")`)
 
-<!-- $$CV_{(n)} = \frac{1}{n}\sum_{i=1}^n\left(\frac{y_i-\hat{y}_i}{1-h_i}\right)^2$$ -->
-
-<!-- -- -->
-
-<!-- * $\hat{y}_i$ is the $i$th fitted value from the linear model  -->
-<!-- -- -->
-
-<!-- * $h_i$ is the diagonal of the "hat" matrix (remember that! `r emo::ji("hat")`) -->
-
-<!-- --- -->
 
 ## Picking $K$ {.small}
 

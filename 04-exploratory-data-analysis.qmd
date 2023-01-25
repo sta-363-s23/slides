@@ -12,7 +12,17 @@ format:
     title-slide-attributes: 
       data-background-color: "#fff" 
       data-color: "#70001A"
+    menu: true
 ---
+
+```{r child = "setup.Rmd"}
+```
+
+```{r}
+#| echo: false
+knitr::opts_chunk$set(echo = FALSE)
+```
+
 
 ## Learning objectives
 
@@ -24,21 +34,20 @@ format:
 
 ## Why EDA? {.small}
 
-> * Check whether everything is **as expected** in your data
->     + Are there as many rows as you expected in the data set?
->     + Is any data missing?
->     + Are there data entry errors?
->     + Are there outliers?
+ * Check whether everything is **as expected** in your data
+     + Are there as many rows as you expected in the data set?
+     + Is any data missing?
+     + Are there data entry errors?
+     + Are there outliers?
 
 ## Why EDA? {.small}
 
-  * Check whether everything is **as expected** in your data
-  
-> * Check whether the **assumptions of your modeling choice** are met
->     + Do the data types match the analysis method?
->     + If doing simple linear regression is the relationship linear?
->     + If doing multiple linear regression, is the functional form modeled correctly?
->     + Are any points having a strong influence on the model results?
+ * Check whether everything is **as expected** in your data
+ * Check whether the **assumptions of your modeling choice** are met
+     + Do the data types match the analysis method?
+     + If doing simple linear regression is the relationship linear?
+     + If doing multiple linear regression, is the functional form modeled correctly?
+     + Are any points having a strong influence on the model results?
 
 # Reading in Data
 
