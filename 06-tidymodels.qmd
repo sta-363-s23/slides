@@ -1,0 +1,575 @@
+---
+title: "tidymodels"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i> adapted from Alison Hill's Introduction to ML with the Tidyverse</i>"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+---
+
+
+
+
+
+
+## tidymodels {.small}
+
+```{r child = "setup.Rmd"}
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidymodels)
+library(broom)
+library(ISLR)
+library(countdown)
+```
+
+:::: columns
+
+::: column
+![](img/02/tidymodels.png)
+:::
+
+::: column
+
+[tidymodels.org](https://www.tidymodels.org/)
+
+
+- tidymodels is an opinionated collection of R packages designed for modeling and statistical analysis.
+- All packages share an underlying philosophy and a common grammar.
+:::
+
+::::
+
+
+## Step 1: Specify the model
+
+* Pick the **model**
+* Set the **engine**
+
+
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+linear_reg() |>
+  set_engine("lm")
+```
+
+
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+linear_reg() |>
+  set_engine("glmnet")
+```
+
+
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+linear_reg() |>
+  set_engine("spark")
+```
+
+
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+decision_tree() |>
+  set_engine("rpart")
+```
+
+
+## Specify the model
+
+::: nonincremental
+
+* All available models:
+
+[tidymodels.org](https://www.tidymodels.org)
+
+:::
+
+
+
+
+## {{< fa laptop >}} `Application Exercise` 
+
+::: nonincremental
+
+1. Write a pipe that creates a model that uses `lm()` to fit a linear regression using tidymodels. Save it as `lm_spec` and look at the object. What does it return?
+
+:::
+
+_Hint: you'll need  https://www.tidymodels.org_
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 5)
+```
+
+##
+
+```{r}
+lm_spec <- 
+  linear_reg() |> # Pick linear regression
+  set_engine(engine = "lm") # set engine
+lm_spec
+```
+
+
+
+## Fit the data
+
+* You can train your model using the `fit()` function
+
+```{r}
+fit(lm_spec,
+    mpg ~ horsepower,
+    data = Auto)
+```
+
+## `r fontawesome::fa("laptop")` `Application Exercise` 
+
+::: nonincremental
+
+1. Fit the model:
+
+```{r, eval = FALSE}
+library(ISLR)
+lm_fit <- fit(lm_spec,
+              mpg ~ horsepower,
+              data = Auto)
+lm_fit
+```
+
+
+Does this give the same results as
+
+```{r, eval = FALSE}
+lm(mpg ~ horsepower, data = Auto)
+```
+
+```{r}
+#| echo: false
+countdown::countdown(3)
+```
+
+:::
+
+## {.small}
+
+```{r}
+lm_fit <- fit(lm_spec,
+              mpg ~ horsepower,
+              data = Auto)
+lm_fit
+lm(mpg ~ horsepower, data = Auto)
+```
+
+
+## Get predictions
+
+```{r, eval = FALSE}
+lm_fit |>
+  predict(new_data = Auto)
+```
+
+
+* Uses the `predict()` function
+* `r emo::ji("double_exclamation_mark")` `new_data` has an underscore
+* `r emo::ji("smile")` This automagically creates a data frame
+
+
+## Get predictions {.small}
+
+```{r}
+lm_fit |>
+  predict(new_data = Auto) |>
+  bind_cols(Auto)
+```
+
+. . .
+
+::: question
+What does `bind_cols` do?
+:::
+
+
+## Get predictions {.small}
+
+```{r}
+lm_fit |>
+  predict(new_data = Auto) |>
+  bind_cols(Auto)
+```
+
+::: question
+Which column has the predicted values?
+:::
+
+## `r fontawesome::fa("laptop")` `Application Exercise` 
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 3)
+```
+
+::: nonincremental
+1. Edit the code below to add the original data to the predicted data.
+:::
+
+```{r, eval = FALSE}
+mpg_pred <- lm_fit |> 
+  predict(new_data = Auto) |> 
+  ---
+```
+
+
+
+## Get predictions {.small}
+
+```{r}
+mpg_pred <- lm_fit |>
+  predict(new_data = Auto) |>
+  bind_cols(Auto)
+
+mpg_pred
+```
+
+
+## Calculate the error
+
+::: nonincremental
+* Root mean square error
+:::
+
+```{r}
+mpg_pred |>
+  rmse(truth = mpg, estimate = .pred)
+```
+
+. . .
+
+::: question
+What is this estimate? (training error? testing error?)
+:::
+
+
+
+## Validation set approach
+
+```{r}
+Auto_split <- initial_split(Auto, prop = 0.5)
+Auto_split
+```
+
+. . .
+
+::: question
+How many observations are in the training set?
+:::
+
+## Validation set approach
+
+```{r}
+Auto_split <- initial_split(Auto, prop = 0.5)
+Auto_split
+```
+
+
+::: question
+How many observations are in the test set?
+:::
+
+## Validation set approach
+
+```{r}
+Auto_split <- initial_split(Auto, prop = 0.5)
+Auto_split
+```
+
+
+::: question
+How many observations are there in total?
+:::
+
+
+## Validation set approach
+
+```{r}
+Auto_split <- initial_split(Auto, prop = 0.5)
+Auto_split
+```
+
+::: nonincremental
+* Extract the training and testing data
+:::
+
+```{r, eval = FALSE}
+training(Auto_split)
+testing(Auto_split)
+```
+
+
+
+## Validation set approach {.small}
+
+```{r}
+Auto_train <- training(Auto_split)
+```
+
+```{r}
+#| eval: false
+Auto_train
+```
+
+
+```{r}
+#| echo: false
+as_tibble(Auto_train)
+```
+
+
+## `r fontawesome::fa("laptop")` `Application Exercise`  {.small}
+
+1. Copy the code below, fill in the blanks to fit a model on the **training** data then calculate the **test** RMSE.
+
+```{r, eval = FALSE}
+set.seed(100)
+Auto_split  <- ________
+Auto_train  <- ________
+Auto_test   <- ________
+lm_fit      <- fit(lm_spec, 
+                   mpg ~ horsepower, 
+                   data = ________)
+mpg_pred  <- ________ |> 
+  predict(new_data = ________) |> 
+  bind_cols(________)
+rmse(________, truth = ________, estimate = ________)
+```
+
+```{r}
+#| echo: false
+countdown::countdown(6)
+```
+
+
+## A faster way! {.small}
+
+* You can use `last_fit()` and specify the split
+* This will automatically train the data on the `train` data from the split
+* Instead of specifying which metric to calculate (with `rmse` as before) you can just use `collect_metrics()` and it will automatically calculate the metrics on the `test` data from the split
+
+## A faster way! {.small}
+
+```{r}
+set.seed(100)
+
+Auto_split <- initial_split(Auto, prop = 0.5)
+lm_fit <- last_fit(lm_spec,
+                   mpg ~ horsepower,
+                   split = Auto_split) 
+
+lm_fit |>
+  collect_metrics()
+```
+
+## A faster way! {.small}
+
+```{r}
+#| code-line-numbers: "6"
+set.seed(100)
+
+Auto_split <- initial_split(Auto, prop = 0.5)
+lm_fit <- last_fit(lm_spec,
+                   mpg ~ horsepower,
+                   split = Auto_split) 
+
+lm_fit |>
+  collect_metrics()
+```
+
+## A faster way! {.small}
+
+```{r}
+#| code-line-numbers: "9"
+set.seed(100)
+
+Auto_split <- initial_split(Auto, prop = 0.5)
+lm_fit <- last_fit(lm_spec,
+                   mpg ~ horsepower,
+                   split = Auto_split) 
+
+lm_fit |>
+  collect_metrics()
+```
+
+
+## What about cross validation?
+
+```{r}
+Auto_cv <- vfold_cv(Auto, v = 5)
+Auto_cv
+```
+
+
+## What about cross validation?
+
+* Instead of `fit` we will use `fit_resamples` 
+
+. . .
+
+```{r, eval = FALSE}
+fit_resamples(lm_spec, 
+              mpg ~ horsepower,
+              resamples = Auto_cv) 
+```
+
+## What about cross validation?
+
+
+
+```{r, eval = FALSE}
+#| code-line-numbers: "1"
+fit_resamples(lm_spec, 
+              mpg ~ horsepower,
+              resamples = Auto_cv) 
+```
+
+## What about cross validation?
+
+
+
+```{r, eval = FALSE}
+#| code-line-numbers: "2"
+fit_resamples(lm_spec, 
+              mpg ~ horsepower,
+              resamples = Auto_cv) 
+```
+
+## What about cross validation?
+
+
+
+```{r, eval = FALSE}
+#| code-line-numbers: "3"
+fit_resamples(lm_spec, 
+              mpg ~ horsepower,
+              resamples = Auto_cv) 
+```
+
+
+## What about cross validation?
+
+```{r}
+fit_resamples(lm_spec,
+              mpg ~ horsepower,
+              resamples = Auto_cv)
+```
+
+
+## What about cross validation?
+
+::: question
+How do we get the metrics out? With `collect_metrics()` again!
+:::
+
+. . .
+
+
+```{r}
+results <- fit_resamples(lm_spec,
+                         mpg ~ horsepower,
+                         resamples = Auto_cv)
+
+results |>
+  collect_metrics()
+```
+
+
+
+
+
+## `r fontawesome::fa("laptop")` `Application Exercise` 
+
+::: nonincremental
+
+```{r} 
+#| echo: false
+countdown::countdown(minutes = 5)
+```
+
+1. Edit the code below to get the 5-fold cross validation error rate for the following model:
+
+$mpg = \beta_0 + \beta_1 horsepower + \beta_2 horsepower^2+ \epsilon$
+
+```{r, eval = FALSE}
+Auto_cv <- vfold_cv(Auto, v = 5)
+
+results <- fit_resamples(lm_spec,
+                         ----,
+                         resamples = ---)
+
+results |>
+  collect_metrics()
+```
+
+* What do you think `rsq` is?
+
+:::
+
+##
+
+```{r, eval = FALSE}
+Auto_cv <- vfold_cv(Auto, v = 5)
+
+results <- fit_resamples(lm_spec,
+                         mpg ~ horsepower + I(horsepower^2),
+                         resamples = Auto_cv)
+
+results |>
+  collect_metrics()
+```
+
+## `r fontawesome::fa("laptop")` `Application Exercise`  {.small}
+
+::: nonincremental
+1. Fit 3 models on the data using 5 fold cross validation:
+
+   ::: smaller
+     $mpg = \beta_0 + \beta_1 horsepower + \epsilon$ 
+     
+     $mpg = \beta_0 + \beta_1 horsepower + \beta_2 horsepower^2+ \epsilon$
+     
+     $mpg = \beta_0 + \beta_1 horsepower + \beta_2 horsepower^2+ \beta_3 horsepower^3 +\epsilon$
+   :::
+
+2. Collect the metrics from each model, saving the results as `results_1`, `results_2`, `results_3`
+
+3. Which model is "best"?
+
+:::
+```{r}
+#| echo: false
+countdown(8)
+```
+
