@@ -17,12 +17,23 @@ format:
 
 
 
+## {{< fa laptop >}} `Application Exercise` {.small}
 
-
-## tidymodels {.small}
 
 ```{r child = "setup.Rmd"}
 ```
+
+::: nonincremental
+1. Create a new project from this template in RStudio Pro:
+```bash
+https://github.com/sta-363-s23/06-appex.git
+```
+2. Load the packages and data by running the top chunk of R code
+
+:::
+
+## tidymodels {.small}
+
 
 
 
@@ -509,7 +520,7 @@ results |>
 
 
 
-## `r fontawesome::fa("laptop")` `Application Exercise` 
+## `r fontawesome::fa("laptop")` `Application Exercise`  {.small}
 
 ::: nonincremental
 
