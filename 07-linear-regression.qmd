@@ -1,0 +1,774 @@
+---
+title: "Linear Regression"
+author: "Dr. D'Agostino McGowan"
+footer: "Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+---
+
+## Linear Regression Questions
+
+* Is there a relationship between a response variable and predictors?
+* How strong is the relationship?
+* What is the uncertainty?
+* How accurately can we predict a future outcome?
+
+
+```{r child = "setup.Rmd"}
+```
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(broom)
+library(Stat2Data)
+library(countdown)
+data(Sparrows)
+```
+
+
+
+## Simple linear regression
+
+$$Y = \beta_0 + \beta_1 X + \varepsilon$$
+
+* $\beta_0$: intercept
+* $\beta_1$: slope
+* $\beta_0$ and $\beta_1$ are **coefficients**, **parameters**
+* $\varepsilon$: error
+
+
+
+## Simple linear regression
+
+We **estimate** this with
+
+$$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1x$$
+
+* $\hat{y}$ is the prediction of $Y$ when $X = x$
+* The **hat** denotes that this is an **estimated** value
+
+
+![](https://media.giphy.com/media/dZ0yRjxBulRjW/giphy.gif)
+
+
+
+
+## Simple linear regression
+
+$$Y_i = \beta_0 + \beta_1X_i + \varepsilon_i$$
+
+$$\varepsilon_i\sim N(0, \sigma^2)$$
+
+
+
+## Simple linear regression
+
+$$Y_i = \beta_0 + \beta_1X_i + \varepsilon_i$$
+
+$$\varepsilon_i\sim N(0, \sigma^2)$$
+
+
+::: {layout-ncol=2}
+[$$
+\begin{align}
+Y_1 &= \beta_0 + \beta_1X_1 + \varepsilon_1\\
+Y_2 &= \beta_0 + \beta_1X_2 + \varepsilon_2\\
+\vdots \hspace{0.25cm} & \hspace{0.25cm} \vdots \hspace{0.5cm}  \vdots\\
+Y_n &=\beta_0 + \beta_1X_n + \varepsilon_n
+\end{align}
+$$]{.fragment fragment-index="1"}
+
+
+[$$
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} \beta_0 + \beta_1X_1\\ \beta_0+\beta_1X_2\\ \vdots\\ \beta_0 + \beta_1X_n\end{bmatrix} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$]{.fragment fragment-index="2"}
+
+:::
+
+
+
+
+## Simple linear regression
+
+$$Y_i = \beta_0 + \beta_1X_i + \varepsilon_i$$
+
+$$\varepsilon_i\sim N(0, \sigma^2)$$
+
+
+::: {layout-ncol=2}
+$$
+\begin{align}
+Y_1 &= \beta_0 + \beta_1X_1 + \varepsilon_1\\
+Y_2 &= \beta_0 + \beta_1X_2 + \varepsilon_2\\
+\vdots \hspace{0.25cm} & \hspace{0.25cm} \vdots \hspace{0.5cm}  \vdots\\
+Y_n &=\beta_0 + \beta_1X_n + \varepsilon_n
+\end{align}
+$$
+
+
+$$
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} \beta_0 + \beta_1X_1\\ \beta_0+\beta_1X_2\\ \vdots\\ \beta_0 + \beta_1X_n\end{bmatrix} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$
+
+:::
+
+
+## Simple linear regression
+
+$$Y_i = \beta_0 + \beta_1X_i + \varepsilon_i$$
+
+$$\varepsilon_i\sim N(0, \sigma^2)$$
+
+::: {layout-ncol=2}
+
+$$
+\begin{align}
+Y_1 &= \beta_0 + \beta_1X_1 + \varepsilon_1\\
+Y_2 &= \beta_0 + \beta_1X_2 + \varepsilon_2\\
+\vdots \hspace{0.25cm} & \hspace{0.25cm} \vdots \hspace{0.5cm}  \vdots\\
+Y_n &=\beta_0 + \beta_1X_n + \varepsilon_n
+\end{align}
+$$
+
+
+$$
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$
+
+:::
+
+
+
+## Simple linear regression
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$
+
+
+
+## Simple linear regression {.small}
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\underbrace{\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}}_{\mathbf{X}: \textrm{ Design Matrix}}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$
+
+. . .
+
+::: question
+What are the dimensions of $\mathbf{X}$?
+:::
+
+* $n\times2$
+
+
+## Simple linear regression {.small}
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\underbrace{\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}}_{\mathbf{X}: \textrm{ Design Matrix}}
+\underbrace{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}_{\beta: \textrm{ Vector of parameters}} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$
+
+. . .
+
+::: question
+What are the dimensions of $\beta$?
+:::
+
+
+
+## Simple linear regression {.small}
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\underbrace{\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}}_{\varepsilon:\textrm{ vector of error terms}}
+\end{align}
+$$
+
+. . .
+
+::: question
+What are the dimensions of $\varepsilon$?
+:::
+
+
+
+## Simple linear regression {.small}
+
+
+$$
+\Large
+\begin{align}
+\underbrace{\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix}}_{\textbf{Y}: \textrm{ Vector of responses}} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$
+
+. . .
+
+::: question
+What are the dimensions of $\mathbf{Y}$?
+:::
+
+
+
+## Simple linear regression {.small}
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\varepsilon_1\\\varepsilon_2\\\vdots\\\varepsilon_n\end{bmatrix}
+\end{align}
+$$
+
+$$\Large \mathbf{Y}=\mathbf{X}\beta+\varepsilon$$
+
+
+
+## Simple linear regression {.small}
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} \hat{y}_1 \\\hat{y}_2\\ \vdots\\ \hat{y}_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} x_1\\ 1\hspace{0.25cm} x_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}x_n\end{bmatrix}
+\begin{bmatrix}\hat{\beta}_0\\\ \hat{\beta}_1\end{bmatrix} 
+\end{align}
+$$
+
+$$\hat{y}_i=\hat{\beta}_0 + \hat{\beta}_1x_i$$
+
+
+* $\hat\varepsilon_i = y_i - \hat{y}_i$
+* $\hat\varepsilon_i = y_i - (\hat{\beta}_0+\hat{\beta}_1x_i)$
+* $\hat\varepsilon_i$ is known as the **residual** for observation $i$
+
+
+
+## Simple linear regression
+
+::: question
+How are $\hat{\beta}_0$ and $\hat{\beta}_1$ chosen? What are we minimizing?
+:::
+
+
+* Minimize the **residual sum of squares**
+* RSS = $\sum\hat\varepsilon_i^2 = \hat\varepsilon_1^2 + \hat\varepsilon_2^2 + \dots+\hat\varepsilon_n^2$
+
+
+
+## Simple linear regression {.small}
+
+::: question
+How could we re-write this with $y_i$ and $x_i$?
+:::
+
+* Minimize the **residual sum of squares**
+* RSS = $\sum\hat\varepsilon_i^2 = \hat\varepsilon_1^2 + \hat\varepsilon_2^2 + \dots+\hat\varepsilon_n^2$
+* RSS = $(y_1 - \hat{\beta_0} - \hat{\beta}_1x_1)^2 + (y_2 - \hat{\beta}_0-\hat{\beta}_1x_2)^2 + \dots + (y_n - \hat{\beta}_0-\hat{\beta}_1x_n)^2$
+
+
+
+## Simple linear regression
+
+Let's put this back in matrix form:
+
+$$
+\Large
+\begin{align}
+ \sum \hat\varepsilon_i^2=\begin{bmatrix}\hat\varepsilon_1 &\hat\varepsilon_2 &\dots&\hat\varepsilon_n\end{bmatrix}
+\begin{bmatrix}\hat\varepsilon_1 \\ \hat\varepsilon_2 \\ \vdots \\ \hat\varepsilon_n\end{bmatrix} = \hat\varepsilon^T\hat\varepsilon
+\end{align}
+$$
+
+
+
+## Simple linear regression
+
+::: question
+What can we replace $\hat\varepsilon_i$ with? (Hint: look back a few slides)
+:::
+
+. . .
+
+
+$$
+\Large
+\begin{align}
+ \sum \hat\varepsilon_i^2 = (\mathbf{Y}-\mathbf{X}\hat\beta)^T(\mathbf{Y}-\mathbf{X}\hat\beta)
+\end{align}
+$$
+
+
+
+## Simple linear regression
+
+OKAY! So this is the **thing** we are trying to minimize with respect to $\beta$:
+
+$$\Large (\mathbf{Y}-\mathbf{X}\beta)^T(\mathbf{Y}-\mathbf{X}\beta)$$
+
+::: question
+In calculus, how do we minimize things?
+:::
+
+
+* Take the derivative with respect to $\beta$
+* Set it equal to 0 (or a vector of 0s!)
+* Solve for $\beta$
+
+
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact`
+
+$$
+\begin{align}
+\mathbf{C} &= \mathbf{AB}\\
+\mathbf{C}^T &=\mathbf{B}^T\mathbf{A}^T
+\end{align}
+$$
+
+
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+::: nonincremental
+* Distribute (FOIL / get rid of the parentheses) the RSS equation
+:::
+
+$$RSS = (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta)$$
+
+```{r}
+#| echo: false
+countdown(minutes = 2)
+```
+
+
+
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact`
+
+$$
+\begin{align}
+\mathbf{C} &= \mathbf{AB}\\
+\mathbf{C}^T &=\mathbf{B}^T\mathbf{A}^T
+\end{align}
+$$
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+::: nonincremental
+* Distribute (FOIL / get rid of the parentheses) the RSS equation
+:::
+
+$$
+\begin{align}
+RSS &= (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta) \\
+& = \mathbf{y}^T\mathbf{y}-\hat{\beta}^T\mathbf{X}^T\mathbf{y}-\mathbf{y}^T\mathbf{X}\hat\beta + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta
+\end{align}
+$$
+
+
+
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact` {.small}
+
+* the transpose of a scalar is a scalar
+* $\hat\beta^T\mathbf{X}^T\mathbf{y}$ is a scalar 
+
+. . .
+
+::: question
+Why? What are the dimensions of $\hat\beta^T$? What are the dimensions of $\mathbf{X}$? What are the dimensions of $\mathbf{y}$?
+:::
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact` {.small}
+
+::: nonincremental
+* $(\mathbf{y}^T\mathbf{X}\hat\beta)^T = \hat\beta^T\mathbf{X}^T\mathbf{y}$
+:::
+
+$$
+\begin{align}
+RSS &= (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta) \\
+& = \mathbf{y}^T\mathbf{y}-\hat{\beta}^T\mathbf{X}^T\mathbf{y}-\mathbf{y}^T\mathbf{X}\hat\beta + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+&=\mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+\end{align}
+$$
+
+
+
+## Linear Regression Review
+
+::: question
+To find the $\hat\beta$ that is going to minimize this RSS, what do we do? Why?
+:::
+
+$$
+\begin{align}
+RSS &= (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta) \\
+& = \mathbf{y}^T\mathbf{y}-\hat{\beta}^T\mathbf{X}^T\mathbf{y}-\mathbf{y}^T\mathbf{X}\hat\beta + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+&=\mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+\end{align}
+$$
+
+
+
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact` {.small}
+
+::: nonincremental
+
+* When $\mathbf{a}$ and $\mathbf{b}$ are $p\times 1$ vectors
+
+$$\frac{\partial\mathbf{a}^T\mathbf{b}}{\partial\mathbf{b}}=\frac{\partial\mathbf{b}^T\mathbf{a}}{\partial\mathbf{b}}=\mathbf{a}$$
+
+
+* When $\mathbf{A}$ is a symmetric matrix
+
+$$\frac{\partial\mathbf{b}^T\mathbf{Ab}}{\partial\mathbf{b}}=2\mathbf{Ab}=2\mathbf{b}^T\mathbf{A}$$
+
+:::
+
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+$$\frac{\partial RSS}{\partial\hat\beta} = $$
+
+::: nonincremental
+* $RSS = \mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta$
+:::
+
+```{r}
+#| echo: false
+countdown(minutes = 2)
+```
+
+
+
+## Linear Regression Review
+
+::: question
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+:::
+
+$$RSS = \mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta$$
+
+$$\frac{\partial RSS}{\partial\hat\beta}=-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta = 0$$
+
+
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact` {.small}
+
+$$\mathbf{A}\mathbf{A}^{-1} = \mathbf{I}$$
+
+. . .
+
+::: question
+What is $\mathbf{I}$?
+:::
+
+. . .
+
+::: nonincremental
+* identity matrix
+
+$$\mathbf{I}=\begin{bmatrix}  1 & 0&\dots & 0 \\   0&1 & \dots &0 \\   \vdots&\vdots&\ddots&\vdots\\   0 &    0 & \dots    & 1    \end{bmatrix}$$
+
+$$\mathbf{AI} = \mathbf{A}$$
+
+:::
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+::: nonincremental
+* Solve for $\hat\beta$
+:::
+
+$$-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta = 0$$
+
+```{r}
+#| echo: false
+countdown(minutes = 2)
+```
+
+
+
+## Linear Regression Review
+
+::: question
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+:::
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+\end{align}
+$$
+
+
+
+## Linear Regression Review
+
+::: question
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+:::
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\end{align}
+$$
+
+
+
+## Linear Regression Review
+
+::: question
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+:::
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+\end{align}
+$$
+
+
+
+## Linear Regression Review
+
+::: question
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+:::
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\mathbf{I}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+\end{align}
+$$
+
+
+## Linear Regression Review
+
+::: question
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+:::
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\mathbf{I}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\hat\beta & = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+\end{align}
+$$
+
+
+
+
+
+## Simple linear regression
+
+
+$$
+\begin{align}
+\begin{bmatrix}\hat{\beta}_0\\\hat{\beta}_1\end{bmatrix}=
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+\end{align}
+$$
+
+
+
+## Simple linear regression
+
+$$
+\begin{align}
+\hat{\mathbf{Y}} &= \mathbf{X}\hat{\beta}\\
+\hat{\mathbf{Y}}&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+\end{align}
+$$
+
+
+
+## Simple linear regression
+
+$$
+\begin{align}
+\hat{\mathbf{Y}} &= \mathbf{X}\hat{\beta}\\
+\hat{\mathbf{Y}}&=\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}}_{\hat\beta}
+\end{align}
+$$
+
+
+
+## Simple linear regression
+
+$$
+\begin{align}
+\hat{\mathbf{Y}} &= \mathbf{X}\hat{\beta}\\
+\hat{\mathbf{Y}}&=\underbrace{\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T}_{\textrm{hat matrix}}\mathbf{Y}
+\end{align}
+$$
+
+. . .
+
+::: question
+Why do you think this is called the "hat matrix"
+:::
+
+![](https://media.giphy.com/media/dZ0yRjxBulRjW/giphy.gif)
+
+
+## Multiple linear regression
+
+We can generalize this beyond just one **predictor**
+
+
+$$
+\begin{align}
+\begin{bmatrix}\hat{\beta}_0\\\hat{\beta}_1\\\vdots\\\hat{\beta}_p\end{bmatrix}=
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+\end{align}
+$$
+
+. . .
+
+::: question
+What are the dimensions of the **design** matrix, $\mathbf{X}$ now?
+:::
+
+* $\mathbf{X}_{n\times (p+1)}$
+
+
+## Multiple linear regression
+
+
+::: question
+What are the dimensions of the **design** matrix, $\mathbf{X}$ now?
+:::
+
+$$
+\begin{align}
+\mathbf{X} = \begin{bmatrix} 1  & X_{11} & X_{12} & \dots & X_{1p} \\
+1 & X_{21} & X_{22} & \dots & X_{2p} \\
+\vdots & \vdots & \vdots & \vdots & \vdots\\
+1 & X_{n1} & X_{n2} & \dots & X_{np}\end{bmatrix}
+\end{align}
+$$
+
+
+
+
+
+
+## $\hat\beta$ interpretation in multiple linear regression {.center}
+
+
+The coefficient for $x$ is $\hat\beta$ (95% CI: $LB_\hat\beta, UB_\hat\beta$). A one-unit increase in $x$ yields an expected increase in y of $\hat\beta$, **holding all other variables constant**.
+
+
+
+## Linear Regression Questions
+
+* `r emo::ji("heavy_check_mark")` Is there a relationship between a response variable and predictors? 
+* How strong is the relationship? 
+* What is the uncertainty?
+* How accurately can we predict a future outcome?
+
+
+
+## Linear Regression Questions
+
+::: nonincremental
+* `r emo::ji("heavy_check_mark")` Is there a relationship between a response variable and predictors? 
+* **How strong is the relationship?**
+* **What is the uncertainty?**
+* How accurately can we predict a future outcome?
+:::
+
+
+## Linear regression uncertainty {.small}
+
+* The standard error of an estimator reflects how it _varies_ under repeated sampling
+
+. . .
+
+$$\textrm{Var}(\hat{\beta}) =\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$$
+
+
+* $\sigma^2 = \textrm{Var}(\varepsilon)$
+* In the case of simple linear regression, $\textrm{SE}(\hat{\beta}_1)^2 = \frac{\sigma^2}{\sum_{i=1}^n(x_i - \bar{x})^2}$
+* This uncertainty is used in the test statistic $t = \frac{\hat\beta_1}{SE_{\hat\beta_1}}$
+
+
