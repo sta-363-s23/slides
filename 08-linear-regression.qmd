@@ -1,0 +1,550 @@
+---
+title: "Linear Regression in R"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+---
+
+## Let's look at an example {.small}
+
+```{r child = "setup.Rmd"}
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(tidymodels)
+library(Stat2Data)
+library(countdown)
+data(Sparrows)
+```
+
+
+
+
+Let's look at a sample of 116 sparrows from Kent Island. We are interested in the relationship between `Weight` and `Wing Length`
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-height: 2
+#| code-fold: true
+ggplot(Sparrows, aes(x = WingLength, y = Weight)) + 
+  geom_point() + 
+  labs(title = "The relationship between weight and wing length", 
+       subtitle = "Savannah Sparrows on Kent Island",
+       x = "Wing length") + 
+  geom_smooth(method = "lm", fill = "blue")
+```
+
+* the **standard error** of $\hat{\beta_1}$ ( $SE_{\hat{\beta}_1}$ ) is how much we expect the sample slope to vary from one random sample to another.
+
+
+
+## Sparrows
+
+::: question
+How can we quantify how much we'd expect the slope to differ from one random sample to another?
+:::
+
+. . .
+
+```{r}
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy()
+```
+
+## Sparrows
+
+::: question
+How can we quantify how much we'd expect the slope to differ from one random sample to another?
+:::
+
+
+```{r, highlight.output = 5}
+#| code-line-numbers: "4"
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy()
+```
+
+
+
+
+## Sparrows
+
+::: question
+How do we interpret this?
+:::
+
+
+```{r}
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy()
+```
+
+
+* "the sample slope is more than 13 standard errors above a slope of zero"
+
+
+## Sparrows {.small}
+
+::: question
+How do we know what values of this statistic are worth paying attention to?
+:::
+
+. . .
+```{r}
+#| code-line-numbers: "4"
+
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy(conf.int = TRUE)
+```
+
+* confidence intervals
+* p-values
+
+
+## `r fontawesome::fa("laptop")` `Application Exercise` {.small}
+
+::: nonincremental
+1. Fit a linear model using the `mtcars` data frame predicting miles per gallon (`mpg`) from weight and horsepower (`wt` and `hp`), using polynomials with 4 degrees of freedom for both.
+2. Pull out the coefficients and confidence intervals using the `tidy()` function demonstrated. How do you interpret these?
+:::
+
+```{r}
+#| echo: false
+countdown(4)
+```
+
+
+## Sparrows
+
+::: question
+How are these statistics distributed under the null hypothesis?
+:::
+
+
+```{r}
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy() 
+```
+
+
+
+
+```{r, echo = FALSE}
+gen_null_stat <- function() { #<<
+  null_sparrow_data <- data.frame(
+    WingLength = rnorm(10, 27, 4),
+    Weight = rnorm(10, 14, 3)
+  )
+  lm(Weight ~ WingLength, data = null_sparrow_data) |>
+    tidy() |>
+    filter(term == "WingLength") |>
+    select("statistic")
+} #<<
+```
+
+```{r, echo = FALSE, cache = TRUE}
+null_stats <- map_df(1:10000, ~ gen_null_stat())
+normal_data <- null_stats |>
+  mutate(y_t = dt(statistic, df = 18),
+         y_norm = dnorm(statistic, 0, 1))
+```
+
+
+## Sparrows
+
+
+```{r, echo = FALSE}
+ggplot(null_stats, aes(x = statistic)) +
+  geom_histogram(bins = 70) + 
+  labs(title = "Histogram of statistics under the null")
+```
+
+* I've generated some data under a null hypothesis where $n = 20$
+
+
+
+## Sparrows
+
+
+```{r, echo = FALSE}
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_line(data = normal_data, aes(x = statistic, y = y_t), color = "green") + 
+  labs(title = "Histogram of statistics under the null",
+       subtitle = "Overlaid with a t-distribution")
+```
+
+* this is a **t-distribution** with **n-p-1** degrees of freedom.
+
+
+
+## Sparrows
+
+The distribution of test statistics we would expect given the **null hypothesis is true**, $\beta_1 = 0$, is **t-distribution** with **n-2** degrees of freedom.
+
+```{r, echo = FALSE}
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_line(data = normal_data, aes(x = statistic, y = y_t), color = "green") + 
+    labs(title = "Histogram of statistics under the null",
+       subtitle = "Overlaid with a t-distribution")
+```
+
+
+
+## Sparrows
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats_bigger <- data.frame(
+  statistic = rt(10000, df = 114)
+)
+
+```
+
+```{r, echo = FALSE}
+ggplot(null_stats_bigger) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_vline(xintercept = 13.463, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null",
+         subtitle = "t-distribution with 114 degrees of freedom")
+```
+
+
+
+## Sparrows
+
+::: question
+How can we compare this line to the distribution under the null?
+:::
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(null_stats_bigger) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_vline(xintercept = 13.463, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null",
+         subtitle = "t-distribution with 114 degrees of freedom")
+```
+
+* p-value
+
+
+# p-value 
+
+The probability of getting a statistic as extreme or more extreme than the observed test statistic **given the null hypothesis is true**
+
+
+
+## Sparrows
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(null_stats_bigger) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_vline(xintercept = 13.463, lwd = 1.5) + 
+  geom_vline(xintercept = -13.463, lwd = 1.5) +
+    labs(title = "Histogram of statistics under the null",
+         subtitle = "t-distribution with 114 degrees of freedom")
+```
+
+
+::: small
+
+```{r}
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy()
+```
+:::
+
+
+
+## Return to generated data, n = 20
+
+```{r, echo = FALSE}
+null_stats$shade <- ifelse(null_stats$statistic > 1.5 | null_stats$statistic < -1.5, TRUE, FALSE)
+```
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+  geom_vline(xintercept = -1.5, lwd = 1.5) +
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+* Let's say we get a statistic of **1.5** in a sample
+
+
+## Let's do it in R!
+
+The proportion of area less than 1.5
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats$shade <- ifelse(null_stats$statistic < 1.5, TRUE, FALSE)
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+
+```{r}
+pt(1.5, df = 18)
+```
+
+
+
+## Let's do it in R!
+
+The proportion of area **greater** than 1.5
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats$shade <- ifelse(null_stats$statistic > 1.5, TRUE, FALSE)
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+
+```{r}
+pt(1.5, df = 18, lower.tail = FALSE)
+```
+
+
+## Let's do it in R!
+
+The proportion of area **greater** than 1.5 **or** **less** than -1.5.
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats$shade <- ifelse(null_stats$statistic > 1.5 | null_stats$statistic < - 1.5, TRUE, FALSE)
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+    geom_vline(xintercept = -1.5, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+. . .
+
+```{r}
+pt(1.5, df = 18, lower.tail = FALSE) * 2
+```
+
+
+
+
+
+# p-value {.center}
+
+The probability of getting a statistic as extreme or more extreme than the observed test statistic **given the null hypothesis is true**
+
+
+
+## Hypothesis test
+
+* **null hypothesis** $H_0: \beta_1 = 0$ 
+* **alternative hypothesis** $H_A: \beta_1 \ne 0$
+* **p-value**: 0.15
+* Often, we have an $\alpha$-level cutoff to compare this to, for example **0.05**. Since this is greater than **0.05**, we **fail to reject the null hypothesis**
+
+
+
+
+## `r fontawesome::fa("laptop")` `Application Exercise` {.small}
+
+::: nonincremental
+1. Using the linear model you fit previously (`mpg` from `wt` and `hp`, using polynomials with 4 degrees of freedom for both with the `mtcars` data) - calculate the p-value for the coefficient for weight
+2. Interpret this value. What is the null hypothesis? What is the alternative hypothesis? Do you reject the null?
+:::
+
+```{r}
+#| echo: false
+countdown(4)
+```
+
+
+
+# confidence intervals {.center}
+
+If we use the same sampling method to select different samples and computed an interval estimate for each sample, we would expect the true population parameter ( $\beta_1$ ) to fall within the interval estimates 95% of the time.
+
+
+
+# Confidence interval
+
+
+$$\Huge \hat\beta_1 \pm t^∗ \times SE_{\hat\beta_1}$$
+
+* $t^*$ is the critical value for the $t_{n−p-1}$ density curve to obtain the desired confidence level
+* Often we want a **95% confidence level**.  
+
+
+
+## Let's do it in R! {.small}
+
+
+```{r, highlight.output = 5}
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy(conf.int = TRUE)
+```
+
+
+* $t^* = t_{n-p-1} = t_{114} = 1.98$
+* $LB = 0.47 - 1.98\times 0.0347 = 0.399$
+* $UB = 0.47+1.98 \times 0.0347 = 0.536$
+
+
+
+
+# confidence intervals 
+
+If we use the same sampling method to select different samples and computed an interval estimate for each sample, we would expect the true population parameter ( $\beta_1$ ) to fall within the interval estimates 95% of the time.
+
+
+
+## Linear Regression Questions
+
+* `r emo::ji("heavy_check_mark")` Is there a relationship between a response variable and predictors? 
+* `r emo::ji("heavy_check_mark")` How strong is the relationship? 
+* `r emo::ji("heavy_check_mark")` What is the uncertainty? 
+* How accurately can we predict a future outcome?
+
+
+
+## Sparrows {.small}
+
+::: question
+Using the information here, how could I predict a new sparrow's weight if I knew the wing length was 30?
+:::
+
+```{r}
+linear_reg() |>
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows) |>
+  tidy()
+```
+
+* $1.37 + 0.467 \times 30 = 15.38$
+
+
+
+## Linear Regression Accuracy {.small}
+ 
+::: question
+What is the residual sum of squares again?
+:::
+
+* Note: In previous classes, this may have been referred to as SSE (sum of squares error), the book uses RSS, so we will stick with that!
+
+. . .
+
+$$RSS = \sum(y_i - \hat{y}_i)^2$$
+
+## Linear Regression Accuracy {.small}
+
+* The **total sum of squares** represents the variability of the outcome, it is equivalent to the variability described by the **model** plus the remaining **residual sum of squares**
+
+$$TSS = \sum(y_i - \bar{y})^2$$
+
+
+## Linear Regression Accuracy {.small}
+
+* There are many ways "model fit" can be assessed. Two common ones are:
+  * Residual Standard Error (RSE)
+  * $R^2$ - the fraction of the variance explained
+* $RSE = \sqrt{\frac{1}{n-p-1}RSS}$
+* $R^2 = 1 - \frac{RSS}{TSS}$
+
+
+
+## Let's do it in R!
+
+
+```{r}
+lm_fit <- linear_reg() |> 
+  set_engine("lm") |>
+  fit(Weight ~ WingLength, data = Sparrows)
+
+lm_fit |>
+  predict(new_data = Sparrows) |>
+  bind_cols(Sparrows) |>
+  rsq(truth = Weight, estimate = .pred) 
+```
+
+. . .
+
+::: question
+Is this testing $R^2$ or training $R^2$?
+:::
+
+
+## `r fontawesome::fa("laptop")` `Application Exercise` {.small}
+
+::: nonincremental
+1. Using the model previously fit (`mpg` from `wt` and `hp`, using polynomials with 4 degrees of freedom for both with the `mtcars` data), estimate the training $R^2$ using the `rsq` function. 
+2. Interpret this values.
+:::
+
+```{r}
+#| echo: false
+countdown(4)
+```
+
+
+## `r fontawesome::fa("laptop")` `Application Exercise` {.small}
+
+::: nonincremental
+1. Create a cross validation object to do 5 fold cross validation using the `mtcars` data
+2. Refit the model on this object (using `fit_resamples`)
+3. Use `collect_metrics` to estimate the test $R^2$ - how does this compare to the training $R^2$ calculated in the previous exercise?
+
+:::
+
+```{r}
+#| echo: false
+countdown(4)
+```
+
+
+## Additional Linear Regression Topics
+
+* Polynomial terms
+* Interactions
+* Outliers
+* Non-constant variance of error terms
+* High leverage points
+* Collinearity
+
+_Refer to Chapter 3 for more details on these topics if you need a refresher._
