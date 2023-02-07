@@ -14,10 +14,23 @@ format:
     menu: true
 ---
 
-## Let's look at an example {.small}
+## {{< fa laptop >}} `Application Exercise` {.small}
 
 ```{r child = "setup.Rmd"}
 ```
+
+::: nonincremental
+1. Create a new project from this template in RStudio Pro:
+```bash
+https://github.com/sta-363-s23/08-appex.git
+```
+2. Load the packages and data by running the top chunk of R code
+
+:::
+
+## Let's look at an example {.small}
+
+
 
 
 
