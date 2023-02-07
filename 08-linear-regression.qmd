@@ -31,9 +31,6 @@ https://github.com/sta-363-s23/08-appex.git
 ## Let's look at an example {.small}
 
 
-
-
-
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(tidyverse)
