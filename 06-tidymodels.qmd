@@ -28,7 +28,7 @@ format:
 ```bash
 https://github.com/sta-363-s23/06-appex.git
 ```
-2. Load the packages and data by running the top chunk of R code
+2. Load the packages by running the top chunk of R code
 
 :::
 
