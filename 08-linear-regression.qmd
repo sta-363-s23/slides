@@ -137,7 +137,7 @@ linear_reg() |>
 ## `r fontawesome::fa("laptop")` `Application Exercise` {.small}
 
 ::: nonincremental
-1. Fit a linear model using the `mtcars` data frame predicting miles per gallon (`mpg`) from weight and horsepower (`wt` and `hp`), using polynomials with 4 degrees of freedom for both.
+1. Fit a linear model using the `mtcars` data frame predicting miles per gallon (`mpg`) from weight and horsepower (`wt` and `hp`).
 2. Pull out the coefficients and confidence intervals using the `tidy()` function demonstrated. How do you interpret these?
 :::
 
@@ -393,7 +393,7 @@ The probability of getting a statistic as extreme or more extreme than the obser
 ## `r fontawesome::fa("laptop")` `Application Exercise` {.small}
 
 ::: nonincremental
-1. Using the linear model you fit previously (`mpg` from `wt` and `hp`, using polynomials with 4 degrees of freedom for both with the `mtcars` data) - calculate the p-value for the coefficient for weight
+1. Using the linear model you fit previously (`mpg` from `wt` and `hp`) - calculate the p-value for the coefficient for weight
 2. Interpret this value. What is the null hypothesis? What is the alternative hypothesis? Do you reject the null?
 :::
 
@@ -523,8 +523,9 @@ Is this testing $R^2$ or training $R^2$?
 ## `r fontawesome::fa("laptop")` `Application Exercise` {.small}
 
 ::: nonincremental
-1. Using the model previously fit (`mpg` from `wt` and `hp`, using polynomials with 4 degrees of freedom for both with the `mtcars` data), estimate the training $R^2$ using the `rsq` function. 
-2. Interpret this values.
+1. Fit a linear model using the `mtcars` data frame predicting miles per gallon (`mpg`) from weight and horsepower (`wt` and `hp`), using polynomials with 4 degrees of freedom for both.
+2. Estimate the training $R^2$ using the `rsq` function. 
+3. Interpret this values.
 :::
 
 ```{r}

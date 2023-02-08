@@ -517,13 +517,13 @@ Lucy D’Agostino McGowan
 <h2><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M128 32C92.7 32 64 60.7 64 96V352h64V96H512V352h64V96c0-35.3-28.7-64-64-64H128zM19.2 384C8.6 384 0 392.6 0 403.2C0 445.6 34.4 480 76.8 480H563.2c42.4 0 76.8-34.4 76.8-76.8c0-10.6-8.6-19.2-19.2-19.2H19.2z"></path></svg> <code>Application Exercise</code></h2>
 <div>
 <ol type="1">
-<li>Fit a linear model using the <code>mtcars</code> data frame predicting miles per gallon (<code>mpg</code>) from weight and horsepower (<code>wt</code> and <code>hp</code>), using polynomials with 4 degrees of freedom for both.</li>
+<li>Fit a linear model using the <code>mtcars</code> data frame predicting miles per gallon (<code>mpg</code>) from weight and horsepower (<code>wt</code> and <code>hp</code>).</li>
 <li>Pull out the coefficients and confidence intervals using the <code>tidy()</code> function demonstrated. How do you interpret these?</li>
 </ol>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_2a84ca0c" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_07c5ff39" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -678,13 +678,13 @@ Lucy D’Agostino McGowan
 <h2><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M128 32C92.7 32 64 60.7 64 96V352h64V96H512V352h64V96c0-35.3-28.7-64-64-64H128zM19.2 384C8.6 384 0 392.6 0 403.2C0 445.6 34.4 480 76.8 480H563.2c42.4 0 76.8-34.4 76.8-76.8c0-10.6-8.6-19.2-19.2-19.2H19.2z"></path></svg> <code>Application Exercise</code></h2>
 <div>
 <ol type="1">
-<li>Using the linear model you fit previously (<code>mpg</code> from <code>wt</code> and <code>hp</code>, using polynomials with 4 degrees of freedom for both with the <code>mtcars</code> data) - calculate the p-value for the coefficient for weight</li>
+<li>Using the linear model you fit previously (<code>mpg</code> from <code>wt</code> and <code>hp</code>) - calculate the p-value for the coefficient for weight</li>
 <li>Interpret this value. What is the null hypothesis? What is the alternative hypothesis? Do you reject the null?</li>
 </ol>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_7ce308d0" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_2c7361e4" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -821,13 +821,14 @@ Lucy D’Agostino McGowan
 <h2><svg aria-hidden="true" role="img" viewbox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M128 32C92.7 32 64 60.7 64 96V352h64V96H512V352h64V96c0-35.3-28.7-64-64-64H128zM19.2 384C8.6 384 0 392.6 0 403.2C0 445.6 34.4 480 76.8 480H563.2c42.4 0 76.8-34.4 76.8-76.8c0-10.6-8.6-19.2-19.2-19.2H19.2z"></path></svg> <code>Application Exercise</code></h2>
 <div>
 <ol type="1">
-<li>Using the model previously fit (<code>mpg</code> from <code>wt</code> and <code>hp</code>, using polynomials with 4 degrees of freedom for both with the <code>mtcars</code> data), estimate the training <span class="math inline">\(R^2\)</span> using the <code>rsq</code> function.</li>
+<li>Fit a linear model using the <code>mtcars</code> data frame predicting miles per gallon (<code>mpg</code>) from weight and horsepower (<code>wt</code> and <code>hp</code>), using polynomials with 4 degrees of freedom for both.</li>
+<li>Estimate the training <span class="math inline">\(R^2\)</span> using the <code>rsq</code> function.</li>
 <li>Interpret this values.</li>
 </ol>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_7ff1a5e3" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_52454cdf" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -845,7 +846,7 @@ Lucy D’Agostino McGowan
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_086de536" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_d8e5d34d" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
