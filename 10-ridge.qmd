@@ -284,10 +284,10 @@ What is a sure-fire way to tell whether $\mathbf{(X^TX)^{-1}}$ will be invertibl
 What is a sure-fire way to tell whether $\mathbf{(X^TX)^{-1}}$ will be invertible?
 :::
 
-
+::: nonincremental
 * Take the determinant!
-
-$|\mathbf{A}|$ means the determinant of matrix $\mathbf{A}$
+* $|\mathbf{A}|$ means the determinant of matrix $\mathbf{A}$
+:::
 
 * For a 3x3 matrix:
 * $\mathbf{A} = \begin{bmatrix}a&b&c\\d&e&f\\g&h&i\end{bmatrix}$
@@ -303,11 +303,16 @@ $$\mathbf{A} = \begin{bmatrix}a&b&c\\d&e&f\\g&h&i\end{bmatrix}$$
 $$|\mathbf{A}| = a(ei-fh)-b(di-fg) +c(dh-eg)$$
 
 
-* (1) multiply $a$ by the determinant of the portion of the matrix that are **not** in $a$'s row or column
-* do the same for $b$ (2) and $c$ (3)
-* put it together as **plus** (1) **minus** (2) **plus** (3)
+* multiply $a$ by the determinant of the portion of the matrix that are **not** in $a$'s row or column (A)
+* do the same for $b$ (B) and $c$ (C)
+* put it together as **plus** (A) **minus** (B) **plus** (C)
 
-. . .
+## Determinants {.small}
+
+_It looks funky, but it follows a nice pattern!_
+
+$$\mathbf{A} = \begin{bmatrix}a&b&c\\d&e&f\\g&h&i\end{bmatrix}$$
+$$|\mathbf{A}| = a(ei-fh)-b(di-fg) +c(dh-eg)$$
 
 $$|\mathbf{A}| = a \left|\begin{matrix}e&f\\h&i\end{matrix}\right|-b\left|\begin{matrix}d&f\\g&i\end{matrix}\right|+c\left|\begin{matrix}d&e\\g&h\end{matrix}\right|$$
 
