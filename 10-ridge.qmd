@@ -490,7 +490,7 @@ Why?
 ## Ridge Regression {.small}
 
 * What if we add an additional _penalty_ to keep the $\hat\beta$ coefficients small (this will keep the variance from blowing up!)
-* Instead of minimizing $RSS$, like we do with linear regresion, let's minimize $RSS$ PLUS some penalty function
+* Instead of minimizing $RSS$, like we do with linear regression, let's minimize $RSS$ PLUS some penalty function
 * $RSS + \underbrace{\lambda\sum_{j=1}^p\beta^2_j}_{\textrm{shrinkage penalty}}$
 
 
