@@ -13,7 +13,7 @@ format:
     menu: true
 ---
 
-## tidymodels
+## {{< fa laptop >}} `Application Exercise`
 
 ```{r child = "setup.Rmd"}
 ```
@@ -27,6 +27,24 @@ library(ISLR)
 library(countdown)
 ```
 
+::: nonincremental
+
+1. Create a new project from this template in RStudio Pro:
+
+```bash
+https://github.com/sta-363-s23/11-appex.git
+```
+
+2. Load the packages and data by running the top chunk of R code
+
+:::
+
+```{r}
+#| echo: false
+countdown(2)
+```
+
+## tidymodels
 
 
 ```{r}
@@ -150,8 +168,6 @@ rec <- recipe(mpg ~ horsepower, data = Auto) |>
 
 * You can find all of the potential preprocessing steps here: https://tidymodels.github.io/recipes/reference/index.html
 
-
-
 ## Where do we plug in this recipe? {.small}
 
 * The `recipe` gets plugged into the `fit_resamples()` function
@@ -202,6 +218,75 @@ results |>
   collect_metrics()
 ```
 
+## {{< fa laptop >}} `Application Exercise` {.small}
+
+::: nonincremental
+
+1. Examine the `Hitters` dataset by running `?Hitters` in the Console
+2. We want to predict a major league player's `Salary` from all of the other 19 variables in this dataset. Create a visualization of `Salary`.
+3. Create a recipe to estimate this model.
+4. Add a preprocessing step to your recipe, scaling each of the predictors
+
+:::
+
+```{r}
+#| echo: false
+countdown(6)
+```
+
+
+## What if we have categorical variables?
+
+* We can turn the categorical variables into indicator ("dummy") variables in the recipe
+
+. . .
+
+```{r}
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = Auto) |>
+  step_dummy(all_nominal()) |>
+  step_scale(all_predictors())
+```
+
+## What if we have missing data?
+
+* We can remove any rows with missing data
+
+. . .
+
+```{r}
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = Auto) |>
+  step_dummy(all_nominal()) |>
+  step_naomit(everything()) |>
+  step_scale(all_predictors())
+```
+
+
+## What if we have missing data?
+
+
+```{r}
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = Auto) |>
+  step_dummy(all_nominal()) |>
+  step_naomit(all_outcomes()) |>
+  step_impute_mean(all_predictors()) |>
+  step_scale(all_predictors())
+```
+
+## {{< fa laptop >}} `Application Exercise` {.small}
+
+::: nonincremental
+
+1. Add a preprocessing step to your recipe to convert nominal variables into indicators
+2. Add a step to your recipe to remove missing values for the outcome
+3. Add a step to your recipe to impute missing values for the predictors using the average for the remaining values **NOTE THIS IS NOT THE BEST WAY TO DO THIS WE WILL LEARN BETTER TECHNIQUES!**
+
+
+:::
+
+```{r}
+#| echo: false
+countdown(6)
+```
 
 
 ## Ridge, Lasso, and Elastic net {.small}
@@ -243,7 +328,21 @@ ridge_spec <- linear_reg(penalty = 100, mixture = 0) |>
 ```
 
 
+## {{< fa laptop >}} `Application Exercise` {.small}
 
+::: nonincremental
+
+1. Set a seed `set.seed(1)`
+2. Create a cross validation object for the `Hitters` dataset
+3. Using the recipe from the previous exercise, fit the model using Ridge regression with a penalty $\lambda$ = 300
+4. What is the estimate of the test RMSE for this model?
+
+:::
+
+```{r}
+#| echo: false
+countdown(6)
+```
 
 ## Ridge, Lasso, and Elastic net
 
@@ -412,6 +511,30 @@ results |>
 
 
 
+
+## {{< fa laptop >}} `Application Exercise` {.small}
+
+::: small
+::: nonincremental
+
+1. Using the `Hitters` cross validation object and recipe created in the previous exercise, use `tune_grid` to pick the optimal penalty and mixture values.
+2. Update the code below to create a grid that includes penalties from 0 to 50 by 1 and mixtures from 0 to 1 by 0.5.
+3. Use this grid in the `tune_grid` function. Then use `collect_metrics` and filter to only include the RSME estimates.
+4. Create a figure to examine the estimated test RMSE for the grid of penalty and mixture values -- which should you choose?
+:::
+:::
+
+```{r}
+#| eval: false
+grid <- expand_grid(penalty = seq(0, ----),
+                    mixture = seq(0, 1, by = ----))
+```
+
+```{r}
+#| echo: false
+countdown(8)
+```
+
 ## Putting it all together {.small}
 
 * Often we can use a combination of all of these tools together
@@ -457,5 +580,3 @@ fit <- last_fit(final_spec,
 fit |>
   collect_metrics()
 ```
-
-

@@ -383,6 +383,8 @@
       margin-right: 0; 
     }
   </style>
+  <link href="12-tidymodels_files/libs/countdown-0.4.0/countdown.css" rel="stylesheet">
+  <script src="12-tidymodels_files/libs/countdown-0.4.0/countdown.js"></script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -395,16 +397,36 @@
 </div>
 
 </section>
-<section id="tidymodels" class="slide level2">
-<h2>tidymodels</h2>
+<section id="fa-laptop-application-exercise" class="slide level2">
+<h2> <code>Application Exercise</code></h2>
 <div class="cell" data-layout-align="center">
 
 </div>
+<div>
+<ol type="1">
+<li>Create a new project from this template in RStudio Pro:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">https://github.com/sta-363-s23/11-appex.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="1">
+<li>Load the packages and data by running the top chunk of R code</li>
+</ol>
+</div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>lm_spec <span class="ot">&lt;-</span> </span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> <span class="co"># Pick linear regression</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>  <span class="fu">set_engine</span>(<span class="at">engine =</span> <span class="st">"lm"</span>) <span class="co"># set engine</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>lm_spec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="countdown" id="timer_96172605" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
+</div>
+</section>
+<section id="tidymodels" class="slide level2">
+<h2>tidymodels</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>lm_spec <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> <span class="co"># Pick linear regression</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">set_engine</span>(<span class="at">engine =</span> <span class="st">"lm"</span>) <span class="co"># set engine</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>lm_spec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear Regression Model Specification (regression)
 
@@ -412,16 +434,16 @@ Computational engine: lm </code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(lm_spec,</span>
-<span id="cb3-2"><a href="#cb3-2"></a>              mpg <span class="sc">~</span> horsepower,</span>
-<span id="cb3-3"><a href="#cb3-3"></a>              <span class="at">data =</span> Auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(lm_spec,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>              mpg <span class="sc">~</span> horsepower,</span>
+<span id="cb4-3"><a href="#cb4-3"></a>              <span class="at">data =</span> Auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="validation-set-approach" class="slide level2 small">
 <h2>Validation set approach</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>Auto_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Auto, <span class="at">prop =</span> <span class="fl">0.5</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>Auto_split</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>Auto_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Auto, <span class="at">prop =</span> <span class="fl">0.5</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>Auto_split</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;Training/Testing/Total&gt;
 &lt;196/196/392&gt;</code></pre>
@@ -430,8 +452,8 @@ Computational engine: lm </code></pre>
 <div class="fragment">
 <p>Extract the training and testing data</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">training</span>(Auto_split)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">testing</span>(Auto_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">training</span>(Auto_split)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">testing</span>(Auto_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -446,15 +468,15 @@ Computational engine: lm </code></pre>
 <section id="a-faster-way-1" class="slide level2">
 <h2>A faster way!</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a>Auto_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Auto, <span class="at">prop =</span> <span class="fl">0.5</span>)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">last_fit</span>(lm_spec,</span>
-<span id="cb7-5"><a href="#cb7-5"></a>                   mpg <span class="sc">~</span> horsepower,</span>
-<span id="cb7-6"><a href="#cb7-6"></a>                   <span class="at">split =</span> Auto_split) </span>
-<span id="cb7-7"><a href="#cb7-7"></a></span>
-<span id="cb7-8"><a href="#cb7-8"></a>lm_fit <span class="sc">|&gt;</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a>  <span class="fu">collect_metrics</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">set.seed</span>(<span class="dv">100</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>Auto_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Auto, <span class="at">prop =</span> <span class="fl">0.5</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">last_fit</span>(lm_spec,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>                   mpg <span class="sc">~</span> horsepower,</span>
+<span id="cb8-6"><a href="#cb8-6"></a>                   <span class="at">split =</span> Auto_split) </span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a>lm_fit <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>  <span class="fu">collect_metrics</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
@@ -467,8 +489,8 @@ Computational engine: lm </code></pre>
 <section id="what-about-cross-validation" class="slide level2">
 <h2>What about cross validation?</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>Auto_cv <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(Auto, <span class="at">v =</span> <span class="dv">5</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>Auto_cv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>Auto_cv <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(Auto, <span class="at">v =</span> <span class="dv">5</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>Auto_cv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#  5-fold cross-validation 
 # A tibble: 5 × 2
@@ -501,22 +523,22 @@ Computational engine: lm </code></pre>
 <section id="what-if-we-wanted-to-do-some-preprocessing-1" class="slide level2 small">
 <h2>What if we wanted to do some <em>preprocessing</em></h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>Auto_scaled <span class="ot">&lt;-</span> Auto <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">mutate</span>(<span class="at">horsepower =</span> <span class="fu">scale</span>(horsepower))</span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="fu">sd</span>(Auto_scaled<span class="sc">$</span>horsepower)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>Auto_scaled <span class="ot">&lt;-</span> Auto <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">mutate</span>(<span class="at">horsepower =</span> <span class="fu">scale</span>(horsepower))</span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="fu">sd</span>(Auto_scaled<span class="sc">$</span>horsepower)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1</code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>Auto_cv_scaled <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(Auto_scaled, <span class="at">v =</span> <span class="dv">5</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">map_dbl</span>(Auto_cv_scaled<span class="sc">$</span>splits,</span>
-<span id="cb13-4"><a href="#cb13-4"></a>        <span class="cf">function</span>(x) {</span>
-<span id="cb13-5"><a href="#cb13-5"></a>          dat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(x)<span class="sc">$</span>horsepower</span>
-<span id="cb13-6"><a href="#cb13-6"></a>          <span class="fu">sd</span>(dat)</span>
-<span id="cb13-7"><a href="#cb13-7"></a>        })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>Auto_cv_scaled <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(Auto_scaled, <span class="at">v =</span> <span class="dv">5</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">map_dbl</span>(Auto_cv_scaled<span class="sc">$</span>splits,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>        <span class="cf">function</span>(x) {</span>
+<span id="cb14-5"><a href="#cb14-5"></a>          dat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(x)<span class="sc">$</span>horsepower</span>
+<span id="cb14-6"><a href="#cb14-6"></a>          <span class="fu">sd</span>(dat)</span>
+<span id="cb14-7"><a href="#cb14-7"></a>        })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.0244697 1.0261352 0.9662367 0.9832638 0.9969558</code></pre>
 </div>
@@ -530,8 +552,8 @@ Computational engine: lm </code></pre>
 </ul>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">step_scale</span>(horsepower) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">step_scale</span>(horsepower) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment">You can find all of the potential preprocessing steps here: https://tidymodels.github.io/recipes/reference/index.html</li>
@@ -544,17 +566,17 @@ Computational engine: lm </code></pre>
 <li class="fragment">The <code>recipe</code> gets plugged into the <code>fit_resamples()</code> function</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>Auto_cv <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(Auto, <span class="at">v =</span> <span class="dv">5</span>)</span>
-<span id="cb16-2"><a href="#cb16-2"></a></span>
-<span id="cb16-3"><a href="#cb16-3"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">step_scale</span>(horsepower)</span>
-<span id="cb16-5"><a href="#cb16-5"></a></span>
-<span id="cb16-6"><a href="#cb16-6"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(lm_spec,</span>
-<span id="cb16-7"><a href="#cb16-7"></a>                         <span class="at">preprocessor =</span> rec,</span>
-<span id="cb16-8"><a href="#cb16-8"></a>                         <span class="at">resamples =</span> Auto_cv)</span>
-<span id="cb16-9"><a href="#cb16-9"></a></span>
-<span id="cb16-10"><a href="#cb16-10"></a>results <span class="sc">|&gt;</span></span>
-<span id="cb16-11"><a href="#cb16-11"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>Auto_cv <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(Auto, <span class="at">v =</span> <span class="dv">5</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">step_scale</span>(horsepower)</span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(lm_spec,</span>
+<span id="cb17-7"><a href="#cb17-7"></a>                         <span class="at">preprocessor =</span> rec,</span>
+<span id="cb17-8"><a href="#cb17-8"></a>                         <span class="at">resamples =</span> Auto_cv)</span>
+<span id="cb17-9"><a href="#cb17-9"></a></span>
+<span id="cb17-10"><a href="#cb17-10"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
@@ -573,23 +595,23 @@ Computational engine: lm </code></pre>
 </ul>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 <section id="putting-it-together" class="slide level2 small">
 <h2>Putting it together</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span>
-<span id="cb19-3"><a href="#cb19-3"></a></span>
-<span id="cb19-4"><a href="#cb19-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(lm_spec,</span>
-<span id="cb19-5"><a href="#cb19-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
-<span id="cb19-6"><a href="#cb19-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span>
-<span id="cb19-7"><a href="#cb19-7"></a></span>
-<span id="cb19-8"><a href="#cb19-8"></a>results <span class="sc">|&gt;</span></span>
-<span id="cb19-9"><a href="#cb19-9"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(lm_spec,</span>
+<span id="cb20-5"><a href="#cb20-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
+<span id="cb20-6"><a href="#cb20-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span>
+<span id="cb20-7"><a href="#cb20-7"></a></span>
+<span id="cb20-8"><a href="#cb20-8"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
@@ -599,13 +621,87 @@ Computational engine: lm </code></pre>
 </div>
 </div>
 </section>
+<section id="fa-laptop-application-exercise-1" class="slide level2 small">
+<h2> <code>Application Exercise</code></h2>
+<div>
+<ol type="1">
+<li>Examine the <code>Hitters</code> dataset by running <code>?Hitters</code> in the Console</li>
+<li>We want to predict a major league player’s <code>Salary</code> from all of the other 19 variables in this dataset. Create a visualization of <code>Salary</code>.</li>
+<li>Create a recipe to estimate this model.</li>
+<li>Add a preprocessing step to your recipe, scaling each of the predictors</li>
+</ol>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_f3c3b387" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
+</div>
+</section>
+<section id="what-if-we-have-categorical-variables" class="slide level2">
+<h2>What if we have categorical variables?</h2>
+<ul>
+<li class="fragment">We can turn the categorical variables into indicator (“dummy”) variables in the recipe</li>
+</ul>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="what-if-we-have-missing-data" class="slide level2">
+<h2>What if we have missing data?</h2>
+<ul>
+<li class="fragment">We can remove any rows with missing data</li>
+</ul>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">step_naomit</span>(<span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="what-if-we-have-missing-data-1" class="slide level2">
+<h2>What if we have missing data?</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> Auto) <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">step_naomit</span>(<span class="fu">all_outcomes</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">step_impute_mean</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fa-laptop-application-exercise-2" class="slide level2 small">
+<h2> <code>Application Exercise</code></h2>
+<div>
+<ol type="1">
+<li>Add a preprocessing step to your recipe to convert nominal variables into indicators</li>
+<li>Add a step to your recipe to remove missing values for the outcome</li>
+<li>Add a step to your recipe to impute missing values for the predictors using the average for the remaining values <strong>NOTE THIS IS NOT THE BEST WAY TO DO THIS WE WILL LEARN BETTER TECHNIQUES!</strong></li>
+</ol>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_047892de" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
+</div>
+</section>
 <section id="ridge-lasso-and-elastic-net" class="slide level2 small">
 <h2>Ridge, Lasso, and Elastic net</h2>
 <p>When specifying your model, you can indicate whether you would like to use ridge, lasso, or elastic net. We can write a general equation to minimize:</p>
 <p><span class="math display">\[RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)\]</span></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment">First specify the engine. We’ll use <code>glmnet</code></li>
@@ -622,8 +718,27 @@ Computational engine: lm </code></pre>
 </div>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>ridge_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">100</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>ridge_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">100</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="fa-laptop-application-exercise-3" class="slide level2 small">
+<h2> <code>Application Exercise</code></h2>
+<div>
+<ol type="1">
+<li>Set a seed <code>set.seed(1)</code></li>
+<li>Create a cross validation object for the <code>Hitters</code> dataset</li>
+<li>Using the recipe from the previous exercise, fit the model using Ridge regression with a penalty <span class="math inline">\(\lambda\)</span> = 300</li>
+<li>What is the estimate of the test RMSE for this model?</li>
+</ol>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_c336e809" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
 </div>
 </div>
 </section>
@@ -631,50 +746,50 @@ Computational engine: lm </code></pre>
 <h2>Ridge, Lasso, and Elastic net</h2>
 <p><span class="math display">\[RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)\]</span></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>ridge_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">100</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>ridge_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">100</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>lasso_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">5</span>, <span class="at">mixture =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>lasso_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">5</span>, <span class="at">mixture =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>enet_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">60</span>, <span class="at">mixture =</span> <span class="fl">0.7</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>enet_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">60</span>, <span class="at">mixture =</span> <span class="fl">0.7</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 <section id="okay-but-we-wanted-to-look-at-3-different-models" class="slide level2 small">
 <h2>Okay, but we wanted to look at 3 different models!</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>ridge_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">100</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
-<span id="cb26-3"><a href="#cb26-3"></a></span>
-<span id="cb26-4"><a href="#cb26-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(ridge_spec,</span>
-<span id="cb26-5"><a href="#cb26-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
-<span id="cb26-6"><a href="#cb26-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>ridge_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">100</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
+<span id="cb30-3"><a href="#cb30-3"></a></span>
+<span id="cb30-4"><a href="#cb30-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(ridge_spec,</span>
+<span id="cb30-5"><a href="#cb30-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
+<span id="cb30-6"><a href="#cb30-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>lasso_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">5</span>, <span class="at">mixture =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
-<span id="cb27-3"><a href="#cb27-3"></a></span>
-<span id="cb27-4"><a href="#cb27-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(lasso_spec,</span>
-<span id="cb27-5"><a href="#cb27-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
-<span id="cb27-6"><a href="#cb27-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>lasso_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">5</span>, <span class="at">mixture =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
+<span id="cb31-3"><a href="#cb31-3"></a></span>
+<span id="cb31-4"><a href="#cb31-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(lasso_spec,</span>
+<span id="cb31-5"><a href="#cb31-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
+<span id="cb31-6"><a href="#cb31-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>elastic_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">60</span>, <span class="at">mixture =</span> <span class="fl">0.7</span>) <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
-<span id="cb28-3"><a href="#cb28-3"></a></span>
-<span id="cb28-4"><a href="#cb28-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(elastic_spec,</span>
-<span id="cb28-5"><a href="#cb28-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
-<span id="cb28-6"><a href="#cb28-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>elastic_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">60</span>, <span class="at">mixture =</span> <span class="fl">0.7</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
+<span id="cb32-3"><a href="#cb32-3"></a></span>
+<span id="cb32-4"><a href="#cb32-4"></a>results <span class="ot">&lt;-</span> <span class="fu">fit_resamples</span>(elastic_spec,</span>
+<span id="cb32-5"><a href="#cb32-5"></a>                         <span class="at">preprocessor =</span> rec,</span>
+<span id="cb32-6"><a href="#cb32-6"></a>                         <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment">😱 this looks like copy + pasting!</li>
@@ -684,9 +799,9 @@ Computational engine: lm </code></pre>
 <section id="tune" class="slide level2">
 <h2>tune 🎶</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>penalty_spec <span class="ot">&lt;-</span> </span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="fu">tune</span>(), <span class="at">mixture =</span> <span class="fu">tune</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>penalty_spec <span class="ot">&lt;-</span> </span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="fu">tune</span>(), <span class="at">mixture =</span> <span class="fu">tune</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment">Notice the code above has <code>tune()</code> for the the penalty and the mixture. Those are the things we want to vary!</li>
@@ -699,20 +814,20 @@ Computational engine: lm </code></pre>
 <li class="fragment">Instead of <code>fit_resamples()</code> we are going to use <code>tune_grid()</code></li>
 </ul>
 <div class="cell" data-layout-align="center" data-hash="12-tidymodels_cache/revealjs/tune_363a755e220fa4ac1bbe76e96cfc0d43">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">penalty =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
-<span id="cb30-2"><a href="#cb30-2"></a>                    <span class="at">mixture =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.2</span>))</span>
-<span id="cb30-3"><a href="#cb30-3"></a></span>
-<span id="cb30-4"><a href="#cb30-4"></a>results <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(penalty_spec,</span>
-<span id="cb30-5"><a href="#cb30-5"></a>                     <span class="at">preprocessor =</span> rec,</span>
-<span id="cb30-6"><a href="#cb30-6"></a>                     <span class="at">grid =</span> grid, </span>
-<span id="cb30-7"><a href="#cb30-7"></a>                     <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">penalty =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
+<span id="cb34-2"><a href="#cb34-2"></a>                    <span class="at">mixture =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.2</span>))</span>
+<span id="cb34-3"><a href="#cb34-3"></a></span>
+<span id="cb34-4"><a href="#cb34-4"></a>results <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(penalty_spec,</span>
+<span id="cb34-5"><a href="#cb34-5"></a>                     <span class="at">preprocessor =</span> rec,</span>
+<span id="cb34-6"><a href="#cb34-6"></a>                     <span class="at">grid =</span> grid, </span>
+<span id="cb34-7"><a href="#cb34-7"></a>                     <span class="at">resamples =</span> Auto_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="tune-2" class="slide level2 small">
 <h2>tune 🎶</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>results <span class="sc">|&gt;</span></span>
-<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 132 × 8
    penalty mixture .metric .estimator  mean     n std_err .config              
@@ -734,10 +849,10 @@ Computational engine: lm </code></pre>
 <section id="subset-results" class="slide level2 small">
 <h2>Subset results</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>results <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
-<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">arrange</span>(mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a>  <span class="fu">arrange</span>(mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 66 × 8
    penalty mixture .metric .estimator  mean     n std_err .config              
@@ -762,10 +877,10 @@ Computational engine: lm </code></pre>
 <section id="subset-results-1" class="slide level2 small">
 <h2>Subset results</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>results <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
-<span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a>  <span class="fu">arrange</span>(mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a>  <span class="fu">arrange</span>(mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 66 × 8
    penalty mixture .metric .estimator  mean     n std_err .config              
@@ -790,17 +905,17 @@ Computational engine: lm </code></pre>
 <section id="section" class="slide level2 small">
 <h2></h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>results <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
-<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb37-4"><a href="#cb37-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(penalty, mean, <span class="at">color =</span> <span class="fu">factor</span>(mixture), <span class="at">group =</span> <span class="fu">factor</span>(mixture))) <span class="sc">+</span></span>
-<span id="cb37-5"><a href="#cb37-5"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb37-6"><a href="#cb37-6"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb37-7"><a href="#cb37-7"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"RMSE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>results <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(penalty, mean, <span class="at">color =</span> <span class="fu">factor</span>(mixture), <span class="at">group =</span> <span class="fu">factor</span>(mixture))) <span class="sc">+</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb41-6"><a href="#cb41-6"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb41-7"><a href="#cb41-7"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"RMSE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="12-tidymodels_files/figure-revealjs/unnamed-chunk-27-1.png" style="width:80.0%"></p>
+<p><img data-src="12-tidymodels_files/figure-revealjs/unnamed-chunk-34-1.png" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -811,6 +926,31 @@ Computational engine: lm </code></pre>
 <figure>
 <p><img data-src="12-tidymodels_files/figure-revealjs/mtcars-1.png" style="width:80.0%"></p>
 </figure>
+</div>
+</div>
+</div>
+</section>
+<section id="fa-laptop-application-exercise-4" class="slide level2 small">
+<h2> <code>Application Exercise</code></h2>
+<div class="small">
+<div>
+<ol type="1">
+<li>Using the <code>Hitters</code> cross validation object and recipe created in the previous exercise, use <code>tune_grid</code> to pick the optimal penalty and mixture values.</li>
+<li>Update the code below to create a grid that includes penalties from 0 to 50 by 1 and mixtures from 0 to 1 by 0.5.</li>
+<li>Use this grid in the <code>tune_grid</code> function. Then use <code>collect_metrics</code> and filter to only include the RSME estimates.</li>
+<li>Create a figure to examine the estimated test RMSE for the grid of penalty and mixture values – which should you choose?</li>
+</ol>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">penalty =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="sc">----</span>),</span>
+<span id="cb42-2"><a href="#cb42-2"></a>                    <span class="at">mixture =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="sc">----</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_820fe0f0" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">08</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 </div>
 </div>
@@ -827,22 +967,22 @@ Computational engine: lm </code></pre>
 <section id="putting-it-all-together-1" class="slide level2 small">
 <h2>Putting it all together</h2>
 <div class="cell" data-layout-align="center" data-hash="12-tidymodels_cache/revealjs/all_194ba0f61e343ff5e1effe80dc6165e6">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>auto_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Auto, <span class="at">prop =</span> <span class="fl">0.5</span>)</span>
-<span id="cb38-2"><a href="#cb38-2"></a>auto_train <span class="ot">&lt;-</span> <span class="fu">training</span>(auto_split)</span>
-<span id="cb38-3"><a href="#cb38-3"></a>auto_cv <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(auto_train, <span class="at">v =</span> <span class="dv">5</span>)</span>
-<span id="cb38-4"><a href="#cb38-4"></a></span>
-<span id="cb38-5"><a href="#cb38-5"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> auto_train) <span class="sc">|&gt;</span></span>
-<span id="cb38-6"><a href="#cb38-6"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span>
-<span id="cb38-7"><a href="#cb38-7"></a></span>
-<span id="cb38-8"><a href="#cb38-8"></a>tuning <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(penalty_spec,</span>
-<span id="cb38-9"><a href="#cb38-9"></a>                     rec,</span>
-<span id="cb38-10"><a href="#cb38-10"></a>                     <span class="at">grid =</span> grid,</span>
-<span id="cb38-11"><a href="#cb38-11"></a>                     <span class="at">resamples =</span> auto_cv)</span>
-<span id="cb38-12"><a href="#cb38-12"></a></span>
-<span id="cb38-13"><a href="#cb38-13"></a>tuning <span class="sc">|&gt;</span></span>
-<span id="cb38-14"><a href="#cb38-14"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
-<span id="cb38-15"><a href="#cb38-15"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb38-16"><a href="#cb38-16"></a>  <span class="fu">arrange</span>(mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>auto_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Auto, <span class="at">prop =</span> <span class="fl">0.5</span>)</span>
+<span id="cb43-2"><a href="#cb43-2"></a>auto_train <span class="ot">&lt;-</span> <span class="fu">training</span>(auto_split)</span>
+<span id="cb43-3"><a href="#cb43-3"></a>auto_cv <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(auto_train, <span class="at">v =</span> <span class="dv">5</span>)</span>
+<span id="cb43-4"><a href="#cb43-4"></a></span>
+<span id="cb43-5"><a href="#cb43-5"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> horsepower <span class="sc">+</span> displacement <span class="sc">+</span> weight, <span class="at">data =</span> auto_train) <span class="sc">|&gt;</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a>  <span class="fu">step_scale</span>(<span class="fu">all_predictors</span>())</span>
+<span id="cb43-7"><a href="#cb43-7"></a></span>
+<span id="cb43-8"><a href="#cb43-8"></a>tuning <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(penalty_spec,</span>
+<span id="cb43-9"><a href="#cb43-9"></a>                     rec,</span>
+<span id="cb43-10"><a href="#cb43-10"></a>                     <span class="at">grid =</span> grid,</span>
+<span id="cb43-11"><a href="#cb43-11"></a>                     <span class="at">resamples =</span> auto_cv)</span>
+<span id="cb43-12"><a href="#cb43-12"></a></span>
+<span id="cb43-13"><a href="#cb43-13"></a>tuning <span class="sc">|&gt;</span></span>
+<span id="cb43-14"><a href="#cb43-14"></a>  <span class="fu">collect_metrics</span>() <span class="sc">|&gt;</span></span>
+<span id="cb43-15"><a href="#cb43-15"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">"rmse"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-16"><a href="#cb43-16"></a>  <span class="fu">arrange</span>(mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 66 × 8
    penalty mixture .metric .estimator  mean     n std_err .config              
@@ -864,13 +1004,13 @@ Computational engine: lm </code></pre>
 <section id="putting-it-all-together-2" class="slide level2 small">
 <h2>Putting it all together</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>final_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">0</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span>
-<span id="cb40-3"><a href="#cb40-3"></a>fit <span class="ot">&lt;-</span> <span class="fu">last_fit</span>(final_spec, </span>
-<span id="cb40-4"><a href="#cb40-4"></a>                rec,</span>
-<span id="cb40-5"><a href="#cb40-5"></a>                <span class="at">split =</span> auto_split) </span>
-<span id="cb40-6"><a href="#cb40-6"></a>fit <span class="sc">|&gt;</span></span>
-<span id="cb40-7"><a href="#cb40-7"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>final_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="dv">0</span>, <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span>
+<span id="cb45-3"><a href="#cb45-3"></a>fit <span class="ot">&lt;-</span> <span class="fu">last_fit</span>(final_spec, </span>
+<span id="cb45-4"><a href="#cb45-4"></a>                rec,</span>
+<span id="cb45-5"><a href="#cb45-5"></a>                <span class="at">split =</span> auto_split) </span>
+<span id="cb45-6"><a href="#cb45-6"></a>fit <span class="sc">|&gt;</span></span>
+<span id="cb45-7"><a href="#cb45-7"></a>  <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
