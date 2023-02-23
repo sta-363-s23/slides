@@ -1,0 +1,461 @@
+---
+title: "tidymodels"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i>adapted from Alison Hill's Introduction to ML with the Tidyverse</i>"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+---
+
+## tidymodels
+
+```{r child = "setup.Rmd"}
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(tidymodels)
+library(broom)
+library(ISLR)
+library(countdown)
+```
+
+
+
+```{r}
+lm_spec <- 
+  linear_reg() |> # Pick linear regression
+  set_engine(engine = "lm") # set engine
+lm_spec
+```
+
+```{r}
+lm_fit <- fit(lm_spec,
+              mpg ~ horsepower,
+              data = Auto)
+```
+
+
+
+## Validation set approach {.small}
+
+```{r}
+Auto_split <- initial_split(Auto, prop = 0.5)
+Auto_split
+```
+
+. . .
+
+Extract the training and testing data
+
+```{r, eval = FALSE}
+training(Auto_split)
+testing(Auto_split)
+```
+
+
+## A faster way! {.small}
+
+* You can use `last_fit()` and specify the split
+* This will automatically train the data on the `train` data from the split
+* Instead of specifying which metric to calculate (with `rmse` as before) you can just use `collect_metrics()` and it will automatically calculate the metrics on the `test` data from the split
+
+## A faster way! 
+
+```{r}
+set.seed(100)
+
+Auto_split <- initial_split(Auto, prop = 0.5)
+lm_fit <- last_fit(lm_spec,
+                   mpg ~ horsepower,
+                   split = Auto_split) 
+
+lm_fit |>
+  collect_metrics() 
+```
+
+
+
+## What about cross validation?
+
+```{r}
+Auto_cv <- vfold_cv(Auto, v = 5)
+Auto_cv
+```
+
+
+
+## What if we wanted to do some _preprocessing_ {.small}
+
+* For the shrinkage methods we discussed it was important to _scale_ the variables
+
+. . .
+
+::: question
+What does this mean?
+:::
+
+. . .
+
+::: question
+What would happen if we scale **before** doing cross-validation? Will we get different answers?
+:::
+
+
+
+## What if we wanted to do some _preprocessing_ {.small}
+
+
+```{r}
+Auto_scaled <- Auto |>
+  mutate(horsepower = scale(horsepower))
+
+sd(Auto_scaled$horsepower)
+```
+
+
+```{r}
+Auto_cv_scaled <- vfold_cv(Auto_scaled, v = 5)
+
+map_dbl(Auto_cv_scaled$splits,
+        function(x) {
+          dat <- as.data.frame(x)$horsepower
+          sd(dat)
+        })
+```
+
+
+
+
+
+## What if we wanted to do some _preprocessing_ {.small}
+
+* `recipe()`!
+* Using the `recipe()` function along with `step_*()` functions, we can specify _preprocessing_ steps and R will automagically apply them to each fold appropriately.
+
+. . .
+
+```{r}
+rec <- recipe(mpg ~ horsepower, data = Auto) |>
+  step_scale(horsepower) 
+```
+
+
+* You can find all of the potential preprocessing steps here: https://tidymodels.github.io/recipes/reference/index.html
+
+
+
+## Where do we plug in this recipe? {.small}
+
+* The `recipe` gets plugged into the `fit_resamples()` function
+
+
+```{r}
+Auto_cv <- vfold_cv(Auto, v = 5)
+
+rec <- recipe(mpg ~ horsepower, data = Auto) |>
+  step_scale(horsepower)
+
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+
+results |>
+  collect_metrics()
+```
+
+
+
+## What if we want to predict mpg with more variables {.small}
+
+* Now we still want to add a step to _scale_ predictors
+* We could either write out all predictors individually to scale them
+* OR we could use the `all_predictors()` short hand.
+
+. . .
+
+```{r}
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = Auto) |>
+  step_scale(all_predictors())
+```
+
+
+
+## Putting it together  {.small}
+
+```{r}
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = Auto) |>
+  step_scale(all_predictors())
+
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+
+results |>
+  collect_metrics()
+```
+
+
+
+## Ridge, Lasso, and Elastic net {.small}
+
+When specifying your model, you can indicate whether you would like to use ridge, lasso, or elastic net. We can write a general equation to minimize:
+
+$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
+
+
+```{r}
+lm_spec <- linear_reg() |>
+  set_engine("glmnet") 
+```
+
+* First specify the engine. We'll use `glmnet`
+* The `linear_reg()` function has two additional parameters, `penalty` and `mixture`
+* `penalty` is $\lambda$ from our equation. 
+* `mixture` is a number between 0 and 1 representing $\alpha$
+
+
+
+
+## Ridge, Lasso, and Elastic net {.small}
+
+
+$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
+
+
+::: question
+What would we set `mixture` to in order to perform Ridge regression?
+:::
+
+. . .
+
+
+```{r}
+ridge_spec <- linear_reg(penalty = 100, mixture = 0) |> 
+  set_engine("glmnet") 
+```
+
+
+
+
+## Ridge, Lasso, and Elastic net
+
+
+$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
+
+
+```{r}
+ridge_spec <- linear_reg(penalty = 100, mixture = 0) |> 
+  set_engine("glmnet") 
+```
+
+. . .
+
+```{r}
+lasso_spec <- linear_reg(penalty = 5, mixture = 1) |>
+  set_engine("glmnet") 
+```
+
+. . .
+```{r}
+enet_spec <- linear_reg(penalty = 60, mixture = 0.7) |> 
+  set_engine("glmnet") 
+```
+
+
+
+## Okay, but we wanted to look at 3 different models! {.small}
+
+
+```{r, eval = FALSE}
+ridge_spec <- linear_reg(penalty = 100, mixture = 0) |>
+  set_engine("glmnet") 
+
+results <- fit_resamples(ridge_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+```
+
+
+
+. . .
+
+```{r, eval = FALSE}
+lasso_spec <- linear_reg(penalty = 5, mixture = 1) |>
+  set_engine("glmnet") 
+
+results <- fit_resamples(lasso_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+```
+
+. . .
+
+```{r, eval = FALSE}
+elastic_spec <- linear_reg(penalty = 60, mixture = 0.7) |>
+  set_engine("glmnet") 
+
+results <- fit_resamples(elastic_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+```
+
+* `r emo::ji("scream")` this looks like copy + pasting!
+
+
+
+## tune `r emo::ji("notes")`
+
+
+```{r}
+penalty_spec <- 
+  linear_reg(penalty = tune(), mixture = tune()) |> 
+  set_engine("glmnet") 
+```
+
+
+* Notice the code above has `tune()` for the the penalty and the mixture. Those are the things we want to vary!
+
+
+
+##  tune `r emo::ji("notes")` {.small}
+
+* Now we need to create a grid of potential penalties ( $\lambda$ ) and mixtures ( $\alpha$ ) that we want to test
+* Instead of `fit_resamples()` we are going to use `tune_grid()`
+
+```{r tune, cache = TRUE, message = FALSE, warning = FALSE}
+grid <- expand_grid(penalty = seq(0, 100, by = 10),
+                    mixture = seq(0, 1, by = 0.2))
+
+results <- tune_grid(penalty_spec,
+                     preprocessor = rec,
+                     grid = grid, 
+                     resamples = Auto_cv)
+```
+
+
+
+## tune `r emo::ji("notes")` {.small}
+
+```{r}
+results |>
+  collect_metrics()
+```
+
+
+
+## Subset results {.small}
+
+```{r}
+results |>
+  collect_metrics() |>
+  filter(.metric == "rmse") |>
+  arrange(mean)
+```
+
+* Since this is a data frame, we can do things like filter and arrange!
+
+## Subset results {.small}
+
+```{r}
+results |>
+  collect_metrics() |>
+  filter(.metric == "rmse") |>
+  arrange(mean)
+```
+
+::: question
+Which would you choose?
+:::
+
+
+
+## {.small}
+
+```{r}
+results |>
+  collect_metrics() |>
+  filter(.metric == "rmse") |>
+  ggplot(aes(penalty, mean, color = factor(mixture), group = factor(mixture))) +
+  geom_line() +
+  geom_point() + 
+  labs(y = "RMSE")
+```
+
+
+
+```{r mtcars, echo = FALSE, cache = TRUE, message = FALSE, warning = FALSE}
+mtcars_cv <- vfold_cv(mtcars, v = 5)
+rec <- recipe(mpg ~ ., mtcars) |>
+  step_dummy(all_nominal()) |>
+  step_scale(all_predictors())
+results <- tune_grid(penalty_spec,
+                     rec,
+                     grid = grid,
+                     resamples = mtcars_cv)
+results |>
+  collect_metrics() |>
+  filter(.metric == "rmse") |>
+  ggplot(aes(penalty, mean, color = factor(mixture), group = factor(mixture))) +
+  geom_line() +
+  geom_point() + 
+  labs(y = "RMSE")
+```
+
+
+
+
+## Putting it all together {.small}
+
+* Often we can use a combination of all of these tools together
+* First split our data
+* Do cross validation on _just the training data_ to tune the parameters
+* Use `last_fit()` with the selected parameters, specifying the split data so that it is evaluated on the left out test sample
+
+
+
+## Putting it all together {.small}
+
+
+```{r all, cache = TRUE, message = FALSE, warning = FALSE}
+auto_split <- initial_split(Auto, prop = 0.5)
+auto_train <- training(auto_split)
+auto_cv <- vfold_cv(auto_train, v = 5)
+
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = auto_train) |>
+  step_scale(all_predictors())
+
+tuning <- tune_grid(penalty_spec,
+                     rec,
+                     grid = grid,
+                     resamples = auto_cv)
+
+tuning |>
+  collect_metrics() |>
+  filter(.metric == "rmse") |>
+  arrange(mean)
+```
+
+
+
+## Putting it all together {.small}
+
+
+```{r}
+final_spec <- linear_reg(penalty = 0, mixture = 0) |>
+  set_engine("glmnet")
+fit <- last_fit(final_spec, 
+                rec,
+                split = auto_split) 
+fit |>
+  collect_metrics()
+```
+
+
