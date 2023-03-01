@@ -413,7 +413,7 @@
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_96172605" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_2449333c" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -633,7 +633,7 @@ Computational engine: lm </code></pre>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_f3c3b387" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_67a27252" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -688,7 +688,7 @@ Computational engine: lm </code></pre>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_047892de" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_5c6f0186" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -735,7 +735,7 @@ Computational engine: lm </code></pre>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_c336e809" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_d9e74178" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -948,7 +948,7 @@ Computational engine: lm </code></pre>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_820fe0f0" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_57cd27d7" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">08</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -1017,6 +1017,48 @@ Computational engine: lm </code></pre>
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
 1 rmse    standard       4.00  Preprocessor1_Model1
 2 rsq     standard       0.726 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+</section>
+<section id="extracting-coefficients" class="slide level2 small">
+<h2>Extracting coefficients</h2>
+<ul>
+<li class="fragment">We can use <code>workflow()</code> to combine the recipe and the model specification to pass to a <code>fit</code> object.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>training_data <span class="ot">&lt;-</span> <span class="fu">training</span>(auto_split)</span>
+<span id="cb47-2"><a href="#cb47-2"></a></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">add_recipe</span>(rec) <span class="sc">|&gt;</span></span>
+<span id="cb47-5"><a href="#cb47-5"></a>  <span class="fu">add_model</span>(final_spec) <span class="sc">|&gt;</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a>  <span class="fu">fit</span>(<span class="at">data =</span> training_data) <span class="sc">|&gt;</span></span>
+<span id="cb47-7"><a href="#cb47-7"></a>  <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  term         estimate penalty
+  &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)     43.8        0
+2 horsepower      -2.13       0
+3 displacement    -1.04       0
+4 weight          -3.50       0</code></pre>
+</div>
+</div>
+</section>
+<section id="fa-laptop-application-exercise-5" class="slide level2 small">
+<h2> <code>Application Exercise</code></h2>
+<div class="small">
+<div>
+<ol type="1">
+<li>Using the final model specification, extract the coefficients from the model by creating a <code>workflow</code></li>
+</ol>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_ecc6ee88" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
 </div>
 </div>
 

@@ -580,3 +580,35 @@ fit <- last_fit(final_spec,
 fit |>
   collect_metrics()
 ```
+
+## Extracting coefficients {.small}
+
+* We can use `workflow()` to combine the recipe and the model specification to pass to a `fit` object.
+
+```{r}
+training_data <- training(auto_split)
+
+workflow() |>
+  add_recipe(rec) |>
+  add_model(final_spec) |>
+  fit(data = training_data) |>
+  tidy()
+```
+
+## {{< fa laptop >}} `Application Exercise` {.small}
+
+::: small
+::: nonincremental
+
+1. Using the final model specification, extract the coefficients from the model by creating a `workflow`
+
+:::
+:::
+
+
+```{r}
+#| echo: false
+
+countdown::countdown(3)
+```
+
