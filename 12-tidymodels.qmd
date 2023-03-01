@@ -601,7 +601,7 @@ workflow() |>
 ::: nonincremental
 
 1. Using the final model specification, extract the coefficients from the model by creating a `workflow`
-
+2. Filter out any coefficients exactly equal to 0
 :::
 :::
 
