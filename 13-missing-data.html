@@ -1003,7 +1003,7 @@ Residual Deviance: 7.287e-07    AIC: 26</code></pre>
 <h2>Disadvantages: Regression Imputation</h2>
 <ul>
 <li class="fragment">We need to specify the conditional relationships</li>
-<li class="fragment">So far, we’ve only talked about linear regression, meaning this method only works for continuous variables (it turns out you can use logistic for categorical variables, but then you need to specify a seperate imputation method for each type of variable, this can be a lot depending on the size of your data!)</li>
+<li class="fragment">So far, we’ve only talked about linear regression, meaning this method only works for continuous variables (it turns out you can use logistic for categorical variables, but then you need to specify a separate imputation method for each type of variable, this can be a lot depending on the size of your data!)</li>
 <li class="fragment">The other variables we use for imputation need to not be missing</li>
 </ul>
 </section>
@@ -1063,6 +1063,33 @@ Residual Deviance: 7.287e-07    AIC: 26</code></pre>
 1      30.3    6.76</code></pre>
 </div>
 </div>
+</section>
+<section id="advantages-conditional-imputation-knn" class="slide level2 small">
+<h2>Advantages: Conditional Imputation: KNN</h2>
+<ul>
+<li class="fragment">Our data can be <strong>conditionally</strong> missing at random – this means that the missingness only needs to be random <strong>conditional</strong> on the variables that we have included in our imputation model</li>
+<li class="fragment">The variability to closer to what it should be compared to just mean imputation</li>
+<li class="fragment">The method allows for either continuous or categorical variables to be imputed using the same technique</li>
+<li class="fragment">The other variables we are using <strong>can</strong> be missing as long as they are not <strong>mostly</strong> missing within each of the K neighbors that end up being chosen (for small percentages of missingess this is reasonable)</li>
+</ul>
+</section>
+<section id="disadvantages-knn-imputation" class="slide level2 small">
+<h2>Disadvantages: KNN Imputation</h2>
+<ul>
+<li class="fragment">We need to specify the conditional relationships (can default to all predictors, though)</li>
+<li class="fragment">Doesn’t account for the <strong>full</strong> potential variability (we need more advanced techniques like multiple imputation for that)</li>
+</ul>
+</section>
+<section id="advanced-techniques" class="slide level2">
+<h2>Advanced techniques</h2>
+<ul>
+<li class="fragment">Chained imputation</li>
+<li class="fragment">Multiple imputation</li>
+<li class="fragment">Multivariate Imputations by Chained Equations (MICE)
+<ul>
+<li class="fragment"><code>mice</code> package in R is a nice one for this</li>
+</ul></li>
+</ul>
 
 <img src="img/icon.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p><a href="https://lucymcgowan.com">Dr.&nbsp;Lucy D’Agostino McGowan</a> adapted from Nicole Dalzell’s slides</p>

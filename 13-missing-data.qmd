@@ -493,7 +493,7 @@ fit(wf, data = nc)
 ## Disadvantages: Regression Imputation {.small}
 
 * We need to specify the conditional relationships 
-* So far, we've only talked about linear regression, meaning this method only works for continuous variables (it turns out you can use logistic for categorical variables, but then you need to specify a seperate imputation method for each type of variable, this can be a lot depending on the size of your data!)
+* So far, we've only talked about linear regression, meaning this method only works for continuous variables (it turns out you can use logistic for categorical variables, but then you need to specify a separate imputation method for each type of variable, this can be a lot depending on the size of your data!)
 * The other variables we use for imputation need to not be missing
 
 ## Conditional Imputation: KNN {.small}
@@ -557,4 +557,21 @@ nc |>
             sd_fage = sd(fage))
 
 ```
+## Advantages: Conditional Imputation: KNN {.small}
 
+* Our data can be **conditionally** missing at random -- this means that the missingness only needs to be random **conditional** on the variables that we have included in our imputation model
+* The variability to closer to what it should be compared to just mean imputation
+* The method allows for either continuous or categorical variables to be imputed using the same technique
+* The other variables we are using **can** be missing as long as they are not **mostly** missing within each of the K neighbors that end up being chosen (for small percentages of missingess this is reasonable)
+
+## Disadvantages: KNN Imputation {.small}
+
+* We need to specify the conditional relationships (can default to all predictors, though) 
+* Doesn't account for the **full** potential variability (we need more advanced techniques like multiple imputation for that)
+
+## Advanced techniques
+
+* Chained imputation
+* Multiple imputation
+* Multivariate Imputations by Chained Equations (MICE)
+     * `mice` package in R is a nice one for this
