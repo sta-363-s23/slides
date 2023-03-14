@@ -1,0 +1,118 @@
+---
+title: "Review"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+---
+
+# Make sure to bring a calculator to the exam
+
+```{r child = "setup.Rmd"}
+```
+
+## Exam {.small}
+
+-   Two parts
+    -   Part 1: In class Monday (you can have one cheat sheet)
+    -   Part 2: The same exam, taken at home -- this is open notes (there will be no class Wednesday so you can have dedicated time to work on this then)
+
+## 
+
+| y   | x1  | x2  |
+|-----|-----|-----|
+| 5.7   | 2   |  1  |
+| 8.3   | 3   |  1  |
+| 7.3   | 4   | 0   |
+
+You want to predict `y` using `x1` and `x2` write out how you would calculate $\hat\beta$ in matrix form using the data provided (you do not need to solve the matrix)
+
+## 
+
+| y   | x1  | x2  |
+|-----|-----|-----|
+| 5.1   | 2   |  1  |
+| 6.9   | 3   |  1  |
+| 7.8   | 4   | 0   |
+
+Solving the above equation results in the following:
+
+$$
+\begin{bmatrix}
+\hat\beta_0 \\\hat\beta_1\\\hat\beta_2
+\end{bmatrix} = 
+\begin{bmatrix}
+0.7\\1.8\\0.9
+\end{bmatrix}
+$$
+
+Using the information provided, calculate the MSE for this model.
+
+## 
+
+| y   | x1  | x2  |
+|-----|-----|-----|
+| 9.1   | 4   |  1  |
+| 6.2   | 3   |  0  |
+| 5.8   | 2   | 1   |
+
+You get a new test data set (above). Using the model you fit to the training data, calculate the MSE in this test set.
+
+## Logistic Regression
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(tidyverse)
+library(broom)
+glm(am ~ wt, data = mtcars, family = "binomial") %>%
+  tidy(conf.int = TRUE) %>%
+  knitr::kable(digits = 2)
+```
+We are predicting whether a car has automatic transmission based on it's weight
+
+How do you interpret $\hat\beta_1$ is this a marginal or conditional effect?
+
+## Logistic Regression
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(tidyverse)
+library(broom)
+glm(am ~ wt + mpg, data = mtcars, family = "binomial") %>%
+  tidy(conf.int = TRUE) %>%
+  knitr::kable(digits = 2)
+```
+
+We add in an additional variable
+
+How do you interpret $\hat\beta_1$? Is this a conditional effect?
+
+## Penalized Regression {.small}
+
+* What is the penalty for Ridge Regression?
+* What is the penalty for Lasso?
+* What is the equation for Elastic Net?
+* How do we choose $\lambda$? $\alpha$?
+
+## Bias-variance trade off
+
+* What is the bias-variance trade-off?
+* As the flexibility of the model increases, how does that impact bias? variance? Training MSE? Testing MSE?
+* As $\lambda$ increases in penalyzed regression, how does this impact the **flexibility** of the model?
+
+## k-fold cross validation
+
+* How does it work?
+* What are the advantages/disadvantages of a small $k$ vs large $k$
