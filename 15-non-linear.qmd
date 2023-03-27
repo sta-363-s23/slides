@@ -1,0 +1,604 @@
+---
+title: "Non-linearity"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i>adapted from slides by Hastie & Tibshirani</i>"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Non-linear relationships
+
+```{r child = "setup.Rmd"}
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(countdown)
+library(ISLR)
+library(tidymodels)
+co <- read.table("data/co.dat", col.names = c("age", "pop"), header = FALSE)
+
+```
+
+::: question
+What have we used so far to deal with non-linear relationships?
+:::
+
+-   Hint: What did you use in Lab 02?
+-   Polynomials!
+
+## Polynomials {.small}
+
+$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$
+
+```{r, echo = FALSE}
+ggplot(co, aes(age, pop)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 4), method = "lm")
+```
+
+This is data from the Columbia World Fertility Survey (1975-76) to
+examine household compositions
+
+## Polynomials {.small}
+
+$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$
+
+```{r, echo = FALSE}
+ggplot(co, aes(age, pop)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 4), method = "lm")
+```
+
+-   Fit here with a 4th degree polynomial
+
+## How is it done? {.small}
+
+-   New variables are created ( $X_1 = X$, $X_2 = X^2$, $X_3 = X^3$,
+etc) and treated as multiple linear regression
+-   We are *not* interested in the individual coefficients, we are
+interested in how a *specific* $x$ value behaves
+-   $\hat{f}(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + \hat\beta_3x_0^3 + \hat\beta_4x_0^4$
+-   *or more often a change between two values*, $a$ and $b$
+-   $\hat{f}(b) -\hat{f}(a) = \hat\beta_1b + \hat\beta_2b^2 + \hat\beta_3b^3 + \hat\beta_4b^4 - \hat\beta_1a - \hat\beta_2a^2 - \hat\beta_3a^3 -\hat\beta_4a^4$
+-   $\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$
+
+## Polynomial Regression {.small}
+
+$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$
+
+::: question
+How do you pick $a$ and $b$?
+:::
+
+-   If given no other information, a sensible choice may be the 25th and
+75th percentiles of $x$
+
+## Polynomial Regression
+
+```{r, echo = FALSE}
+ggplot(co, aes(x = age, y = pop)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 4), method = "lm") + 
+  geom_vline(xintercept = c(24.5, 73.5), lty = 2)
+```
+
+## <i class="fas fa-laptop"></i> `Application Exercise` {.small}
+
+$$pop = \beta_0 + \beta_1age + \beta_2age^2 + \beta_3age^3 +\beta_4age^4+ \epsilon$$
+
+Using the information below, write out the equation to predicted change
+in population from a change in age from the 25th percentile (24.5) to a
+75th percentile (73.5).
+
+```{r, echo = FALSE, results = "asis"}
+lm(pop ~ age + I(age^2) + I(age^3) + I(age^4), data = co) %>%
+  tidy() %>%
+  knitr::kable(digits = 4, format = "markdown")
+```
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 3)
+```
+
+## Choosing $d$ {.small}
+
+$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$
+
+### Either:
+
+::: nonincremental
+-   Pre-specify $d$ (before looking `r emo::ji("eyes")` at your data!)
+-   Use cross-validation to pick $d$
+:::
+
+::: question
+Why?
+:::
+
+## Polynomial Regression
+
+Polynomials have notoriously bad tail behavior (so they can be bad for
+extrapolation)
+
+::: question
+What does this mean?
+:::
+
+## Step functions {.small}
+
+Another way to create a transformation is to cut the variable into
+distinct regions
+
+$$C_1(X) = I(X < 35), C_2(X) = I(35\leq X<65), C_3(X) = I(X \geq 65)$$
+
+```{r, echo = FALSE}
+mod <- lm(pop ~ I(age < 35) + I(age >=35 & age < 65) + I(age >= 65), data = co)
+p <- predict(mod)
+ggplot(co, aes(x = age, y = pop)) +
+  geom_point() +
+  geom_line(aes(x = age, y = p), color = "blue")
+```
+
+## Step functions {.small}
+
+-   Create dummy variables for each group
+-   Include each of these variables in multiple regression
+-   The choice of cutpoints or **knots** can be problematic (and make a
+big difference!)
+
+## Step functions {.small}
+
+$$C_1(X) = I(X < 35), C_2(X) = I(35\leq X<65), C_3(X) = I(X \geq 65)$$
+
+```{r, echo = FALSE}
+#| fig-height: 1.5
+mod <- lm(pop ~ I(age < 35) + I(age >=35 & age < 65) + I(age >= 65), data = co)
+p <- predict(mod)
+ggplot(co, aes(x = age, y = pop)) +
+  geom_point() +
+  geom_line(aes(x = age, y = p), color = "blue")
+```
+
+::: question
+What is the predicted value when $age = 25$?
+:::
+
+## Step functions {.small}
+
+$$C_1(X) = I(X < 15), C_2(X) = I(15\leq X<65), C_3(X) = I(X \geq 65)$$
+
+```{r, echo = FALSE, fig.height = 1.5}
+mod <- lm(pop ~ I(age < 15) + I(age >=15 & age < 65) + I(age >= 65), data = co)
+p <- predict(mod)
+ggplot(co, aes(x = age, y = pop)) +
+  geom_point() +
+  geom_line(aes(x = age, y = p), color = "blue")
+```
+
+::: question
+What is the predicted value when $age = 25$?
+:::
+
+## Piecewise polynomials {.small}
+
+Instead of a single polynomial in $X$ over it's whole domain, we can use
+different polynomials in regions defined by knots
+
+$$y_i = \begin{cases}\beta_{01}+\beta_{11}x_i + \beta_{21}x^2_i+\beta_{31}x^3_i+\epsilon_i& \textrm{if } x_i < c\\ \beta_{02}+\beta_{12}x_i + \beta_{22}x_i^2 + \beta_{32}x_{i}^3+\epsilon_i&\textrm{if }x_i\geq c\end{cases}$$
+
+::: question
+What could go wrong here?
+:::
+
+-   It would be nice to have constraints (like continuity!)
+-   Insert **splines!**
+
+## 
+
+![](img/15/splines.png)
+
+## Linear Splines {.small}
+
+*A linear spline with knots at* $\xi_k$, $k = 1,\dots, K$ is a piecewise
+linear polynomial continuous at each knot
+
+$$y_i = \beta_0 + \beta_1b_1(x_i)+\beta_2b_2(x_i)+\dots+\beta_{K+1}b_{K+1}(x_i)+\epsilon_i$$
+
+-   $b_k$ are **basis functions**
+-   $\begin{align}b_1(x_i)&=x_i\\ b_{k+1}(x_i)&=(x_i-\xi_k)_+,k=1,\dots,K\end{align}$
+-   Here $()_+$ means the **positive part**
+-   $(x_i-\xi_k)_+=\begin{cases}x_i-\xi_k & \textrm{if } x_i>\xi_k\\0&\textrm{otherwise}\end{cases}$
+
+
+
+## <i class="fas fa-pen"></i> `Application Exercise` {.small}
+
+Let's create data set to fit a *linear spline* with 2 knots: 35 and 65.
+
+:::: columns
+
+::: {.column width="20%"}
+
+| x   |
+|-----|
+| 4   |
+| 15  |
+| 25  |
+| 37  |
+| 49  |
+| 66  |
+|70   |
+|80   |
+:::
+
+::: {.column width="80%"}
+::: nonincremental
+1.  Using the data to the left create a new dataset with three variables:
+$b_1(x), b_2(x), b_3(x)$
+2.  Write out the equation you would be fitting to estimate the effect
+on some outcome $y$ using this linear spline
+:::
+:::
+
+::::
+
+```{r}
+#| echo: false
+countdown::countdown(4)
+```
+
+
+## Linear Spline
+
+:::: columns
+
+::: {.column width="20%"}
+
+| x   |
+|-----|
+| 4   |
+| 15  |
+| 25  |
+| 37  |
+| 49  |
+| 66  |
+|70   |
+|80   |
+
+:::
+
+::: {.column width="10%"}
+
+### `r emo::ji("right_arrow")`
+:::
+
+::: {.column width="70%"}
+| $b_1(x)$| $b_2(x)$ | $b_3(x)$|
+|-----|--------------|---------|
+| 4   | 0 | 0
+| 15  | 0 | 0
+| 25  | 0 | 0
+| 37  | 2 | 0
+| 49  | 14 | 0
+| 66  | 31 | 1
+|70   | 35 | 5
+|80   | 45 | 15
+:::
+
+::::
+
+## <i class="fas fa-pen"></i> `Application Exercise` {.small}
+
+Below is a linear regression model fit to include the 3 bases you just created with 2 knots: 35 and 65. Use the information here to draw the relationship between $x$ and $y$.
+
+```{r}
+#| echo: false
+set.seed(1)
+d <- tibble(
+  b1 = c(4, 15, 25, 37, 49, 66, 70, 80),
+  b2 = ifelse(b1 < 35, 0, b1 - 35),
+  b3 = ifelse(b1 < 65, 0, b1 - 65),
+  y = 2 * b1 + -2 * b2 -3 * b3 + rnorm(8, sd = 0.25)
+)
+lm(y ~ b1 + b2 + b3, data = d) |>
+  tidy() |>
+  knitr::kable(digits = 1)
+```
+
+
+```{r}
+#| echo: false
+countdown::countdown(7)
+```
+
+## Linear Splines {.small}
+
+::: {.column width="70%"}
+| $b_1(x)$| $b_2(x)$ | $b_3(x)$| $\hat{y}$
+|-----|--------------|---------|
+| 4   | 0 | 0 | $2 \times 4 -2 \times 0 - 3\times 0 = 8$
+| 15  | 0 | 0 | $2 \times 15 -2 \times 0 - 3\times 0 = 30$
+| 25  | 0 | 0 | $2 \times 25 -2 \times 0 - 3\times 0 = 50$
+| 37  | 2 | 0 | $2 \times 37 -2 \times 2 - 3\times 0 = 70$
+| 49  | 14 | 0 | $2 \times 49 -2 \times 14 - 3\times 0 = 70$
+| 66  | 31 | 1 | $2 \times 66 -2 \times 31 - 3\times 1 = 67$
+|70   | 35 | 5 | $2 \times 70 -2 \times 35 - 3\times 5 = 55$
+|80   | 45 | 15 | $2 \times 80 -2 \times 45 - 3\times 15 = 25$
+:::
+
+## Linear Splines {.small}
+
+```{r}
+#| echo: false
+
+p_ <- predict(lm(y ~ b1 + b2 + b3, data = d))
+
+ggplot(d, aes(x = b1, y = p_)) +
+  geom_point() +
+  labs(x = "X",
+       y = expression(hat(y)))
+```
+## Linear Splines {.small}
+
+```{r}
+#| echo: false
+newdat <- tibble(
+  b1 = 4:80,
+  b2 = ifelse(b1 > 35, b1 - 35, 0),
+  b3 = ifelse(b1 > 65, b1 - 65, 0)
+)
+p <- predict(lm(y ~ b1 + b2 + b3, data = d),
+             newdata = newdat)
+
+ggplot(newdat, aes(x = b1, y = p)) +
+  geom_point() + 
+  labs(x = "X",
+       y = expression(hat(y)))
+```
+
+
+## Cubic Splines {.small}
+
+*A cubic splines with knots at* $\xi_i, k = 1, \dots, K$ is a piecewise
+cubic polynomial with continuous derivatives up to order 2 at each knot.
+
+Again we can represent this model with truncated power functions
+
+$$y_i = \beta_0 + \beta_1b_1(x_i)+\beta_2b_2(x_i)+\dots+\beta_{K+3}b_{K+3}(x_i) + \epsilon_i$$
+
+$$\begin{align}b_1(x_i)&=x_i\\b_2(x_i)&=x_i^2\\b_3(x_i)&=x_i^3\\b_{k+3}(x_i)&=(x_i-\xi_k)^3_+, k = 1,\dots,K\end{align}$$
+
+where
+
+$$(x_i-\xi_k)^{3}_+=\begin{cases}(x_i-\xi_k)^3&\textrm{if }x_i>\xi_k\\0&\textrm{otherwise}\end{cases}$$
+
+## <i class="fas fa-pen"></i> `Application Exercise` {.small}
+
+Let's create data set to fit a *cubic spline* with 2 knots: 35 and 65.
+
+:::: columns
+
+::: {.column width="20%"}
+
+| x   |
+|-----|
+| 4   |
+| 15  |
+| 25  |
+| 37  |
+| 49  |
+| 66  |
+|70   |
+|80   |
+:::
+
+::: {.column width="80%"}
+::: nonincremental
+1.  Using the data to the left create a new dataset with five variables: $b_1(x), b_2(x), b_3(x), b_4(x), b_5(x)$
+2.  Write out the equation you would be fitting to estimate the effect
+on some outcome *y* using this cubic spline
+:::
+:::
+
+::::
+
+```{r}
+#| echo: false
+countdown::countdown(5)
+```
+
+## Cubic Spline
+
+:::: columns
+
+::: {.column width="20%"}
+
+| x   |
+|-----|
+| 4   |
+| 15  |
+| 25  |
+| 37  |
+| 49  |
+| 66  |
+|70   |
+|80   |
+
+:::
+
+::: {.column width="10%"}
+
+### `r emo::ji("right_arrow")`
+:::
+
+::: {.column width="70%"}
+
+```{r}
+#| echo: false
+d |>
+  mutate(b2 = b1^2,
+         b3 = b1^3,
+         b4 = ifelse(b1 > 35, (b1 - 35)^3, 0),
+         b5 = ifelse(b1 > 65, (b1 - 65)^3, 0)
+  ) -> d
+d |>
+  select(-y) |>
+  knitr::kable()
+```
+
+:::
+
+::::
+
+## Cubic Spline {.small}
+
+```{r}
+#| echo: false
+lm(y ~ b1 + b2 + b3 + b4 + b5, data = d) |>
+  tidy() |>
+  knitr::kable(digits = 3)
+```
+
+## Cubic Splines {.small}
+
+```{r}
+#| echo: false
+
+p_ <- predict(lm(y ~ b1 + b2 + b3 + b4 + b5, data = d))
+
+ggplot(d, aes(x = b1, y = p_)) +
+  geom_point() +
+  labs(x = "X",
+       y = expression(hat(y)))
+```
+## Cubic Splines {.small}
+
+```{r}
+#| echo: false
+newdat <- tibble(
+  b1 = 4:80,
+  b2 = b1^2,
+  b3 = b1^3,
+  b4 = ifelse(b1 > 35, (b1 - 35)^3, 0),
+  b5 = ifelse(b1 > 65, (b1 - 65)^3, 0)
+)
+p <- predict(lm(y ~ b1 + b2 + b3 + b4 + b5, data = d),
+             newdata = newdat)
+
+ggplot(newdat, aes(x = b1, y = p)) +
+  geom_point() + 
+  labs(x = "X",
+       y = expression(hat(y)))
+```
+
+## Cubic Splines {.small}
+
+```{r}
+#| echo: false
+newdat <- tibble(
+  b1 = -100:100,
+  b2 = b1^2,
+  b3 = b1^3,
+  b4 = ifelse(b1 > 35, (b1 - 35)^3, 0),
+  b5 = ifelse(b1 > 65, (b1 - 65)^3, 0)
+)
+p <- predict(lm(y ~ b1 + b2 + b3 + b4 + b5, data = d),
+             newdata = newdat)
+
+ggplot(newdat, aes(x = b1, y = p)) +
+  geom_point() + 
+  geom_vline(xintercept = c(4, 80), lty = 2) +
+  labs(x = "X",
+       y = expression(hat(y)))
+```
+
+## Natural cubic splines {.small}
+
+*A natural cubic spline extrapolates linearly beyond the boundary knots*
+
+This adds 4 extra constraints and allows us to put **more** internal knots for the same degrees of freedom as a regular cubic spline
+
+<img src="img/15/natural.png" height="400"/></img>
+
+## Natural Cubic Splines {.small}
+
+```{r}
+#| echo: false
+
+p <- predict(lm(y ~ splines::ns(b1, knots = c(35, 65)), data = d),
+             newdata = newdat)
+
+ggplot(newdat, aes(x = b1, y = p)) +
+  geom_point() + 
+  geom_vline(xintercept = c(4, 80), lty = 2) +
+  labs(x = "X",
+       y = expression(hat(y)))
+```
+
+
+## Natural Cubic Splines {.small}
+
+```{r}
+#| echo: false
+da <- tibble(
+  x = newdat$b1,
+  ns = predict(lm(y ~ splines::ns(b1, knots = c(35, 65)), data = d),
+             newdata = newdat),
+  cubic = predict(lm(y ~ b1 + b2 + b3 + b4 + b5, data = d), 
+                  newdata = newdat),
+  linear = predict(lm(y ~ b1 + ifelse(b1>35, b1 - 35, 0) + ifelse(b1>65, b1 - 65, 0), data = d),
+                   newdata = newdat)
+) |>
+  pivot_longer(ns:linear)
+
+da |>
+  filter(name != "linear") |>
+ggplot(aes(x = x, y = value, color = name)) +
+  geom_point(alpha = 0.5) + 
+  geom_vline(xintercept = c(4, 80), lty = 2) +
+  labs(x = "X",
+       y = expression(hat(y)),
+       color = "Spline")
+```
+
+## Natural Splines {.small}
+
+```{r}
+
+
+ggplot(da, aes(x = x, y = value, color = name)) +
+  geom_point(alpha = 0.5) + 
+  geom_vline(xintercept = c(4, 80), lty = 2) +
+  labs(x = "X",
+       y = expression(hat(y)),
+       color = "Spline")
+```
+
+
+## Knot placement {.small}
+
+-   One strategy is to decide $K$ (the number of knots) in advance and
+then place them at appropriate quantiles of the observed $X$
+-   A cubic spline with $K$ knots has $K+3$ parameters (or degrees of
+freedom!)
+-   A natural spline with $K$ knots has $K-1$ degrees of freedom
+
+## Knot placement {.small}
+
+Here is a comparison of a degree-14 polynomial and natural cubic spline
+(both have 15 degrees of freedom)
+
+<img src="img/15/knots.png" height="500"/></img>
