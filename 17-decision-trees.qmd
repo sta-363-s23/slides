@@ -1,0 +1,518 @@
+---
+title: "Decision trees - Regression tree building"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i>adapted from slides by Hastie & Tibshirani</i>"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+set.seed(1)
+```
+
+
+## Decision trees {.small}
+
+* Can be applied to **regression** problems
+* Can be applied to **classification** problems
+
+. . .
+
+::: question
+What is the difference?
+:::
+
+
+
+
+# Regression trees
+
+
+## Decision tree - Baseball Salary Example {.small}
+
+```{r, echo = FALSE}
+Hitters |>
+  filter(!is.na(Salary)) |>
+  ggplot(aes(x = Years, y = Hits, color = Salary)) +
+  geom_point() + 
+  scale_colour_viridis_c(option = "plasma") +
+  theme_classic()
+```
+
+
+
+::: question
+How would you stratify this?
+:::
+
+
+
+## Decision tree - Baseball Salary Example
+
+```{r, echo = FALSE}
+dt_model <- decision_tree(tree_depth = 2, mode = "regression") |>
+  set_engine("rpart") |> 
+  fit(Salary ~ Years + Hits, data = Hitters)
+rpart.plot::rpart.plot(dt_model$fit, roundint = FALSE)
+```
+
+
+
+## Let's walk through the figure {.small}
+
+* This is using the `Hitters` data from the `ISLR` `r emo::ji("package")`
+* I fit a **regression tree** predicting the salary of a baseball player from:
+  * Number of years they played in the major leagues
+  * Number of hits they made in the previous year
+
+* At each **node** the label (e.g., $X_j < t_k$ ) indicates that the _left_ branch that comes from that split. The _right_ branch is the opposite, e.g. $X_j \geq t_k$.
+
+## Let's walk through the figure {.small}
+
+* For example, the first **internal node** indicates that those to the left have less than 4.5 years in the major league, on the right have $\geq$ 4.5 years.
+
+
+* The number on the _top_ of the **nodes** indicates the predicted Salary, for example before doing _any_ splitting, the average Salary for the whole dataset is 536 thousand dollars.
+
+
+* This tree has **two internal nodes** and **three termninal nodes**
+
+
+
+## Decision tree - Baseball Salary Example {.small}
+
+```{r, echo = FALSE}
+dt_model <- decision_tree(tree_depth = 2, mode = "regression") |>
+  set_engine("rpart") |> 
+  fit(Salary ~ Years + Hits, data = Hitters)
+rpart.plot::rpart.plot(dt_model$fit, roundint = FALSE)
+```
+
+
+
+## Decision tree - Baseball Salary Example {.small}
+
+```{r, echo = FALSE}
+Hitters |>
+  filter(!is.na(Salary)) |>
+  mutate(color = case_when(
+    Years < 4.5 ~ 1,
+    Hits < 118 ~ 2,
+    TRUE ~ 3
+  )) |>
+  ggplot(aes(x = Years, y = Hits, color = color)) +
+  geom_point() + 
+  theme_classic() +
+  theme(legend.position = "none") +
+  geom_vline(xintercept = 4.5) + 
+  geom_segment(aes(x = 4.5, xend = 25, y = 118, yend = 118), color = "black")
+```
+
+
+
+## Decision tree - Baseball Salary Example {.small}
+
+```{r, echo = FALSE}
+Hitters |>
+  filter(!is.na(Salary)) |>
+  mutate(color = case_when(
+    Years < 4.5 ~ 1,
+    Hits < 118 ~ 2,
+    TRUE ~ 3
+  )) |>
+  ggplot(aes(x = Years, y = Hits, color = color)) +
+  geom_point() + 
+  theme_classic() +
+  theme(legend.position = "none") +
+  geom_vline(xintercept = 4.5) + 
+  geom_segment(aes(x = 4.5, xend = 25, y = 118, yend = 118), color = "black") + 
+  geom_text(label = "R1", aes(x = 3, y = 200), color = "orange", size = 10)
+```
+
+
+
+## Decision tree - Baseball Salary Example {.small}
+
+```{r, echo = FALSE}
+Hitters |>
+  filter(!is.na(Salary)) |>
+  mutate(color = case_when(
+    Years < 4.5 ~ 1,
+    Hits < 118 ~ 2,
+    TRUE ~ 3
+  )) |>
+  ggplot(aes(x = Years, y = Hits, color = color)) +
+  geom_point() + 
+  theme_classic() +
+  theme(legend.position = "none") +
+  geom_vline(xintercept = 4.5) + 
+  geom_segment(aes(x = 4.5, xend = 25, y = 118, yend = 118), color = "black") + 
+  geom_text(label = "R1", aes(x = 3, y = 200), color = "orange", size = 10) + 
+  geom_text(label = "R2", aes(x = 15, y = 15), color = "orange", size = 10) + 
+  geom_text(label = "R3", aes(x = 15, y = 200), color = "orange", size = 10) 
+
+```
+
+
+
+## Terminology {.small}
+
+* `r emo::ji("tree")` The final regions, $R_1, R_2, R_3$ are called **terminal nodes**
+* `r emo::ji("tree")` You can think of the trees as _upside down_, the **leaves** are at the bottom
+* `r emo::ji("tree")` The splits are called **internal nodes**
+
+
+
+## Interpretation of results {.small}
+
+* `Years` is the most important factor in determining `Salary`; players with less experience earn lower salaries
+
+
+* Given that a player is less experienced, the number of `Hits` seems to play little role in the `Salary`
+
+
+* Among players who have been in the major leagues for 4.5 years or more, the number of `Hits` made in the previous year **does** affect `Salary`, players with more `Hits` tend to have higher salaries
+
+
+* This is probably an oversimplification, but see how easy it is to interpret!
+
+
+
+
+
+
+## <i class="fas fa-edit"></i> `Interpreting decision trees`  {.small}
+
+::: nonincremental
+
+1. How many internal nodes does this plot have? How many terminal nodes?
+2. What is the average Salary for players who have more than 6.5 years in the major leagues but less than 118 Hits? What % of the dataset fall in this category?
+
+:::
+```{r, echo = FALSE, fig.height = 2}
+dt_model <- decision_tree(tree_depth = 3, mode = "regression") |>
+  set_engine("rpart") |> 
+  fit(Salary ~ Years + Hits, data = Hitters)
+rpart.plot::rpart.plot(dt_model$fit, roundint = FALSE)
+```
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 2, bottom = 9)
+```
+
+
+## The tree building process {.small}
+
+* Divide the predictor space (the set of possible values for $X_1, X_2, \dots, X_p$ ) into $J$ distinct non-overlapping regions, $R_1, R_2, \dots R_j$
+* For every observation that falls into the region $R_j$, we make the same prediction, the **mean response value** for the training observations in $R_j$
+
+
+
+## The tree building process {.small}
+
+* The regions could have any shape, but we choose to divide the predictor space into high-dimensional **boxes** for simplicity and ease of interpretation
+
+* The goal is to find boxes, $R_1, \dots, R_j$ that minimize the RSS, given by
+
+* $\sum_{j=1}^J\sum_{i\in R_j}(y_i-\hat{y}_{R_j})^2$ where $\hat{y}_{R_j}$ is the mean response for the training observations within the $j$th box.
+
+
+
+## The tree building process {.small}
+
+* It is often computationally infeasible to consider every possible partition of the feature space into $J$ boxes
+* Therefore, we take a **top-down, greedy** approach known as recursive binary splitting
+
+* This is **top-down** because it begins at the top of the tree and then splits the predictor space successively into two branches at a time
+
+
+* It is **greedy** because at each step the **best** split is made at that step (instead of looking forward and picking a split that may result in a better tree in a future step)
+
+
+
+## The tree building process {.small}
+
+* First select the predictor $X_j$ and the cutpoint $s$ such that splitting the predictor space into $\{X|X_j < s\}$ and $\{X|X_k\geq s\}$ leads to the _greatest possible reduction in RSS_
+
+
+* We repeat this process, looking for the best predictor and cutpoint to split the data within each of the resulting regions
+
+* Now instead of splitting the _entire_ predictor space, we split one of the two previously identified regions, now we have _three_ regions
+
+
+## The tree building process {.small}
+
+* Then we look to split one of these three regions to minimize the RSS
+* This process continues until some stopping criteria are met. 
+`r emo::ji("stop_sign")` e.g., we could stop when we have created a fixed number of regions, or we could keep going until no region contains more than 5 observations, etc.
+
+
+
+## <i class="fas fa-edit"></i> `Draw a partition`
+
+Draw an example of a partition of a two-dimensional feature space that could result from recursive binary splitting with six regions. Label your figure with the regions, $R_1, \dots, R_6$ as well as the cutpoints $t_1, t_2, \dots$. Draw a decision tree corresponding to this partition. 
+
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 5)
+```
+
+
+## Decision tree predictions
+
+* Predict the response for a _test observation_ using the mean of the _training observations_ in the region that the _test observation_ belongs to
+
+. . .
+
+::: question
+What could potentially go wrong with what we have described so far?
+:::
+
+
+* The process may produce good predictions on the _training_ set but is likely to **overfit!**
+
+
+
+## Pruning a tree {.small}
+
+_Do you love the tree puns? I DO!_
+
+* A smaller tree (with fewer splits, that is fewer regions $R_1,\dots, R_j$ ) may lead to **lower variance** and better interpretation at the cost of a little **bias**
+
+
+* A good strategy is to _grow_ a very large tree, $T_0$, and then **prune** it back to obtain a **subtree**
+
+
+* For this, we use **cost complexity pruning** (also known as **weakest link** `r emo::ji("link")` **pruning**)
+
+
+* Consider a sequence of trees indexed by a nonnegative tuning parameter, $\alpha$. For each $\alpha$ there is a subtree $T \subset T_0$ such that $\sum_{m=1}^{|T|}\sum_{i:x_i\in R_m}(y_i-\hat{y}_{R_m})^2+\alpha|T|$ is as small as possible. 
+
+
+
+## Pruning {.small}
+
+$$\sum_{m=1}^{|T|}\sum_{i:x_i\in R_m}(y_i-\hat{y}_{R_m})^2+\alpha|T|$$
+
+* $|T|$ indicates the number of terminal nodes of the tree $T$
+
+
+* $R_m$ is the box (the subset of the predictor space) corresponding to the $m$th terminal node
+
+
+* $\hat{y}_{R_m}$ is the mean of the training observations in $R_m$
+
+
+
+## Choosing the best subtree {.small}
+
+The _tuning parameter_, $\alpha$, controls the trade-off between the subtree's _complexity_ and its _fit_ to the training data
+
+
+::: question
+How do you think you could select $\alpha$?
+:::
+
+
+* You can select an optimal value, $\hat{\alpha}$ using **cross-validation**!
+
+
+* Then return to the full dataset and obtain the subtree using $\hat{\alpha}$
+
+
+
+## Summary regression tree algorithm {.small}
+
+* Use **recursive binary splitting** to grow a large tree on the training data, stop when you reach some stopping criteria
+
+
+* Apply **cost complexity pruning** to the larger tree to obtain a sequence of best subtrees, as a function of $\alpha$
+
+
+* Use K-fold cross-validation to choose $\alpha$. Pick $\alpha$ to minimize the average error
+
+
+* Return the subtree that corresponds to the chosen $\alpha$ 
+
+
+# The baseball example
+
+
+
+## 1. Randomly divide the data in half, 132 training observations, 131 testing {.small}
+
+```{r, echo = FALSE}
+baseball <- Hitters[!is.na(Hitters$Salary), ]
+```
+
+```{r}
+set.seed(77)
+baseball_split <- initial_split(baseball, prop = 0.5)
+baseball_train <- training(baseball_split)
+```
+
+
+
+## 2. Create cross-validation object for 6-fold cross validation {.small}
+
+```{r}
+baseball_cv <- vfold_cv(baseball_train, v = 6)
+```
+
+
+
+## 3. Create a model specification that tunes based on complexity, $\alpha$ and add to workflow {.small}
+
+```{r}
+tree_spec <- decision_tree(
+  cost_complexity = tune(), 
+  tree_depth = 10,
+  mode = "regression") |>
+  set_engine("rpart")
+
+wf <- workflow() |>
+  add_recipe(
+    recipe(Salary ~ Hits + Years + PutOuts + RBI + Walks + Runs, data = baseball)
+    ) |>
+  add_model(tree_spec)
+```
+
+
+
+::: question
+What is my tree depth for my "large" tree?
+:::
+
+
+
+## 4. Fit the model on the cross validation set {.small}
+
+
+```{r, cache = TRUE}
+grid <- expand_grid(cost_complexity = seq(0.01, 0.05, by = 0.01))
+model <- tune_grid(wf,
+                   grid = grid,
+                   resamples = baseball_cv)
+```
+
+
+
+
+::: question
+What $\alpha$s am I trying?
+:::
+
+
+
+## 5. Choose $\alpha$ that minimizes the RMSE {.small}
+
+```{r}
+model |>
+  show_best(metric = "rmse")
+```
+
+
+
+## 5. Choose $\alpha$ that minimizes the RMSE {.small}
+
+```{r, eval = FALSE}
+model |>
+  show_best()
+```
+
+```{r}
+model |>
+  select_best(metric = "rmse") #<<
+```
+
+
+
+## 5. Choose $\alpha$ that minimizes the RMSE {.small}
+
+```{r, eval = FALSE}
+model |>
+  show_best(metric = "rmse")
+```
+
+```{r}
+final_complexity <- select_best(model, metric = "rmse")
+```
+
+
+
+## 6. Fit the final model {.small}
+
+
+```{r}
+wf_final <- wf |>
+  finalize_workflow(final_complexity)
+
+final_model <- fit(wf_final,
+                   data = baseball_train)
+```
+
+
+
+
+## Final tree
+
+```{r, echo = FALSE}
+rpart.plot::rpart.plot(final_model$fit$fit$fit, roundint = FALSE)
+```
+
+
+
+::: question
+How many terminal nodes does this tree have?
+:::
+
+
+
+## Calculate RMSE on the test data
+
+```{r}
+baseball_test <- testing(baseball_split)
+final_model |>
+  predict(new_data = baseball_test) |>
+  bind_cols(baseball_test) |>
+  metrics(truth = Salary, estimate = .pred)
+```
+
+
+
+
+
+
+## <i class="fas fa-laptop"></i> `Application Exercise`
+
+Pull in the application exercise files from:
+
+```bash
+https://github.com/sta-363-s23/17-appex.git
+```
+
+Using the `College` data from the `ISLR` package, predict the number of applications received from a subset of the variables of your choice using a decision tree. (Not sure about the variables? Run `?College` in the console after loading the `ISLR` package)
+
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 10)
+```
+
