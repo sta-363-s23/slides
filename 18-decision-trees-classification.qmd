@@ -1,0 +1,178 @@
+---
+title: "Decision trees - Classification trees"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i>adapted from slides by Hastie & Tibshirani</i>"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Classification Trees
+
+* Very similar to **regression trees** except it is used to predict a **qualitative response** rather than a **quantitative** one
+
+* We predict that each observation belongs to the **most commonly occuring class** of the training observations in a given region
+
+
+```{r child = "setup.Rmd"}
+```
+
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+set.seed(1)
+```
+
+
+
+
+
+
+## Fitting classification trees {.small}
+
+* We use **recursive binary splitting** to grow the tree
+* Instead of RSS, we can use:
+* **Gini index**: $G = \sum_{k=1}^K \hat{p}_{mk}(1-\hat{p}_{mk})$
+
+* This is a measure of total variance across the $K$ classes. If all of the $\hat{p}_{mk}$ values are close to zero or one, this will be small
+
+
+* The Gini index is a measure of node **purity** small values indicate that node contains predominantly observations from a single class
+
+
+* In `R`, this can be estimated using the `gain_capture()` function. 
+
+
+## Classification tree - Heart Disease Example {.small}
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+heart <- read_csv("data/heart.csv")
+heart$HD <- as.factor(heart$AHD)
+```
+
+* Classifying whether 303 patients have heart disease based on 13 predictors (`Age`, `Sex`, `Chol`, etc)
+
+
+
+## 1. Split the data into a cross-validation set
+
+```{r}
+heart_cv <- vfold_cv(heart, v = 5)
+```
+
+
+
+::: question
+How many folds do I have?
+:::
+
+
+## 2. Create a model specification that tunes based on complexity, $\alpha$ {.small}
+
+```{r}
+#| code-line-numbers: "|4|"
+tree_spec <- decision_tree(
+  cost_complexity = tune(), 
+  tree_depth = 10,
+  mode = "classification") %>% 
+  set_engine("rpart")
+
+wf <- workflow() |>
+  add_recipe(
+    recipe(HD ~ Age + Sex + ChestPain + RestBP + Chol + Fbs + 
+                     RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca,
+    data = heart
+    )
+  ) |>
+  add_model(tree_spec)
+```
+
+
+
+## 3. Fit the model on the cross validation set {.small}
+
+
+```{r, cache = TRUE}
+#| code-line-numbers: "|5|"
+grid <- expand_grid(cost_complexity = seq(0.01, 0.05, by = 0.01))
+model <- tune_grid(wf,
+                   grid = grid,
+                   resamples = heart_cv,
+                   metrics = metric_set(gain_capture, accuracy)) 
+```
+
+. . .
+
+::: question
+What $\alpha$s am I trying?
+:::
+
+
+
+## 5. Choose $\alpha$ that minimizes the Gini Index {.small}
+
+
+```{r}
+best <- model %>%
+  select_best(metric = "gain_capture")
+```
+
+
+
+## 6. Fit the final model
+
+```{r}
+final_wf <- wf |>
+  finalize_workflow(best)
+
+final_model <- fit(final_wf, data = heart)
+```
+
+
+
+## 7. Examine how the final model does on the full sample {.small}
+
+```{r}
+final_model %>%
+  predict(new_data = heart) %>%
+  bind_cols(heart) %>%
+  conf_mat(truth = HD, estimate = .pred_class) %>%
+  autoplot(type = "heatmap")
+```
+
+
+
+## Decision trees
+
+:::: columns
+
+::: column
+### Pros
+
+* simple
+* easy to interpret
+:::
+
+
+
+::: column
+
+### Cons
+
+* not often competitive in terms of predictive accuracy
+* Next we will discuss how to combine _multiple_ trees to improve accuracy
+:::
+
+::::

@@ -1,0 +1,128 @@
+---
+title: "Plotting Decision trees"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+
+## Plotting decision trees
+
+There are several R packages that assist with tree plotting
+
+* `rpart.plot`
+* `partykit`
+* `rattle`
+
+
+
+## Where to find out more about packages {.small}
+
+1. Vignettes
+2. Journal Article (R Journal is great)
+3. Rstudio Community
+4. StackOverflow
+5. Twitter
+
+
+
+## <i class="fas fa-laptop"></i> `Learn about partykit`
+
+Google `partykit` to find out how more about it (hint: use key words like `rstats` and `decision tree plots`)
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 3)
+```
+
+
+## `rpart.plot`
+
+We're going to focus on `rpart.plot`, but feel free to try the others!
+
+
+```{r, eval = FALSE}
+install.packages("rpart.plot")
+```
+
+```{r, message = FALSE, warning = FALSE}
+library(rpart.plot)
+```
+
+
+
+## `rpart.plot` {.small}
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(ISLR)
+library(tidymodels)
+baseball <- Hitters[!is.na(Hitters$Salary), ]
+```
+
+
+```{r}
+tree_spec <- decision_tree(
+  cost_complexity = 0.1,
+  tree_depth = 10,
+  mode = "regression") |>
+  set_engine("rpart")
+
+wf <- workflow() |>
+  add_recipe(
+    recipe(Salary ~ Hits + Years + PutOuts + RBI + Walks + Runs,
+                   data = baseball)
+  ) |>
+  add_model(tree_spec)
+
+model <- fit(wf, baseball)
+```
+
+. . .
+
+```{r, eval = FALSE}
+#| code-line-numbers: "|1|2|"
+rpart.plot(model$fit$fit$fit,
+           roundint = FALSE)
+```
+
+
+
+## `rpart.plot`
+
+```{r}
+rpart.plot(model$fit$fit$fit, 
+           roundint = FALSE)
+```
+
+
+
+
+## <i class="fas fa-laptop"></i> `Application Exercise`
+
+::: nonincremental
+1. Open your application exercise
+2. Install `rpart.plot`
+3. Create a plot from your final decision tree
+:::
+
+```{r}
+#| echo: false
+countdown::countdown(minutes = 10)
+```
+
