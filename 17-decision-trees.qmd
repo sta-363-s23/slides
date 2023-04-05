@@ -505,7 +505,7 @@ final_model |>
 Pull in the application exercise files from:
 
 ```bash
-https://github.com/sta-363-s23/17-appex.git
+https://github.com/sta-363-s23/appex-17.git
 ```
 
 Using the `College` data from the `ISLR` package, predict the number of applications received from a subset of the variables of your choice using a decision tree. (Not sure about the variables? Run `?College` in the console after loading the `ISLR` package)
