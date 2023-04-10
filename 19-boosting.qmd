@@ -1,0 +1,318 @@
+---
+title: "Boosting Decision Trees: The Algorithm"
+author: "Lucy D'Agostino McGowan"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i>adapted from slides by Hastie & Tibshirani</i>"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+
+
+## Boosting {.small}
+
+```{r child = "setup.Rmd"}
+```
+
+
+* Like **bagging**, **boosting** is an approach that can be applied to many statistical learning methods
+
+
+* We will discuss how to use **boosting** for decision trees
+
+
+
+
+
+## Bagging {.small}
+
+* resampling from the original training data to make many bootstrapped training data sets 
+* fitting a separate decision tree to each bootstrapped training data set
+* combining all trees to make one predictive model
+* `r emo::ji("index_pointing_up")` Note, each tree is built on a bootstrap dataset, independent of the other trees
+
+## Boosting  {.small}
+
+* **Boosting** is similar, except the trees are grown _sequentially_, using information from the previously grown trees
+
+
+
+## Boosting algorithm for regression trees {.small}
+
+### Step 1
+
+* Set $\hat{f}(x)= 0$ and $r_i= y_i$ for all $i$ in the training set
+
+
+
+## Boosting algorithm for regression trees  {.small}
+
+### Step 2 For $b = 1, 2, \dots, B$ repeat:
+
+* Fit a tree $\hat{f}^b$ with $d$ splits ( $d$ + 1 terminal nodes) to the training data ( $X, r$ )
+* Update $\hat{f}$ by adding in a shrunken version of the new tree: $\hat{f}(x)\leftarrow \hat{f}(x)+\lambda \hat{f}^b(x)$
+
+* Update the residuals: $r_i \leftarrow r_i - \lambda \hat{f}^b(x_i)$
+
+## Boosting algorithm for regression trees  {.small}
+
+### Step 3
+
+* Output the boosted model $\hat{f}(x)=\sum_{b = 1}^B\lambda\hat{f}^b(x)$
+
+
+## Big picture  {.small}
+
+* Given the current model, we are fitting a decision tree to the _residuals_
+
+
+* We then add this new decision tree into the fitted function to update the residuals
+
+
+* Each of these trees can be small (just a few terminal nodes), determined by $d$
+
+
+* Instead of fitting a single large decision tree, which could result in overfitting, boosting _learns slowly_
+
+
+
+## Big Picture  {.small}
+
+
+* By fitting small trees to the _residuals_ we _slowly_ improve $\hat{f}$ in areas where it does not perform well
+
+
+* The shrinkage parameter $\lambda$ slows the process down even more allowing more and different shaped trees to try to minimize those residuals
+
+
+
+## Boosting for classification  {.small}
+
+* Boosting for classification is similar, but a bit more complex
+
+
+* `tidymodels` will handle this for us, but if you are interested in learning more, you can check out [Chapter 10 of Elements of Statistical Learning](https://web.stanford.edu/~hastie/Papers/ESLII.pdf)
+
+
+
+
+## Tuning parameters  {.small}
+
+::: question
+With **bagging** what could we tune?
+:::
+
+
+
+* $B$, the number of bootstrapped training samples (the number of decision trees fit) (`trees`)
+
+
+* It is more efficient to just pick something very large instead of tuning this
+* For $B$, you don't really risk overfitting if you pick something too big
+
+## Tuning parameters  {.small}
+
+
+::: question
+With **random forest** what could we tune?
+:::
+
+
+* The depth of the tree, $B$, and `m` the number of predictors to try (`mtry`)
+
+
+* The default is $\sqrt{p}$, and this does pretty well
+
+
+
+## Tuning parameters for boosting  {.small}
+
+
+* $B$ the number of bootstraps
+* $\lambda$ the shrinkage parameter
+* $d$ the number of splits in each tree
+
+
+
+## Tuning parameters for boosting  {.small}
+
+
+::: question
+What do you think you can use to pick $B$?
+:::
+
+* Unlike **bagging** and **random forest** with **boosting** you can overfit if $B$ is too large
+
+
+* Cross-validation, of course!
+
+
+
+## Tuning parameters for boosting  {.small}
+
+* The _shrinkage parameter_ $\lambda$ controls the rate at which boosting learn
+
+
+* $\lambda$ is a small, positive number, typically 0.01 or 0.001
+
+
+* It depends on the problem, but typically a very small $\lambda$ can require a very large $B$ for good performance
+
+
+
+## Tuning parameters for boosting  {.small}
+
+* _The number of splits_, $d$, in each tree controls the _complexity_ of the boosted ensemble
+
+
+* Often $d=1$ is a good default
+
+
+* _brace yourself for another tree pun!_
+
+
+* In this case we call the tree a _stump_ meaning it just has a single split
+
+
+* This results in an _additive model_
+
+
+* You can think of $d$ as the _interaction depth_ it controls the interaction order of the boosted model, since $d$ splits can involve at most $d$ variables
+
+
+## Variable importance  {.small}
+
+* For bagged or random forest _regression trees_, we can record the _total RSS_ that is decreased due to splits of a given predictor $X_i$ averaged over all $B$ trees
+
+
+* A large value would indicate that that variable is _important_
+
+
+
+## Variable importance  {.small}
+
+* For bagged or random forest _classification trees_ we can add up the total amount that the Gini Index is decreased by splits of a given predictor, $X_i$, averaged over $B$ trees
+
+
+
+## Variable importance in R  {.small}
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidymodels)
+library(tidyverse)
+heart <- read_csv("data/heart.csv")
+heart$HD <- as.factor(heart$AHD)
+heart <- heart[complete.cases(heart), ]
+```
+
+
+```{r}
+#| code-line-numbers: "|7|"
+rf_spec <- rand_forest(
+  mode = "classification",
+  mtry = 3
+) |> 
+  set_engine(
+    "ranger",
+    importance = "impurity") 
+
+wf <- workflow() |>
+  add_recipe(
+    recipe(HD ~ Age + Sex + ChestPain + RestBP + Chol + Fbs + 
+               RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca + Thal,               
+             data = heart)
+  ) |>
+  add_model(rf_spec)
+model <- fit(wf, data = heart)
+```
+
+
+```{r}
+ranger::importance(model$fit$fit$fit)
+```
+
+
+
+## Variable importance
+
+
+```{r}
+library(ranger)
+importance(model$fit$fit$fit)
+```
+
+
+
+```{r}
+var_imp <- ranger::importance(model$fit$fit$fit)
+```
+
+
+
+## Plotting variable importance
+
+
+```{r, fig.height = 1.5}
+var_imp_df <- data.frame(
+  variable = names(var_imp),
+  importance = var_imp
+  )
+
+var_imp_df |>
+ggplot(aes(x = variable, y = importance)) +
+  geom_col()
+```
+
+
+
+
+::: question
+How could we make this plot better?
+:::
+
+
+
+## Plotting variable importance
+
+
+```{r}
+var_imp_df |>
+ggplot(aes(x = variable, y = importance)) +
+  geom_col() + 
+  coord_flip()
+```
+
+
+::: question
+How could we make this plot better?
+:::
+
+
+
+
+## Plotting variable importance {.small}
+
+
+```{r}
+var_imp_df |>
+  mutate(variable = factor(variable, 
+   levels = variable[order(var_imp_df$importance)])) |>
+ggplot(aes(x = variable, y = importance)) +
+  geom_col() + 
+  coord_flip()
+```
+
+
+
+
+
