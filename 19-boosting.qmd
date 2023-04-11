@@ -1,5 +1,5 @@
 ---
-title: "Boosting Decision Trees: The Algorithm"
+title: "Boosting Decision Trees and Variable Importance"
 author: "Lucy D'Agostino McGowan"
 footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) <i>adapted from slides by Hastie & Tibshirani</i>"
 logo: "img/icon.png"

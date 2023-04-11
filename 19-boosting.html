@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.2.269">
 
   <meta name="author" content="Lucy D’Agostino McGowan">
-  <title>Boosting Decision Trees: The Algorithm</title>
+  <title>Boosting Decision Trees and Variable Importance</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -392,7 +392,7 @@
     <div class="slides">
 
 <section id="title-slide" data-background-color="#fff" data-color="#70001A" class="quarto-title-block center">
-  <h1 class="title">Boosting Decision Trees: The Algorithm</h1>
+  <h1 class="title">Boosting Decision Trees and Variable Importance</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -587,7 +587,7 @@ Lucy D’Agostino McGowan
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_78d3defd" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_7ea07101" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -643,9 +643,9 @@ Lucy D’Agostino McGowan
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>ranger<span class="sc">::</span><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Age        Sex  ChestPain     RestBP       Chol        Fbs    RestECG 
- 8.9176023  3.8479686 16.2586620  7.0602054  7.3581972  0.7988767  1.7044950 
+ 8.4105385  3.9179814 16.2075537  7.8479381  7.0121649  0.8112367  1.5944339 
      MaxHR      ExAng    Oldpeak      Slope         Ca       Thal 
-14.0455240  6.6307565 13.7438718  5.4426297 16.7757157 14.4126291 </code></pre>
+13.7292165  6.8135135 13.0718556  5.9581823 16.6729564 14.7206036 </code></pre>
 </div>
 </div>
 </section>
@@ -656,9 +656,9 @@ Lucy D’Agostino McGowan
 <span id="cb8-2"><a href="#cb8-2"></a><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Age        Sex  ChestPain     RestBP       Chol        Fbs    RestECG 
- 8.9176023  3.8479686 16.2586620  7.0602054  7.3581972  0.7988767  1.7044950 
+ 8.4105385  3.9179814 16.2075537  7.8479381  7.0121649  0.8112367  1.5944339 
      MaxHR      ExAng    Oldpeak      Slope         Ca       Thal 
-14.0455240  6.6307565 13.7438718  5.4426297 16.7757157 14.4126291 </code></pre>
+13.7292165  6.8135135 13.0718556  5.9581823 16.6729564 14.7206036 </code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
