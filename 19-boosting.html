@@ -384,6 +384,8 @@
       margin-right: 0; 
     }
   </style>
+  <link href="19-boosting_files/libs/countdown-0.4.0/countdown.css" rel="stylesheet">
+  <script src="19-boosting_files/libs/countdown-0.4.0/countdown.js"></script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -527,14 +529,88 @@ Lucy D’Agostino McGowan
 <li class="fragment"><p>You can think of <span class="math inline">\(d\)</span> as the <em>interaction depth</em> it controls the interaction order of the boosted model, since <span class="math inline">\(d\)</span> splits can involve at most <span class="math inline">\(d\)</span> variables</p></li>
 </ul>
 </section>
-<section id="variable-importance" class="slide level2 small">
+<section id="boosted-trees-in-r" class="slide level2 small">
+<h2>Boosted trees in R</h2>
+<div class="cell" data-layout-align="center">
+
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="|1|2|3|4|5|7|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>boost_spec <span class="ot">&lt;-</span> <span class="fu">boost_tree</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="at">mode =</span> <span class="st">"classification"</span>, </span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="at">tree_depth =</span> <span class="dv">1</span>, </span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="at">trees =</span> <span class="dv">1000</span>, </span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="at">learn_rate =</span> <span class="fl">0.001</span>, </span>
+<span id="cb1-6"><a href="#cb1-6"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li class="fragment">Set the <code>mode</code> as you would with a bagged tree or random forest</li>
+<li class="fragment"><code>tree_depth</code> here is the depth of each tree, let’s set that to 1<br>
+</li>
+<li class="fragment"><code>trees</code> is the number of trees that are fit, this is equivalent to <code>B</code></li>
+<li class="fragment"><code>learn_rate</code> is <span class="math inline">\(\lambda\)</span></li>
+</ul>
+</section>
+<section id="make-a-recipe" class="slide level2">
+<h2>Make a recipe</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(HD <span class="sc">~</span> Age <span class="sc">+</span> Sex <span class="sc">+</span> ChestPain <span class="sc">+</span> RestBP <span class="sc">+</span> Chol <span class="sc">+</span> Fbs <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2"></a>             RestECG <span class="sc">+</span> MaxHR <span class="sc">+</span> ExAng <span class="sc">+</span> Oldpeak <span class="sc">+</span> Slope <span class="sc">+</span> Ca <span class="sc">+</span> Thal,           </span>
+<span id="cb2-3"><a href="#cb2-3"></a>           <span class="at">data =</span> heart) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>())  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li class="fragment"><code>xgboost</code> wants you to have all numeric data, that means we need to make dummy variables</li>
+<li class="fragment">because <code>HD</code> (the outcome) is also categorical, we can use <code>all_nominal_predictors</code> to make sure we don’t turn the outcome into dummy variables as well</li>
+</ul>
+</section>
+<section id="fit-the-model" class="slide level2">
+<h2>Fit the model</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">add_recipe</span>(rec) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">add_model</span>(boost_spec)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>model <span class="ot">&lt;-</span> <span class="fu">fit</span>(wf, <span class="at">data =</span> heart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="boosting-2" class="slide level2">
+<h2><i class="fas fa-laptop"></i> <code>Boosting</code></h2>
+<p>How would this code change if I wanted to tune <code>B</code> the number of bootstrapped training samples?</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>boost_spec <span class="ot">&lt;-</span> <span class="fu">boost_tree</span>( </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="at">mode =</span> <span class="st">"classification"</span>, </span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="at">tree_depth =</span> <span class="dv">1</span>, </span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="at">trees =</span> <span class="dv">1000</span>, </span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="at">learn_rate =</span> <span class="fl">0.001</span>, </span>
+<span id="cb4-6"><a href="#cb4-6"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_78d3defd" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
+</div>
+</section>
+<section id="boosting-3" class="slide level2">
+<h2><i class="fas fa-laptop"></i> <code>Boosting</code></h2>
+<p>Fit a <strong>boosted model</strong> to the data from the previous application exercise.</p>
+</section>
+<section>
+<section id="variable-importance" class="title-slide slide level1 center">
+<h1>Variable Importance</h1>
+
+</section>
+<section id="variable-importance-1" class="slide level2 small">
 <h2>Variable importance</h2>
 <ul>
 <li class="fragment"><p>For bagged or random forest <em>regression trees</em>, we can record the <em>total RSS</em> that is decreased due to splits of a given predictor <span class="math inline">\(X_i\)</span> averaged over all <span class="math inline">\(B\)</span> trees</p></li>
 <li class="fragment"><p>A large value would indicate that that variable is <em>important</em></p></li>
 </ul>
 </section>
-<section id="variable-importance-1" class="slide level2 small">
+<section id="variable-importance-2" class="slide level2 small">
 <h2>Variable importance</h2>
 <ul>
 <li class="fragment">For bagged or random forest <em>classification trees</em> we can add up the total amount that the Gini Index is decreased by splits of a given predictor, <span class="math inline">\(X_i\)</span>, averaged over <span class="math inline">\(B\)</span> trees</li>
@@ -546,92 +622,92 @@ Lucy D’Agostino McGowan
 
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1" data-code-line-numbers="|7|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>rf_spec <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(</span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="at">mode =</span> <span class="st">"classification"</span>,</span>
-<span id="cb1-3"><a href="#cb1-3"></a>  <span class="at">mtry =</span> <span class="dv">3</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>) <span class="sc">|&gt;</span> </span>
-<span id="cb1-5"><a href="#cb1-5"></a>  <span class="fu">set_engine</span>(</span>
-<span id="cb1-6"><a href="#cb1-6"></a>    <span class="st">"ranger"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span>) </span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a>wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>  <span class="fu">add_recipe</span>(</span>
-<span id="cb1-11"><a href="#cb1-11"></a>    <span class="fu">recipe</span>(HD <span class="sc">~</span> Age <span class="sc">+</span> Sex <span class="sc">+</span> ChestPain <span class="sc">+</span> RestBP <span class="sc">+</span> Chol <span class="sc">+</span> Fbs <span class="sc">+</span> </span>
-<span id="cb1-12"><a href="#cb1-12"></a>               RestECG <span class="sc">+</span> MaxHR <span class="sc">+</span> ExAng <span class="sc">+</span> Oldpeak <span class="sc">+</span> Slope <span class="sc">+</span> Ca <span class="sc">+</span> Thal,               </span>
-<span id="cb1-13"><a href="#cb1-13"></a>             <span class="at">data =</span> heart)</span>
-<span id="cb1-14"><a href="#cb1-14"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a>  <span class="fu">add_model</span>(rf_spec)</span>
-<span id="cb1-16"><a href="#cb1-16"></a>model <span class="ot">&lt;-</span> <span class="fu">fit</span>(wf, <span class="at">data =</span> heart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|7|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>rf_spec <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="at">mode =</span> <span class="st">"classification"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="at">mtry =</span> <span class="dv">3</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">set_engine</span>(</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="st">"ranger"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span>) </span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a>wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a>  <span class="fu">add_recipe</span>(</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="fu">recipe</span>(HD <span class="sc">~</span> Age <span class="sc">+</span> Sex <span class="sc">+</span> ChestPain <span class="sc">+</span> RestBP <span class="sc">+</span> Chol <span class="sc">+</span> Fbs <span class="sc">+</span> </span>
+<span id="cb5-12"><a href="#cb5-12"></a>             RestECG <span class="sc">+</span> MaxHR <span class="sc">+</span> ExAng <span class="sc">+</span> Oldpeak <span class="sc">+</span> Slope <span class="sc">+</span> Ca <span class="sc">+</span> Thal,               </span>
+<span id="cb5-13"><a href="#cb5-13"></a>           <span class="at">data =</span> heart)</span>
+<span id="cb5-14"><a href="#cb5-14"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>  <span class="fu">add_model</span>(rf_spec)</span>
+<span id="cb5-16"><a href="#cb5-16"></a>model <span class="ot">&lt;-</span> <span class="fu">fit</span>(wf, <span class="at">data =</span> heart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>ranger<span class="sc">::</span><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>ranger<span class="sc">::</span><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Age        Sex  ChestPain     RestBP       Chol        Fbs    RestECG 
- 8.9706857  3.9764206 16.5231149  7.2824046  6.8820113  0.7617023  1.6711885 
+ 8.9176023  3.8479686 16.2586620  7.0602054  7.3581972  0.7988767  1.7044950 
      MaxHR      ExAng    Oldpeak      Slope         Ca       Thal 
-13.4047878  6.3443318 13.6172685  6.3220291 16.9817480 14.6101827 </code></pre>
+14.0455240  6.6307565 13.7438718  5.4426297 16.7757157 14.4126291 </code></pre>
 </div>
 </div>
 </section>
-<section id="variable-importance-2" class="slide level2">
+<section id="variable-importance-3" class="slide level2">
 <h2>Variable importance</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(ranger)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">library</span>(ranger)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Age        Sex  ChestPain     RestBP       Chol        Fbs    RestECG 
- 8.9706857  3.9764206 16.5231149  7.2824046  6.8820113  0.7617023  1.6711885 
+ 8.9176023  3.8479686 16.2586620  7.0602054  7.3581972  0.7988767  1.7044950 
      MaxHR      ExAng    Oldpeak      Slope         Ca       Thal 
-13.4047878  6.3443318 13.6172685  6.3220291 16.9817480 14.6101827 </code></pre>
+14.0455240  6.6307565 13.7438718  5.4426297 16.7757157 14.4126291 </code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>var_imp <span class="ot">&lt;-</span> ranger<span class="sc">::</span><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>var_imp <span class="ot">&lt;-</span> ranger<span class="sc">::</span><span class="fu">importance</span>(model<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plotting-variable-importance" class="slide level2">
 <h2>Plotting variable importance</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>var_imp_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="at">variable =</span> <span class="fu">names</span>(var_imp),</span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="at">importance =</span> var_imp</span>
-<span id="cb7-4"><a href="#cb7-4"></a>  )</span>
-<span id="cb7-5"><a href="#cb7-5"></a></span>
-<span id="cb7-6"><a href="#cb7-6"></a>var_imp_df <span class="sc">|&gt;</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> importance)) <span class="sc">+</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>  <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>var_imp_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="at">variable =</span> <span class="fu">names</span>(var_imp),</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="at">importance =</span> var_imp</span>
+<span id="cb11-4"><a href="#cb11-4"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a>var_imp_df <span class="sc">|&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> importance)) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>  <span class="fu">geom_col</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="19-boosting_files/figure-revealjs/unnamed-chunk-7-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="question">
+<img data-src="19-boosting_files/figure-revealjs/unnamed-chunk-13-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="question">
 <p>How could we make this plot better?</p>
 </div>
 </section>
 <section id="plotting-variable-importance-1" class="slide level2">
 <h2>Plotting variable importance</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>var_imp_df <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> importance)) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>var_imp_df <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> importance)) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="19-boosting_files/figure-revealjs/unnamed-chunk-8-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="question">
+<img data-src="19-boosting_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"><div class="question">
 <p>How could we make this plot better?</p>
 </div>
 </section>
 <section id="plotting-variable-importance-2" class="slide level2 small">
 <h2>Plotting variable importance</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>var_imp_df <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">factor</span>(variable, </span>
-<span id="cb9-3"><a href="#cb9-3"></a>   <span class="at">levels =</span> variable[<span class="fu">order</span>(var_imp_df<span class="sc">$</span>importance)])) <span class="sc">|&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> importance)) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
-<span id="cb9-6"><a href="#cb9-6"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>var_imp_df <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">factor</span>(variable, </span>
+<span id="cb13-3"><a href="#cb13-3"></a>                           <span class="at">levels =</span> variable[<span class="fu">order</span>(var_imp_df<span class="sc">$</span>importance)])) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> importance)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb13-6"><a href="#cb13-6"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="19-boosting_files/figure-revealjs/unnamed-chunk-9-1.png" style="width:80.0%"></p>
+<p><img data-src="19-boosting_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -640,7 +716,7 @@ Lucy D’Agostino McGowan
 <div class="footer footer-default">
 <p><a href="https://lucymcgowan.com">Dr.&nbsp;Lucy D’Agostino McGowan</a> <i>adapted from slides by Hastie &amp; Tibshirani</i></p>
 </div>
-</section>
+</section></section>
     </div>
   </div>
 

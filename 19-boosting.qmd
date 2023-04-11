@@ -190,6 +190,88 @@ What do you think you can use to pick $B$?
 * You can think of $d$ as the _interaction depth_ it controls the interaction order of the boosted model, since $d$ splits can involve at most $d$ variables
 
 
+## Boosted trees in R {.small}
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidymodels)
+library(tidyverse)
+heart <- read_csv("data/heart.csv")
+heart <- heart[complete.cases(heart), ]
+heart$HD <- as.factor(heart$AHD)
+
+```
+
+
+```{r}
+#| code-line-numbers: "|1|2|3|4|5|7|"
+boost_spec <- boost_tree(
+  mode = "classification", 
+  tree_depth = 1, 
+  trees = 1000, 
+  learn_rate = 0.001, 
+) |>
+  set_engine("xgboost")  
+```
+
+* Set the `mode` as you would with a bagged tree or random forest
+* `tree_depth` here is the depth of each tree, let's set that to 1  
+* `trees` is the number of trees that are fit, this is equivalent to `B`
+* `learn_rate` is $\lambda$
+
+
+
+## Make a recipe
+
+```{r}
+rec <- recipe(HD ~ Age + Sex + ChestPain + RestBP + Chol + Fbs + 
+             RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca + Thal,           
+           data = heart) |>
+  step_dummy(all_nominal_predictors())  
+```
+
+* `xgboost` wants you to have all numeric data, that means we need to make dummy variables
+* because `HD` (the outcome) is also categorical, we can use `all_nominal_predictors` to make sure we don't turn the outcome into dummy variables as well
+
+## Fit the model
+
+```{r}
+wf <- workflow() |>
+  add_recipe(rec) |>
+  add_model(boost_spec)
+model <- fit(wf, data = heart)
+```
+
+
+
+
+
+## <i class="fas fa-laptop"></i> `Boosting`
+
+How would this code change if I wanted to tune `B` the number of bootstrapped training samples?
+
+```{r}
+boost_spec <- boost_tree( 
+  mode = "classification", 
+  tree_depth = 1, 
+  trees = 1000, 
+  learn_rate = 0.001, 
+) |>
+  set_engine("xgboost") 
+```
+
+```{r}
+#| echo: false
+
+countdown::countdown(6)
+```
+
+
+## <i class="fas fa-laptop"></i> `Boosting`
+
+Fit a **boosted model** to the data from the previous application exercise.
+
+# Variable Importance
+
 ## Variable importance  {.small}
 
 * For bagged or random forest _regression trees_, we can record the _total RSS_ that is decreased due to splits of a given predictor $X_i$ averaged over all $B$ trees
@@ -229,8 +311,8 @@ rf_spec <- rand_forest(
 wf <- workflow() |>
   add_recipe(
     recipe(HD ~ Age + Sex + ChestPain + RestBP + Chol + Fbs + 
-               RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca + Thal,               
-             data = heart)
+             RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca + Thal,               
+           data = heart)
   ) |>
   add_model(rf_spec)
 model <- fit(wf, data = heart)
@@ -266,10 +348,10 @@ var_imp <- ranger::importance(model$fit$fit$fit)
 var_imp_df <- data.frame(
   variable = names(var_imp),
   importance = var_imp
-  )
+)
 
 var_imp_df |>
-ggplot(aes(x = variable, y = importance)) +
+  ggplot(aes(x = variable, y = importance)) +
   geom_col()
 ```
 
@@ -287,7 +369,7 @@ How could we make this plot better?
 
 ```{r}
 var_imp_df |>
-ggplot(aes(x = variable, y = importance)) +
+  ggplot(aes(x = variable, y = importance)) +
   geom_col() + 
   coord_flip()
 ```
@@ -306,8 +388,8 @@ How could we make this plot better?
 ```{r}
 var_imp_df |>
   mutate(variable = factor(variable, 
-   levels = variable[order(var_imp_df$importance)])) |>
-ggplot(aes(x = variable, y = importance)) +
+                           levels = variable[order(var_imp_df$importance)])) |>
+  ggplot(aes(x = variable, y = importance)) +
   geom_col() + 
   coord_flip()
 ```
