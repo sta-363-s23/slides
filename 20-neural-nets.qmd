@@ -55,7 +55,60 @@ $$
 * The activations ($A_k$) are nonlinear transformations of linear combinations of the features (the features are the input predictors, $X$)
 * We can have multiple "hidden layers" 
 * The model is fit by minimizing RSS!
-* It is fit in a slow, iterative fashion using **gradient descent**. It is then stopped when overfitting is detected
+* It is fit in a slow (using a learning rate, like we did for boosting), in an iterative fashion using **gradient descent**, you can prevent overfitting
+
+## Gradient Descent {.small}
+
+* Gradient descent is an optimization algorithm used to minimize a function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient.
+
+* Here is a simple example of gradient descent: we have a feature $x$ and an outcome $y$ and want to find the line that best fits the data
+
+* The "loss function" can be mean squared error $L = \frac{1}{n}\sum_{i=1}^{n}(y_i - (\hat\beta_0 + \hat\beta_1x_i ))^2$
+
+## Gradient Descent {.small}
+
+* We can use gradient descent to find the values of $\hat\beta_0$ and $\hat\beta_1$ that minimize the MSE. 
+
+* The gradient of the loss function with respect to the parameters $\beta_0$  is: $\frac{\partial L}{\partial \beta_0} = \frac{-2}{n}\sum_{i=1}^{n}(y_i - (\beta_0 + \beta_1x_i))$ 
+
+* And for $\beta_1$: $\frac{\partial L}{\partial \beta_1} = \frac{-2}{n}\sum_{i=1}^{n}x_i(y_i - (\beta_0 + \beta_1x_i))$
+
+* We can then update the values of $\hat\beta_0$ and $\hat\beta_1$ using the following equations: $\beta_{i,new} = \beta_i - \alpha \frac{\partial L}{\partial \beta_i}$ where $\alpha$ is the learning rate.
+
+## Gradient Descent  {.small}
+
+Here's an example of gradient descent with a small dataset:
+
+| x | y |
+|---|---|
+| 1 | 1 |
+| 2 | 3 |
+| 3 | 5 |
+| 4 | 7 |
+
+```{r}
+alpha <- 0.01
+beta_0 <- rep(0, 1000)
+beta_1 <- rep(0, 1000)
+i <- 1
+
+for (i in 1:1000) {
+
+x <- 1:4
+y <- c(1, 3, 5, 7)
+
+beta_0[i + 1] <- beta_0[i] - alpha * -2/4 * sum(y - beta_0[i]  - beta_1[i] * x)
+beta_1[i + 1] <- beta_1[i] - alpha * -2/4 * sum(x * (y - beta_0[i] - beta_1[i] * x)) 
+
+}
+```
+
+## Gradient Descent
+
+```{r}
+ggplot(data.frame(i = 1:1001, beta_1), aes(i, beta_1)) + 
+  geom_point()
+```
 
 ## Keras
 

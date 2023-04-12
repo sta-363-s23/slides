@@ -428,9 +428,80 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 <li class="fragment">The activations (<span class="math inline">\(A_k\)</span>) are nonlinear transformations of linear combinations of the features (the features are the input predictors, <span class="math inline">\(X\)</span>)</li>
 <li class="fragment">We can have multiple “hidden layers”</li>
 <li class="fragment">The model is fit by minimizing RSS!</li>
-<li class="fragment">It is fit in a slow, iterative fashion using <strong>gradient descent</strong>. It is then stopped when overfitting is detected</li>
+<li class="fragment">It is fit in a slow (using a learning rate, like we did for boosting), in an iterative fashion using <strong>gradient descent</strong>, you can prevent overfitting</li>
 </ul>
 </section>
+<section id="gradient-descent" class="slide level2 small">
+<h2>Gradient Descent</h2>
+<ul>
+<li class="fragment"><p>Gradient descent is an optimization algorithm used to minimize a function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient.</p></li>
+<li class="fragment"><p>Here is a simple example of gradient descent: we have a feature <span class="math inline">\(x\)</span> and an outcome <span class="math inline">\(y\)</span> and want to find the line that best fits the data</p></li>
+<li class="fragment"><p>The “loss function” can be mean squared error <span class="math inline">\(L = \frac{1}{n}\sum_{i=1}^{n}(y_i - (\hat\beta_0 + \hat\beta_1x_i ))^2\)</span></p></li>
+</ul>
+</section>
+<section id="gradient-descent-1" class="slide level2 small">
+<h2>Gradient Descent</h2>
+<ul>
+<li class="fragment"><p>We can use gradient descent to find the values of <span class="math inline">\(\hat\beta_0\)</span> and <span class="math inline">\(\hat\beta_1\)</span> that minimize the MSE.</p></li>
+<li class="fragment"><p>The gradient of the loss function with respect to the parameters <span class="math inline">\(\beta_0\)</span> is: <span class="math inline">\(\frac{\partial L}{\partial \beta_0} = \frac{-2}{n}\sum_{i=1}^{n}(y_i - (\beta_0 + \beta_1x_i))\)</span></p></li>
+<li class="fragment"><p>And for <span class="math inline">\(\beta_1\)</span>: <span class="math inline">\(\frac{\partial L}{\partial \beta_1} = \frac{-2}{n}\sum_{i=1}^{n}x_i(y_i - (\beta_0 + \beta_1x_i))\)</span></p></li>
+<li class="fragment"><p>We can then update the values of <span class="math inline">\(\hat\beta_0\)</span> and <span class="math inline">\(\hat\beta_1\)</span> using the following equations: <span class="math inline">\(\beta_{i,new} = \beta_i - \alpha \frac{\partial L}{\partial \beta_i}\)</span> where <span class="math inline">\(\alpha\)</span> is the learning rate.</p></li>
+</ul>
+</section>
+<section id="gradient-descent-2" class="slide level2 small">
+<h2>Gradient Descent</h2>
+<p>Here’s an example of gradient descent with a small dataset:</p>
+<table>
+<thead>
+<tr class="header">
+<th>x</th>
+<th>y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>beta_0 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1000</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>beta_1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1000</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) {</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a>beta_0[i <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> beta_0[i] <span class="sc">-</span> alpha <span class="sc">*</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">4</span> <span class="sc">*</span> <span class="fu">sum</span>(y <span class="sc">-</span> beta_0[i]  <span class="sc">-</span> beta_1[i] <span class="sc">*</span> x)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>beta_1[i <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> beta_1[i] <span class="sc">-</span> alpha <span class="sc">*</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">/</span><span class="dv">4</span> <span class="sc">*</span> <span class="fu">sum</span>(x <span class="sc">*</span> (y <span class="sc">-</span> beta_0[i] <span class="sc">-</span> beta_1[i] <span class="sc">*</span> x)) </span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="gradient-descent-3" class="slide level2">
+<h2>Gradient Descent</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">i =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1001</span>, beta_1), <span class="fu">aes</span>(i, beta_1)) <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="20-neural-nets_files/figure-revealjs/unnamed-chunk-4-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="keras" class="slide level2">
 <h2>Keras</h2>
 <ul>
@@ -446,7 +517,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 <ol type="1">
 <li>Pull in the application exercise files from:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">https://github.com/sta-363-s23/appex-20.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">https://github.com/sta-363-s23/appex-20.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="2" type="1">
 <li>Run <code>install.packages("keras")</code> once in the console</li>
 <li>Run <code>keras::install_keras()</code> once in the console</li>
@@ -455,7 +526,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_6284bdbe" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_2a6b8bb3" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -482,7 +553,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_76e3afbc" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_31775bc7" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -492,30 +563,30 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 <section id="example-hitters-data-1" class="slide level2 small">
 <h2>Example: Hitters Data</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">library</span>(ISLR)</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">library</span>(keras)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">library</span>(keras)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="example-hitters-data-2" class="slide level2 small">
 <h2>Example: Hitters Data</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="1-5|1|2|3|4|5|7-10|12-13|15-16|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters) <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">step_naomit</span>(Salary, <span class="at">skip =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">step_impute_knn</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) </span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>splits <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Hitters, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
-<span id="cb3-9"><a href="#cb3-9"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(splits)</span>
-<span id="cb3-10"><a href="#cb3-10"></a>test <span class="ot">&lt;-</span> <span class="fu">testing</span>(splits)</span>
-<span id="cb3-11"><a href="#cb3-11"></a></span>
-<span id="cb3-12"><a href="#cb3-12"></a>training_processed <span class="ot">&lt;-</span> <span class="fu">prep</span>(rec) <span class="sc">|&gt;</span> <span class="fu">bake</span>(<span class="at">new_data =</span> train)</span>
-<span id="cb3-13"><a href="#cb3-13"></a>testing_processed <span class="ot">&lt;-</span> <span class="fu">prep</span>(rec) <span class="sc">|&gt;</span> <span class="fu">bake</span>(<span class="at">new_data =</span> test)</span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a>training_matrix_x <span class="ot">&lt;-</span> training_processed <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Salary) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span>
-<span id="cb3-16"><a href="#cb3-16"></a>testing_matrix_x <span class="ot">&lt;-</span> testing_processed <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Salary) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="1-5|1|2|3|4|5|7-10|12-13|15-16|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters) <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">step_naomit</span>(Salary, <span class="at">skip =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">step_impute_knn</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) </span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>splits <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Hitters, <span class="at">prop =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(splits)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>test <span class="ot">&lt;-</span> <span class="fu">testing</span>(splits)</span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a>training_processed <span class="ot">&lt;-</span> <span class="fu">prep</span>(rec) <span class="sc">|&gt;</span> <span class="fu">bake</span>(<span class="at">new_data =</span> train)</span>
+<span id="cb5-13"><a href="#cb5-13"></a>testing_processed <span class="ot">&lt;-</span> <span class="fu">prep</span>(rec) <span class="sc">|&gt;</span> <span class="fu">bake</span>(<span class="at">new_data =</span> test)</span>
+<span id="cb5-14"><a href="#cb5-14"></a></span>
+<span id="cb5-15"><a href="#cb5-15"></a>training_matrix_x <span class="ot">&lt;-</span> training_processed <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Salary) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span>
+<span id="cb5-16"><a href="#cb5-16"></a>testing_matrix_x <span class="ot">&lt;-</span> testing_processed <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Salary) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="application-exercise-2" class="slide level2 smaller">
@@ -530,7 +601,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_792f908e" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_0da5232e" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -561,27 +632,27 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </section>
 <section id="example-hitters-data-6" class="slide level2 small">
 <h2>Example: Hitters Data</h2>
-<div class="cell" data-layout-align="center" data-hash="20-neural-nets_cache/revealjs/unnamed-chunk-8_53b4c37b070dd953a2b056e380a68792">
-<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-4|1|2|3|4|5-6|7-11|7|8|9|10|11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation=</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="dv">19</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">"mse"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6"></a>           <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">"mse"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">fit</span>(training_matrix_x, </span>
-<span id="cb4-8"><a href="#cb4-8"></a>      training_processed<span class="sc">$</span>Salary, </span>
-<span id="cb4-9"><a href="#cb4-9"></a>      <span class="at">epochs =</span> <span class="dv">100</span>, </span>
-<span id="cb4-10"><a href="#cb4-10"></a>      <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
-<span id="cb4-11"><a href="#cb4-11"></a>      <span class="at">validation_data =</span> <span class="fu">list</span>(testing_matrix_x, testing_processed<span class="sc">$</span>Salary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center" data-hash="20-neural-nets_cache/revealjs/unnamed-chunk-10_3676bee09d23099711b94742385d4d2d">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1-4|1|2|3|4|5-6|7-11|7|8|9|10|11|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">50</span>, <span class="at">activation=</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="dv">19</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">"mse"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>           <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">"mse"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">fit</span>(training_matrix_x, </span>
+<span id="cb6-8"><a href="#cb6-8"></a>      training_processed<span class="sc">$</span>Salary, </span>
+<span id="cb6-9"><a href="#cb6-9"></a>      <span class="at">epochs =</span> <span class="dv">100</span>, </span>
+<span id="cb6-10"><a href="#cb6-10"></a>      <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
+<span id="cb6-11"><a href="#cb6-11"></a>      <span class="at">validation_data =</span> <span class="fu">list</span>(testing_matrix_x, testing_processed<span class="sc">$</span>Salary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="example-hitters-data-7" class="slide level2">
 <h2>Example: Hitters Data</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">plot</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">plot</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="20-neural-nets_files/figure-revealjs/unnamed-chunk-9-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="20-neural-nets_files/figure-revealjs/unnamed-chunk-11-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="application-exercise-3" class="slide level2 smaller">
 <h2><i class="fas fa-laptop"></i> <code>Application Exercise</code></h2>
 <div>
@@ -594,7 +665,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_1efe2246" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_c3cb8088" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -603,27 +674,27 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </section>
 <section id="example-hitters-data-8" class="slide level2 small">
 <h2>Example:: Hitters Data</h2>
-<div class="cell" data-layout-align="center" data-hash="20-neural-nets_cache/revealjs/unnamed-chunk-11_03ac7e0f766f45faa2e99084fa825d38">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">40</span>, <span class="at">activation=</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="dv">19</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">"mse"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6"></a>           <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">"mse"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">fit</span>(training_matrix_x, </span>
-<span id="cb6-8"><a href="#cb6-8"></a>      training_processed<span class="sc">$</span>Salary, </span>
-<span id="cb6-9"><a href="#cb6-9"></a>      <span class="at">epochs =</span> <span class="dv">1000</span>, </span>
-<span id="cb6-10"><a href="#cb6-10"></a>      <span class="at">batch_size =</span> <span class="dv">30</span>,</span>
-<span id="cb6-11"><a href="#cb6-11"></a>      <span class="at">validation_data =</span> <span class="fu">list</span>(testing_matrix_x, testing_processed<span class="sc">$</span>Salary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center" data-hash="20-neural-nets_cache/revealjs/unnamed-chunk-13_f3beec80b9a4a925c38adeec7cf2b4b8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">40</span>, <span class="at">activation=</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="dv">19</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">"mse"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6"></a>           <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">"mse"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="fu">fit</span>(training_matrix_x, </span>
+<span id="cb8-8"><a href="#cb8-8"></a>      training_processed<span class="sc">$</span>Salary, </span>
+<span id="cb8-9"><a href="#cb8-9"></a>      <span class="at">epochs =</span> <span class="dv">1000</span>, </span>
+<span id="cb8-10"><a href="#cb8-10"></a>      <span class="at">batch_size =</span> <span class="dv">30</span>,</span>
+<span id="cb8-11"><a href="#cb8-11"></a>      <span class="at">validation_data =</span> <span class="fu">list</span>(testing_matrix_x, testing_processed<span class="sc">$</span>Salary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="example-hitters-data-9" class="slide level2">
 <h2>Example: Hitters Data</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">plot</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">plot</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="20-neural-nets_files/figure-revealjs/unnamed-chunk-12-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="20-neural-nets_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="example-classifying-numbers" class="slide level2 small">
 <h2>Example: Classifying numbers</h2>
 <div class="columns">
@@ -697,24 +768,24 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">256</span>, <span class="at">activation =</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="dv">784</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">128</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.3</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">"softmax"</span>)</span>
-<span id="cb8-7"><a href="#cb8-7"></a></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">256</span>, <span class="at">activation =</span> <span class="st">"relu"</span>, <span class="at">input_shape =</span> <span class="dv">784</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">128</span>, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">10</span>, <span class="at">activation =</span> <span class="st">"softmax"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Model: "sequential"
+<pre><code>Model: "sequential_2"
 ________________________________________________________________________________
  Layer (type)                       Output Shape                    Param #     
 ================================================================================
- dense_2 (Dense)                    (None, 256)                     200960      
- dropout_1 (Dropout)                (None, 256)                     0           
- dense_1 (Dense)                    (None, 128)                     32896       
- dropout (Dropout)                  (None, 128)                     0           
- dense (Dense)                      (None, 10)                      1290        
+ dense_6 (Dense)                    (None, 256)                     200960      
+ dropout_3 (Dropout)                (None, 256)                     0           
+ dense_5 (Dense)                    (None, 128)                     32896       
+ dropout_2 (Dropout)                (None, 128)                     0           
+ dense_4 (Dense)                    (None, 10)                      1290        
 ================================================================================
 Total params: 235,146
 Trainable params: 235,146
@@ -725,35 +796,35 @@ ________________________________________________________________________________
 </section>
 <section id="r-code-1" class="slide level2">
 <h2>R Code</h2>
-<div class="cell" data-layout-align="center" data-hash="20-neural-nets_cache/revealjs/unnamed-chunk-15_4d3e4a1c42a3d29b42157ca16b71d5ea">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>history <span class="ot">&lt;-</span> model <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>,</span>
-<span id="cb10-3"><a href="#cb10-3"></a>          <span class="at">metrics =</span> <span class="st">"accuracy"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">fit</span>(training_x, training_y, <span class="at">epochs =</span> <span class="dv">30</span>, <span class="at">batch_size =</span> <span class="dv">128</span>,</span>
-<span id="cb10-5"><a href="#cb10-5"></a>      <span class="at">validation_split =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-layout-align="center" data-hash="20-neural-nets_cache/revealjs/unnamed-chunk-17_e331aa7dd5c9a67e5e908e4f3295d113">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>history <span class="ot">&lt;-</span> model <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">"categorical_crossentropy"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3"></a>          <span class="at">metrics =</span> <span class="st">"accuracy"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">fit</span>(training_x, training_y, <span class="at">epochs =</span> <span class="dv">30</span>, <span class="at">batch_size =</span> <span class="dv">128</span>,</span>
+<span id="cb12-5"><a href="#cb12-5"></a>      <span class="at">validation_split =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="r-code-2" class="slide level2">
 <h2>R code</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">plot</span>(history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">plot</span>(history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="20-neural-nets_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="20-neural-nets_files/figure-revealjs/unnamed-chunk-18-1.png" style="width:80.0%" class="r-stretch quarto-figure-center"></section>
 <section id="accuracy" class="slide level2">
 <h2>Accuracy</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>accuracy <span class="ot">&lt;-</span> <span class="cf">function</span>(prediction, truth) {</span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">mean</span>(<span class="fu">drop</span>(prediction) <span class="sc">==</span> <span class="fu">drop</span>(truth))</span>
-<span id="cb12-3"><a href="#cb12-3"></a>}</span>
-<span id="cb12-4"><a href="#cb12-4"></a></span>
-<span id="cb12-5"><a href="#cb12-5"></a>preds <span class="ot">&lt;-</span> model <span class="sc">|&gt;</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">predict</span>(testing_x)</span>
-<span id="cb12-7"><a href="#cb12-7"></a></span>
-<span id="cb12-8"><a href="#cb12-8"></a>preds <span class="ot">&lt;-</span> <span class="fu">max.col</span>(preds) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="fu">accuracy</span>(preds, testing_y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>accuracy <span class="ot">&lt;-</span> <span class="cf">function</span>(prediction, truth) {</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">mean</span>(<span class="fu">drop</span>(prediction) <span class="sc">==</span> <span class="fu">drop</span>(truth))</span>
+<span id="cb14-3"><a href="#cb14-3"></a>}</span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a>preds <span class="ot">&lt;-</span> model <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>  <span class="fu">predict</span>(testing_x)</span>
+<span id="cb14-7"><a href="#cb14-7"></a></span>
+<span id="cb14-8"><a href="#cb14-8"></a>preds <span class="ot">&lt;-</span> <span class="fu">max.col</span>(preds) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="fu">accuracy</span>(preds, testing_y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1032</code></pre>
+<pre><code>[1] 0.9813</code></pre>
 </div>
 </div>
 </section>
