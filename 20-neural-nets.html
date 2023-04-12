@@ -408,10 +408,13 @@ Lucy D’Agostino McGowan
 <p><span class="math display">\[
 f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 =\beta_0 + \sum_{k=1}^K\beta_kg(w_{k0}+\sum_{j=1}^p w_{kj}X_j)
-\]</span> ## Neural Network {.small}</p>
+\]</span></p>
+</section>
+<section id="neural-network-1" class="slide level2 small">
+<h2>Neural Network</h2>
 
 <img data-src="img/20/neural-net.png" class="r-stretch"></section>
-<section id="neural-network-1" class="slide level2 small">
+<section id="neural-network-2" class="slide level2 small">
 <h2>Neural Network</h2>
 <ul>
 <li class="fragment"><span class="math inline">\(A_k = h_k(X) = g(w_{k0} + \sum_{j=1}^pw_{kj}X_j)\)</span></li>
@@ -420,11 +423,11 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 <li class="fragment">Popular <span class="math inline">\(g(z)\)</span> functions are the <strong>sigmoid</strong> and <strong>rectified linear</strong></li>
 </ul>
 </section>
-<section id="neural-network-2" class="slide level2">
+<section id="neural-network-3" class="slide level2">
 <h2>Neural Network</h2>
 
 <img data-src="img/20/gz.png" class="r-stretch"></section>
-<section id="neural-network-3" class="slide level2 small">
+<section id="neural-network-4" class="slide level2 small">
 <h2>Neural Network</h2>
 <ul>
 <li class="fragment">Activation functions are usually <strong>nonlinear</strong> otherwise the model just collapses to a linear model</li>
@@ -529,7 +532,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_c5313a1a" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_e1fc5316" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -556,7 +559,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_591dad1b" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_682f7d8d" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -604,7 +607,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_30c605c2" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_aad45e76" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -668,7 +671,7 @@ f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="countdown" id="timer_6bd93b87" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_055119d5" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">06</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
@@ -827,7 +830,7 @@ ________________________________________________________________________________
 <span id="cb14-8"><a href="#cb14-8"></a>preds <span class="ot">&lt;-</span> <span class="fu">max.col</span>(preds) <span class="sc">-</span> <span class="dv">1</span></span>
 <span id="cb14-9"><a href="#cb14-9"></a><span class="fu">accuracy</span>(preds, testing_y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.129</code></pre>
+<pre><code>[1] 0.1178</code></pre>
 </div>
 </div>
 </section>

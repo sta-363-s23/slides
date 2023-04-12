@@ -34,6 +34,7 @@ $$
 f(X) = \beta_0 + \sum_{k=1}^K\beta_kh_k(X)\\
 =\beta_0 + \sum_{k=1}^K\beta_kg(w_{k0}+\sum_{j=1}^p w_{kj}X_j)
 $$
+
 ## Neural Network {.small}
 
 ![](img/20/neural-net.png)
