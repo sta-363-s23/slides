@@ -1,0 +1,156 @@
+---
+title: "Ensemble Models"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com) images from: https://stacks.tidymodels.org/articles/basics.html"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+---
+
+
+## Ensemble Models {.small}
+
+```{r child = "setup.Rmd"}
+```
+
+Let's stack models together!
+
+![](img/21/stacks.png)
+
+## Ensemble Models {.small}
+
+* Take your output from `tune_grid` for several different model types
+* "Stack" them together into a single prediction model
+* The single model uses Lasso to predict the outcome using the predictions from the other models
+* You get a coefficient that you then apply for each candidate model to get a final prediction!
+
+## Ensemble Models
+
+![](img/21/model_defs.png)
+
+. . .
+
+![](img/21/candidates.png)
+
+. . .
+
+![](img/21/data_stack.png)
+
+## Ensemble Models
+
+![](img/21/coefs.png)
+
+## Ensemble Models
+
+![](img/21/class_model_stack.png)
+
+## So how do we do it? {.small}
+
+* As I mentioned, we can just use our output from `tune_grid` with one tiny addition -- we need to tell R that we want to save a bit more information in each of the tuned models so that we can smoosh them all together
+
+. . .
+
+```{r}
+#| code-line-numbers: "|2|3|"
+#| message: false
+#| warning: false
+library(tidymodels)
+ctrl <- control_resamples(
+    save_pred = TRUE,
+    save_workflow = TRUE
+  )
+```
+
+. . .
+
+```{r}
+#| code-line-numbers: "|4|"
+#| eval: false
+mod <- tune_grid(
+  wf,
+  cv,
+  control = ctrl
+)
+```
+
+## Example {.small}
+
+```{r}
+#| cache: true
+library(ISLR)
+set.seed(1)
+Hitters <- drop_na(Hitters)
+cv <- vfold_cv(Hitters)
+rec <- recipe(Salary ~ ., data = Hitters) |>
+  step_dummy(all_nominal_predictors()) |>
+  step_normalize(all_predictors())
+
+bag_spec <- rand_forest(
+  mode = "regression",
+  mtry = ncol(Hitters) - 1,
+  trees = tune()
+)
+
+rf_spec <- rand_forest(
+  mode = "regression",
+  mtry = 3,
+  trees = tune()
+)
+
+grid = data.frame(trees = c(10, 50, 100, 1000))
+
+wf_bag <- workflow() |>
+  add_recipe(rec) |>
+  add_model(bag_spec)
+
+wf_rf <- wf_bag |>
+  update_model(rf_spec)
+
+tune_bag <- tune_grid(wf_bag, cv, grid = grid, control = ctrl)
+tune_rf <- tune_grid(wf_rf, cv, grid = grid, control = ctrl)
+
+```
+
+## Example {.small}
+
+```{r}
+library(stacks)
+ens <- stacks() |>
+  add_candidates(tune_bag, name = "bag") |>
+  add_candidates(tune_rf, name = "rf")
+
+ens
+```
+
+## Example {.small}
+
+```{r}
+library(stacks)
+ens <- stacks() |>
+  add_candidates(tune_bag, name = "bag") |>
+  add_candidates(tune_rf, name = "rf") |>
+  blend_predictions() |>
+  fit_members()
+
+ens
+
+collect_parameters(ens, "rf")
+```
+
+## Example {.small}
+
+```{r}
+preds <- ens |>
+  predict(new_data = Hitters, members = TRUE) |>
+  bind_cols(Hitters |> select(Salary)) 
+
+map_dfr(preds, rmse, truth = Salary, data = preds) |>
+  mutate(member = colnames(preds))
+```
+
