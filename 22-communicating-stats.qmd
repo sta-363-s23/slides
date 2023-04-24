@@ -1,0 +1,150 @@
+---
+title: "Communicating Statistics"
+footer:  "[Dr. Lucy D'Agostino McGowan](https://lucymcgowan.com)"
+logo: "img/icon.png"
+format: 
+  kakashi-revealjs: 
+    theme: [custom.scss]
+    slide-number: true
+    chalkboard: true
+    title-slide-attributes: 
+      data-background-color: "#fff" 
+      data-color: "#70001A"
+    menu: true
+---
+
+# Leaders in Effective Statistical Communication
+
+## Natalie Dean
+
+:::: {.columns}
+
+::: {.column width="40%"}
+Assistant Professor of Biostatistics, University of Florida
+:::
+
+::: {.column width="60%"}
+![](img/22/natalie.png)
+:::
+
+::::
+
+[nataliexdean.com/twitter.html](https://www.nataliexdean.com/twitter.html)
+
+
+## Roger Peng & Hilary Parker
+
+:::: columns
+
+::: column 
+Not So Standard Deviations Podcast
+:::
+
+::: column 
+![](img/22/nssd.png)
+
+:::
+
+::::
+
+[nssdeviations.com](https://nssdeviations.com)
+
+## Regina Nuzzo
+
+:::: columns
+
+::: column
+
+Senior Adviser for Statistics Communication & Media Innovation at the American Statistical Association
+
+:::
+
+::: column 
+
+![](img/22/regina.png)
+
+:::
+::::
+
+[reginanuzzo.com/#publications_selected](https://www.reginanuzzo.com/#publications_selected)
+
+## Daniela Witten
+
+:::: columns
+
+::: column 
+
+Dorothy Gilford Endowed Chair of Mathematical Statistics, Professor of Statistics & Biostatistics University of Washington
+
+[danielawitten.com](https://www.danielawitten.com)
+
+:::
+
+
+
+::: column
+![](img/22/daniela.png)
+
+:::
+
+::::
+
+
+## `r fontawesome::fa("laptop")` `Application Exercise`
+
+:::nonincremental
+* Choose one of the five leaders discussed (or pick a new one!). 
+* Find one example of a statistical communication they have 
+produced. 
+* How does this demonstrate their leadership in the field?
+:::
+
+```{r}
+#| echo: false
+
+countdown::countdown(7)
+```
+
+
+# Honesty in Statistical Communication
+
+# “There are three kinds of lies: lies, damn lies, and statistics”
+
+## 
+
+![](img/22/truth.png)
+
+## Honesty in Statistical Communication
+
+- Statistics is more of a science
+- We take data and fit models to try draw inference or make predictions
+- Many times, the truth we hope to describe or model is something that we can’t know
+
+## Honesty in Statistical Communication
+
+- As statisticians we acknowledge our **uncertainty** and **quantify** it
+- Statisticians are in some sense more honest in their statements about the world than others who make absolute claims :)
+
+# “Statistics [is] The only science that enables different experts using the same figures to draw different conclusions.” Evan Esar  {.small}
+
+- Good statistical analyses include **judgments**
+
+## Judgements
+
+- What variables to include?
+- What transformations to attempt?
+- Is the data representative?
+- Is the prediction model sound?
+- What methods were used?
+- Is the model overfit?
+
+## Going forward {.small}
+
+- To use statistics you must make judgments
+- Know the motivating reason for the analysis because this will guide them in making these judgments
+- The guiding principle in making statistics judgments is a search for truth about the world
+- Resist jumping to conclusions, extrapolating, and proposing explanations for associations that assume causation
+
+## The American Statistical Association's Ethical guidelines for statistical practice: 
+
+https://www.amstat.org/ASA/Your-Career/Ethical-Guidelines-for-Statistical-Practice.aspx
